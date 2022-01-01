@@ -1,4 +1,5 @@
-﻿using IIAuctionHouse.Core.Models.Forest;
+﻿using IIAuctionHouse.DataAccess.Entities;
+using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities;
 using IIAuctionHouse.DataAccess.Entities.ForestEntities;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,17 +25,21 @@ namespace IIAuctionHouse.DataAccess
             //     .WithOne(fl => fl.TreeTypeEntity)
             //     .HasForeignKey<ForestEntity>(f => f.TreeTypeEntityForeignKey);
             //------ One to many --------//
-            modelBuilder.Entity<ForestEntity>().HasOne(fl => fl.ForestLocationEntity).
-                WithMany().HasForeignKey(fl=> new {fl.ForestLocationEntityForeignKey}).OnDelete(DeleteBehavior.SetNull);
-            modelBuilder.Entity<ForestEntity>().HasOne(tg => tg.TreeGroupEntity).
-                WithMany().HasForeignKey(tg=> new {tg.TreeGroupEntityForeignKey}).OnDelete(DeleteBehavior.SetNull);
-            modelBuilder.Entity<ForestEntity>().HasOne(tt => tt.TreeTypeEntity).
-                WithMany().HasForeignKey(tt=> new {tt.TreeTypeEntityForeignKey}).OnDelete(DeleteBehavior.SetNull);
+            // modelBuilder.Entity<ForestEntity>().HasOne(fl => fl.ForestLocationEntity).
+            //     WithMany().HasForeignKey(fl=> new {fl.ForestLocationEntityForeignKey}).OnDelete(DeleteBehavior.SetNull);
+            // modelBuilder.Entity<ForestEntity>().HasOne(tg => tg.TreeGroupEntity).
+            //     WithMany().HasForeignKey(tg=> new {tg.TreeGroupEntityForeignKey}).OnDelete(DeleteBehavior.SetNull);
+            // modelBuilder.Entity<ForestEntity>().HasOne(tt => tt.TreeTypeEntity).
+            //     WithMany().HasForeignKey(tt=> new {tt.TreeTypeEntityForeignKey}).OnDelete(DeleteBehavior.SetNull);
+            //
+            //
+        //     modelBuilder.Entity<TreeTypeEntity>().HasOne(p => p.PercentageEntity).WithOne()
+        //         .HasForeignKey<TreeTypeEntity>(p=>p.PercentageEntityForeignKey).OnDelete(DeleteBehavior.Cascade);
         }
 
         public virtual DbSet<ForestEntity> Forests { get; set; }
-        public virtual DbSet<ForestLocationEntity> ForestLocations { get; set; }
-        public virtual DbSet<TreeTypeEntity> TreeTypes { get; set; }
-        public virtual DbSet<TreeGroupEntity> TreeGroups { get; set; }
+        public virtual DbSet<PlotEntity> PlotEntities { get; set; }
+        public virtual DbSet<TreeTypeEntity> TreeTypeEntities { get; set; }
+        
     }
 }

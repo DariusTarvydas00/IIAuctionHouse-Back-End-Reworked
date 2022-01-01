@@ -1,19 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using IIAuctionHouse.Core.IServices.IForestService;
+using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.DataAccess;
-using IIAuctionHouse.DataAccess.Repositories;
-using IIAuctionHouse.DataAccess.Repositories.ForestRepositories;
+using IIAuctionHouse.DataAccess.Repositories.ForestDetailsRepositories;
 using IIAuctionHouse.Domain.IRepositories;
-using IIAuctionHouse.Domain.IRepositories.IForestRepositories;
 using IIAuctionHouse.Domain.Services;
-using IIAuctionHouse.Domain.Services.ForestServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,14 +40,12 @@ namespace IIAuctionHouse.WebApi
                         .UseSqlite("Data Source=AuctionHouseDbContext.db");
                 }, ServiceLifetime.Transient
             );
-            services.AddScoped<IForestLocationService, ForestLocationService>();
-            services.AddScoped<IForestLocationRepo, ForestLocationRepository>();
-            services.AddScoped<ITreeGroupService, TreeGroupService>();
-            services.AddScoped<ITreeGroupRepo, TreeGroupRepository>();
-            services.AddScoped<ITreeTypeService, TreeTypeService>();
-            services.AddScoped<ITreeTypeRepo, TreeTypeRepository>();
             services.AddScoped<IForestService, ForestService>();
-            services.AddScoped<IForestRepo, ForestRepository>();
+            services.AddScoped<IForestRepository, ForestRepository>();
+            services.AddScoped<IPlotService, PlotService>();
+            services.AddScoped<IPlotRepository, PlotRepository>();
+            services.AddScoped<ITreeTypeService, TreeTypeService>();
+            services.AddScoped<ITreeTypeRepository, TreeTypeRepository>();
             
             services.AddScoped<IMainDbContextSeeder, MainDbContextSeeder>();
             

@@ -1,0 +1,21 @@
+﻿using System.Collections.Generic;
+using IIAuctionHouse.Core.Models;
+
+namespace IIAuctionHouse.Core.IServices
+{
+    public interface IPlotService
+    {
+        List<Plot> GetAll();
+        
+        Plot GetById(int id);
+
+        Plot NewPlot(double plotSize, int plotResolutionFirstValue, int plotResolutionSecondValue, 
+            double plotTenderness, int volume, int averageTreeHeight, List<TreeType> treeTypes);
+
+        Plot Create(Plot plot);
+        
+        Plot Update(Plot plot);
+
+        Plot Delete(int id);
+    }
+}

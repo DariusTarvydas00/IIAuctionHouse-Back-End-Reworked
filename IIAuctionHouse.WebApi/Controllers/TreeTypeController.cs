@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using IIAuctionHouse.Core.IServices.IForestService;
-using IIAuctionHouse.Core.Models.Forest;
+using IIAuctionHouse.Core.IServices;
+using IIAuctionHouse.Core.Models;
+using IIAuctionHouse.WebApi.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IIAuctionHouse.WebApi.Controllers
@@ -23,36 +24,25 @@ namespace IIAuctionHouse.WebApi.Controllers
             }
 
             [HttpGet("{id}")]
-            public ActionResult<TreeType> GetById(int id)
+            public ActionResult<TreeTypeDto> GetById(int id)
             {
-                var foundTreeType = _treeTypeService.GetById(id);
-                return Ok(new TreeType()
-                {
-                    Id = foundTreeType.Id,
-                    TypeOfTree = foundTreeType.TypeOfTree
-                });
+                var treeType = _treeTypeService.GetById(id);
+                return Ok(treeType);
             }
 
             [HttpPost]
-            public ActionResult<TreeType> Post(string typeOfTree)
+            public ActionResult<TreeType> Post([FromBody] TreeTypeDto treeTypeDto)
             {
-                var postTypeOfTree = _treeTypeService.Create(typeOfTree);
-                return Ok(new TreeType()
-                {
-                    Id = postTypeOfTree.Id,
-                    TypeOfTree = postTypeOfTree.TypeOfTree
-                });
+                var newTreeType = _treeTypeService.NewTreeType(treeTypeDto.Name, treeTypeDto.Percentage);
+                _treeTypeService.Create(newTreeType);
+                return Ok(newTreeType);
             }
 
-            [HttpDelete]
+            [HttpDelete("{id}")]
             public ActionResult<TreeType> Delete(int id)
             {
-                var deleteTypeOfTree = _treeTypeService.Delete(id);
-                return Ok(new TreeType()
-                {
-                    Id = deleteTypeOfTree.Id,
-                    TypeOfTree = deleteTypeOfTree.TypeOfTree
-                });
+                var deleteTreeType = _treeTypeService.Delete(id);
+                return Ok(deleteTreeType);
             }
         }
     }

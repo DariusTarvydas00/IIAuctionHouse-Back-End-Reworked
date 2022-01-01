@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using IIAuctionHouse.Core.Models.Forest;
+using IIAuctionHouse.Core.Models;
 
-namespace IIAuctionHouse.Domain.IRepositories.IForestRepositories
+namespace IIAuctionHouse.Domain.IRepositories
 {
-    public interface IForestRepo
+    public interface IForestRepository
     {
         IEnumerable<Forest> FindAll();
         Forest GetById(int id);

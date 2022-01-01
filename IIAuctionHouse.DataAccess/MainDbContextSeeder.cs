@@ -1,4 +1,6 @@
-﻿using IIAuctionHouse.DataAccess.Entities.ForestEntities;
+﻿using IIAuctionHouse.DataAccess.Entities;
+using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities;
+using IIAuctionHouse.DataAccess.Entities.ForestEntities;
 
 namespace IIAuctionHouse.DataAccess
 {
@@ -16,49 +18,39 @@ namespace IIAuctionHouse.DataAccess
             _ctx.Database.EnsureDeleted();
             _ctx.Database.EnsureCreated();
             
-            _ctx.ForestLocations.Add(new ForestLocationEntity()
+            _ctx.TreeTypeEntities.Add(new TreeTypeEntity()
             {
-                Id = 1,
-                ForestryEnterprise = "Esbjerg",
+                Name = "treeType1",
+                Percentage = 10
             });
-            
-            _ctx.ForestLocations.Add(new ForestLocationEntity()
+            _ctx.TreeTypeEntities.Add(new TreeTypeEntity()
             {
-                Id = 2,
-                ForestryEnterprise = "Varde"
+                Name = "treeType2",
+                Percentage = 20
             });
-            _ctx.TreeGroups.Add(new TreeGroupEntity()
+            _ctx.TreeTypeEntities.Add(new TreeTypeEntity()
             {
-                Id = 1,
-                GroupOfTree = "Pinophyta"
+                Name = "treeType3",
+                Percentage = 30
             });
-            _ctx.TreeGroups.Add(new TreeGroupEntity()
-            {
-                Id = 2,
-                GroupOfTree = "Magnoliophyta"
-            });
-            _ctx.TreeTypes.Add(new TreeTypeEntity()
-            {
-                Id = 1,
-                TypeOfTree = "Aceraceae"
-            });
-            _ctx.TreeTypes.Add(new TreeTypeEntity()
-            {
-                Id = 2,
-                TypeOfTree = "Pinaceae"
-            });
-            _ctx.Forests.Add(new ForestEntity()
-            {
-                ForestLocationEntityForeignKey = 1,
-                TreeGroupEntityForeignKey = 1,
-                TreeTypeEntityForeignKey = 1
-            });
-            _ctx.Forests.Add(new ForestEntity()
-            {
-                ForestLocationEntityForeignKey = 2,
-                TreeGroupEntityForeignKey = 2,
-                TreeTypeEntityForeignKey = 2
-            });
+            // _ctx.TreeTypes.Add(new TreeTypeEntity()
+            // {
+            //     Id = 2,
+            //     Name = "dsa",
+            //     Percentage = 10
+            // });
+            // _ctx.Forests.Add(new ForestEntity()
+            // {
+            //     ForestLocationEntityForeignKey = 1,
+            //     TreeGroupEntityForeignKey = 1,
+            //     TreeTypeEntityForeignKey = 1
+            // });
+            // _ctx.Forests.Add(new ForestEntity()
+            // {
+            //     ForestLocationEntityForeignKey = 2,
+            //     TreeGroupEntityForeignKey = 2,
+            //     TreeTypeEntityForeignKey = 2
+            // });
             _ctx.SaveChanges();
         }
 

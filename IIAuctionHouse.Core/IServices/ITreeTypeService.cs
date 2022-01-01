@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using IIAuctionHouse.Core.Models.Forest;
+using IIAuctionHouse.Core.Models;
 
-namespace IIAuctionHouse.Core.IServices.IForestService
+namespace IIAuctionHouse.Core.IServices
 {
     public interface ITreeTypeService
     {
@@ -9,7 +9,9 @@ namespace IIAuctionHouse.Core.IServices.IForestService
         
         TreeType GetById(int id);
 
-        TreeType Create(string treeType);
+        TreeType NewTreeType(string name, int percentage);
+
+        TreeType Create(TreeType treeType);
         
         TreeType Update(TreeType treeType);
 

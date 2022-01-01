@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using IIAuctionHouse.Core.IServices.IForestService;
-using IIAuctionHouse.Core.Models.Forest;
+using IIAuctionHouse.Core.IServices;
+using IIAuctionHouse.Core.Models;
+using IIAuctionHouse.DataAccess.Entities;
 using IIAuctionHouse.DataAccess.Entities.ForestEntities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,18 +31,10 @@ namespace IIAuctionHouse.WebApi.Controllers
             return Ok(new Forest()
             {
                 Id = foundForest.Id,
-                ForestLocation = new ForestLocation()
-                {
-                    Id = foundForest.ForestLocation.Id
-                },
-                TreeGroup = new TreeGroup()
-                {
-                    Id = foundForest.TreeGroup.Id
-                },
-                TreeType = new TreeType()
-                {
-                    Id = foundForest.TreeType.Id
-                }
+                // TreeType = new TreeType()
+                // {
+                //     Id = foundForest.TreeType.Id
+                // }
             });
         }
 
@@ -65,9 +58,7 @@ namespace IIAuctionHouse.WebApi.Controllers
             return Ok(new Forest()
             {
                 Id = deleteTypeOfTree.Id,
-                ForestLocation = deleteTypeOfTree.ForestLocation,
-                TreeGroup = deleteTypeOfTree.TreeGroup,
-                TreeType = deleteTypeOfTree.TreeType
+                //TreeType = deleteTypeOfTree.TreeType
             });
         }
     }
