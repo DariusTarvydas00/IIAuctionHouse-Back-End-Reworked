@@ -4,4 +4,16 @@
         <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\IIAuctionHouse.Domain\IIAuctionHouse.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="10.1.1" />
+      <PackageReference Include="EntityFramework" Version="6.4.4" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.13" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.13" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    </ItemGroup>
+
 </Project>
