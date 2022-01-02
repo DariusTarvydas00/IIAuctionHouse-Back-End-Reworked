@@ -1,5 +1,6 @@
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.DataAccess;
+using IIAuctionHouse.DataAccess.Repositories;
 using IIAuctionHouse.DataAccess.Repositories.ForestDetailsRepositories;
 using IIAuctionHouse.Domain.IRepositories;
 using IIAuctionHouse.Domain.Services;
@@ -46,6 +47,9 @@ namespace IIAuctionHouse.WebApi
             services.AddScoped<IPlotRepository, PlotRepository>();
             services.AddScoped<ITreeTypeService, TreeTypeService>();
             services.AddScoped<ITreeTypeRepository, TreeTypeRepository>();
+            
+            services.AddScoped<IPercentageService, PercentageService>();
+            services.AddScoped<IPercentageRepository, PercentageRepository>();
             
             services.AddScoped<IMainDbContextSeeder, MainDbContextSeeder>();
             

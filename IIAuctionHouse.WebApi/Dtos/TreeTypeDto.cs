@@ -3,6 +3,7 @@
     public class TreeTypeDto
     {
         public string Name { get; set; }
-        public int Percentage { get; set; }
+        public int PercentageId { get; set; }
+
     }
 }

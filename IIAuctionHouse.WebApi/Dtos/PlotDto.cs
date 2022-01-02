@@ -6,8 +6,7 @@ namespace IIAuctionHouse.WebApi.Dtos
     public class PlotDto
     {
         public double PlotSize { get; set; }
-        public int PlotResolutionFirstValue { get; set; }
-        public int PlotResolutionSecondValue { get; set; }
+        public string PlotResolution { get; set; }
         public double PlotTenderness { get; set; }
         public int Volume { get; set; }
         public int AverageTreeHeight { get; set; }

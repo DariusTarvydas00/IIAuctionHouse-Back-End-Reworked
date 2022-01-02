@@ -6,11 +6,13 @@ namespace IIAuctionHouse.Core.Models
     {
         public int Id { get; set; }
         public double PlotSize { get; set; }
-        public int PlotResolutionFirstValue { get; set; }
-        public int PlotResolutionSecondValue { get; set; }
+        
+        public string PlotResolution { get; set; }
         public double PlotTenderness { get; set; }
         public int Volume { get; set; }
         public int AverageTreeHeight { get; set; }
         public List<TreeType> TreeTypes { get; set; }
+
+        //public Forest Forest { get; set; }
     }
 }

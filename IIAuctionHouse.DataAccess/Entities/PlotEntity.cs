@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using IIAuctionHouse.Core.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace IIAuctionHouse.DataAccess.Entities
 {
@@ -7,16 +8,15 @@ namespace IIAuctionHouse.DataAccess.Entities
     {
         public int Id { get; set; }
         public double PlotSize { get; set; }
-        public int PlotResolutionFirstValue { get; set; }
-        public int PlotResolutionSecondValue { get; set; }
+        public string PlotResolution { get; set; }
         public double PlotTenderness { get; set; }
         public int Volume { get; set; }
         public int AverageTreeHeight { get; set; }
-        
-        public int TreeTypeForeignKey { get; set; }
-        public List<TreeType> TreeTypeEntities { get; set; }
-        
-        public int ForestForeignKey { get; set; }
-        public ForestEntity ForestEntity { get; set; }
+        // public List<TreeType> PlotTreeTypes { get; set; }
+        //
+        // public List<PlotTreeTypeEntity> TreeTypes { get; set; }
+        //
+        // public int ForestEntityId { get; set; }
+        // public ForestEntity ForestEntity { get; set; }
     }
 }

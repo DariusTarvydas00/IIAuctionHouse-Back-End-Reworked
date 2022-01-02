@@ -11,6 +11,7 @@ namespace IIAuctionHouse.WebApi.Controllers
         public class TreeTypeController : ControllerBase
         {
             private readonly ITreeTypeService _treeTypeService;
+            private readonly IPercentageService _percentageService;
 
             public TreeTypeController(ITreeTypeService treeTypeService)
             {
@@ -24,22 +25,43 @@ namespace IIAuctionHouse.WebApi.Controllers
             }
 
             [HttpGet("{id}")]
-            public ActionResult<TreeTypeDto> GetById(int id)
+            public ActionResult<TreeType> GetById(int id)
             {
                 var treeType = _treeTypeService.GetById(id);
                 return Ok(treeType);
             }
 
             [HttpPost]
-            public ActionResult<TreeType> Post([FromBody] TreeTypeDto treeTypeDto)
+            public ActionResult<TreeTypeDto> Post([FromBody] TreeTypeDto treeTypeDto)
             {
-                var newTreeType = _treeTypeService.NewTreeType(treeTypeDto.Name, treeTypeDto.Percentage);
-                _treeTypeService.Create(newTreeType);
-                return Ok(newTreeType);
+                return Ok(_treeTypeService.Create(new TreeType()
+                {
+                    Name = treeTypeDto.Name,
+                    Percentage = new Percentage()
+                    {
+                        Id = treeTypeDto.PercentageId
+                    }
+                }));
+            }
+            
+            [HttpPut("{id}")]
+            public ActionResult Put(int id, [FromBody] TreeTypeDto treeTypeDto)
+            {
+                var foundTreeType = _treeTypeService.GetById(id);
+                var treeType = new TreeType()
+                {
+                    Id = foundTreeType.Id,
+                    Name = treeTypeDto.Name,
+                    Percentage = new Percentage()
+                    {
+                        Id = treeTypeDto.PercentageId
+                    }
+                };
+                return Ok(_treeTypeService.Update(treeType));
             }
 
             [HttpDelete("{id}")]
-            public ActionResult<TreeType> Delete(int id)
+            public ActionResult<TreeTypeDto> Delete(int id)
             {
                 var deleteTreeType = _treeTypeService.Delete(id);
                 return Ok(deleteTreeType);

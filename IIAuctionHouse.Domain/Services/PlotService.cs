@@ -9,10 +9,12 @@ namespace IIAuctionHouse.Domain.Services
     public class PlotService: IPlotService
     {
         private readonly IPlotRepository _plotRepository;
-        
-        public PlotService(IPlotRepository plotRepository)
+        private readonly ITreeTypeRepository _treeTypeRepository;
+
+        public PlotService(IPlotRepository plotRepository, ITreeTypeRepository treeTypeRepository)
         {
             _plotRepository = plotRepository;
+            _treeTypeRepository = treeTypeRepository;
         }
         public List<Plot> GetAll()
         {
@@ -21,17 +23,18 @@ namespace IIAuctionHouse.Domain.Services
 
         public Plot GetById(int id)
         {
-            return _plotRepository.GetById(id);
+            var plot = _plotRepository.GetById(id);
+            //plot.TreeTypes = _treeTypeRepository.FindAll().Where(type => type.Plot.Id == plot.Id).ToList();
+            return plot;
         }
 
-        public Plot NewPlot(double plotSize, int plotResolutionFirstValue, int plotResolutionSecondValue, double plotTenderness,
+        public Plot NewPlot(double plotSize, string plotResolution, double plotTenderness,
             int volume, int averageTreeHeight, List<TreeType> treeTypes)
         {
             var newPlot = new Plot()
             {
                 PlotSize = plotSize,
-                PlotResolutionFirstValue = plotResolutionFirstValue,
-                PlotResolutionSecondValue = plotResolutionSecondValue,
+                PlotResolution = plotResolution,
                 PlotTenderness = plotTenderness,
                 Volume = volume,
                 AverageTreeHeight = averageTreeHeight,

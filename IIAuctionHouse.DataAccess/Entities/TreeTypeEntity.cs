@@ -1,4 +1,4 @@
-﻿using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities;
+﻿using System.Collections.Generic;
 
 namespace IIAuctionHouse.DataAccess.Entities
 {
@@ -6,10 +6,11 @@ namespace IIAuctionHouse.DataAccess.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
         public int Percentage { get; set; }
-        
-        //public int PlotForeignKey { get; set; }
-        //public PlotEntity PlotEntity { get; set; }
+
+        public int? PercentageEntityId { get; set; }
+        public PercentageEntity PercentageEntity { get; set; }
+        //
+        // public List<PlotTreeTypeEntity> PlotTreeTypes { get; set; }
     }
 }

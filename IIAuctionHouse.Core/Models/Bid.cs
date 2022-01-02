@@ -1,4 +1,6 @@
-﻿namespace IIAuctionHouse.Core.Models
+﻿using System.Collections.Generic;
+
+namespace IIAuctionHouse.Core.Models
 {
     public class Bid
     {

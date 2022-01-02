@@ -17,6 +17,6 @@ namespace IIAuctionHouse.Core.Models
         
         public List<Plot> Plots { get; set; }
 
-        //public List<Bid> Bids { get; set; }
+        public List<Bid> Bids { get; set; }
     }
 }

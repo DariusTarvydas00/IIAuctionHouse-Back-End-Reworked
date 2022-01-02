@@ -9,7 +9,7 @@ namespace IIAuctionHouse.Core.IServices
         
         Plot GetById(int id);
 
-        Plot NewPlot(double plotSize, int plotResolutionFirstValue, int plotResolutionSecondValue, 
+        Plot NewPlot(double plotSize, string plotResolution, 
             double plotTenderness, int volume, int averageTreeHeight, List<TreeType> treeTypes);
 
         Plot Create(Plot plot);

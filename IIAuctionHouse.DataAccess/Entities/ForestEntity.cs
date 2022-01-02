@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using IIAuctionHouse.DataAccess.Entities.ForestEntities;
 
 namespace IIAuctionHouse.DataAccess.Entities
 {
@@ -14,17 +13,15 @@ namespace IIAuctionHouse.DataAccess.Entities
         public double GeoLocationX { get; set; }
 
         public double GeoLocationY { get; set; }
-        
-        // public int ForestUidForeignKey { get; set; }
-        // public ForestUidEntity ForestUidEntity { get; set; }
-        
-        public int PlotForeignKey { get; set; }
-        public List<PlotEntity> PlotEntities { get; set; }
-        
-        //public int ForestUidForeignKey { get; set; }
-        //public ForestUidEntity ForestUidEntity { get; set; }
-        // public int BidForeignKey { get; set; }
-        // public List<BidEntity> BidEntities { get; set; }
+      //   
+      //   public int PlotEntityId { get; set; }
+      //   public List<PlotEntity> PlotEntities { get; set; }
+      //   
+      // //  public int ForestUidId { get; set; }
+      //  // public ForestUIdEntity ForestUidEntity { get; set; }
+      //   
+      //    public int BidEntityId { get; set; }
+      //    public List<BidEntity> BidEntities { get; set; }
 
     }
 }

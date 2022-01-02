@@ -26,20 +26,15 @@ namespace IIAuctionHouse.WebApi.Controllers
         public ActionResult<Plot> GetById(int id)
         {
             var foundPlot = _plotService.GetById(id);
-            return Ok(new Plot()
-            {
-                Id = foundPlot.Id,
-                // TreeType = new TreeType()
-                // {
-                //     Id = foundForest.TreeType.Id
-                // }
-            });
+            return Ok(foundPlot);
         }
 
         [HttpPost]
         public ActionResult<Plot> Post([FromBody] Plot plot)
         {
-            return _plotService.Create(plot);
+            var newPlot = _plotService.NewPlot(plot.Volume, plot.PlotResolution,
+                plot.PlotTenderness, plot.Volume, plot.AverageTreeHeight, plot.TreeTypes);
+            return _plotService.Create(newPlot);
         }
 
         [HttpPut]
@@ -53,11 +48,7 @@ namespace IIAuctionHouse.WebApi.Controllers
         public ActionResult<Plot> Delete(int id)
         {
             var deleteTypeOfTree = _plotService.Delete(id);
-            return Ok(new Plot()
-            {
-                Id = deleteTypeOfTree.Id,
-                //TreeType = deleteTypeOfTree.TreeType
-            });
+            return Ok(deleteTypeOfTree);
         }
     }
 }

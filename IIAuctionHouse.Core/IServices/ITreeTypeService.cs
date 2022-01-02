@@ -9,7 +9,7 @@ namespace IIAuctionHouse.Core.IServices
         
         TreeType GetById(int id);
 
-        TreeType NewTreeType(string name, int percentage);
+        TreeType NewTreeType(string name, Percentage percentage);
 
         TreeType Create(TreeType treeType);
         

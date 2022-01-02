@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using IIAuctionHouse.Core.Models;
 using IIAuctionHouse.DataAccess.Entities;
-using IIAuctionHouse.DataAccess.Entities.ForestEntities;
 using IIAuctionHouse.Domain.IRepositories;
 
 namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailsRepositories
@@ -26,7 +25,7 @@ namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailsRepositories
                 ForestryEnterprise = entity.ForestryEnterprise,
                 GeoLocationX = entity.GeoLocationX,
                 GeoLocationY = entity.GeoLocationY,
-                
+                Plots = new List<Plot>()
                 // ForestLocation = entity.ForestLocationEntityForeignKey > 0 ? new ForestLocation()
                 // {
                 //     Id = entity.ForestLocationEntity.Id,
