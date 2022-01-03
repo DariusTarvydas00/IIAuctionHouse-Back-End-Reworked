@@ -1,13 +1,15 @@
-﻿namespace IIAuctionHouse.Core.Models
+﻿using System.Reflection.Metadata;
+
+namespace IIAuctionHouse.Core.Models
 {
     public class ForestLocation
     {
         public int Id { get; set; }
-        
-        public string ForestryEnterprise { get; set; }
 
         public double GeoLocationX { get; set; }
 
         public double GeoLocationY { get; set; }
+
+        //public Forest Forest { get; set; }
     }
 }

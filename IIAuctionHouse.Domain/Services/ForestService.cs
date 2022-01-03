@@ -30,7 +30,6 @@ namespace IIAuctionHouse.Domain.Services
         {
             var newForest = new Forest()
             {
-                ForestUid = forestUid,
                 ForestGroup = forestGroup,
             };
             return newForest;

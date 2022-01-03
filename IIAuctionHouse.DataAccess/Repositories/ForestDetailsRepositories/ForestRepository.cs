@@ -22,7 +22,6 @@ namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailsRepositories
             {
                 Id = entity.Id,
                 ForestGroup = entity.ForestGroup,
-                Plots = new List<Plot>()
                 // ForestLocation = entity.ForestLocationEntityForeignKey > 0 ? new ForestLocation()
                 // {
                 //     Id = entity.ForestLocationEntity.Id,
@@ -101,9 +100,7 @@ namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailsRepositories
             var deletedForest = new Forest()
             {
                 Id = delete.Id,
-                ForestUid = delete.ForestUid,
                 ForestGroup = delete.ForestGroup,
-                Plots = delete.Plots,
 
             };
             _ctx.Remove(delete);

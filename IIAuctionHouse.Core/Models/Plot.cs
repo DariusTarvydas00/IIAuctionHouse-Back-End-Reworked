@@ -13,6 +13,6 @@ namespace IIAuctionHouse.Core.Models
         public int AverageTreeHeight { get; set; }
         public List<TreeType> TreeTypes { get; set; }
 
-        //public Forest Forest { get; set; }
+        public Forest Forest { get; set; }
     }
 }

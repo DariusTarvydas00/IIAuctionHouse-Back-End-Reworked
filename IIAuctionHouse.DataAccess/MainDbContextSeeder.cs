@@ -102,52 +102,71 @@ namespace IIAuctionHouse.DataAccess
             
             
             // -------- Percentage Entity -----------//
-            for (int i = 1; i < 11; i++)
-            {
-                _ctx.PercentageEntities.Add(new PercentageEntity()
-                {
-                    PercentageEntityValue = i * 10,
-                });
-            }
-
-            // -------- Tree Type Entity -----------//
-            var list = new List<TreeTypeEntity>();
-            for (int i = 1; i < 11; i++)
-            {
-                Random randomNumber = new Random();
-                int id = randomNumber.Next(1, 10);
-                _ctx.TreeTypeEntities.Add(new TreeTypeEntity()
-                {
-                    Name = "treeType" + i,
-                    PercentageEntityId = id
-                });
-                list.Add(new TreeTypeEntity()
-                {
-                    Name = "treeType" + i,
-                    PercentageEntityId = id
-                });
-            }
-
-            
-            _ctx.PlotEntities.Add(new PlotEntity()
-            {
-                Volume = 12,
-                PlotResolution = "123x123",
-                PlotSize = 12,
-                PlotTenderness = 0.1,
-                AverageTreeHeight = 23,
-                TreeTypesInE = new List<PlotTreeTypeEntity>()
-                {
-                    new PlotTreeTypeEntity()
-                    {
-                        TreeTypeEntityId = 1
-                    },
-                    new PlotTreeTypeEntity()
-                    {
-                        TreeTypeEntityId = 2
-                    }
-                }
-            });
+            // for (int i = 1; i < 11; i++)
+            // {
+            //     _ctx.PercentageEntities.Add(new PercentageEntity()
+            //     {
+            //         PercentageEntityValue = i * 10,
+            //     });
+            // }
+            //
+            // // -------- Tree Type Entity -----------//
+            // var list = new List<TreeTypeEntity>();
+            // for (int i = 1; i < 11; i++)
+            // {
+            //     Random randomNumber = new Random();
+            //     int id = randomNumber.Next(1, 10);
+            //     _ctx.TreeTypeEntities.Add(new TreeTypeEntity()
+            //     {
+            //         Name = "treeType" + i,
+            //         PercentageEntityId = id
+            //     });
+            //     list.Add(new TreeTypeEntity()
+            //     {
+            //         Name = "treeType" + i,
+            //         PercentageEntityId = id
+            //     });
+            // }
+            //
+            //
+            // _ctx.PlotEntities.Add(new PlotEntity()
+            // {
+            //     Volume = 12,
+            //     PlotResolution = "123x123",
+            //     PlotSize = 12,
+            //     PlotTenderness = 0.1,
+            //     AverageTreeHeight = 23,
+            //     TreeTypesInE = new List<PlotTreeTypeEntity>()
+            //     {
+            //         new PlotTreeTypeEntity()
+            //         {
+            //             TreeTypeEntityId = 1
+            //         },
+            //         new PlotTreeTypeEntity()
+            //         {
+            //             TreeTypeEntityId = 2
+            //         }
+            //     }
+            // });
+            // _ctx.PlotEntities.Add(new PlotEntity()
+            // {
+            //     Volume = 1,
+            //     PlotResolution = "1x1",
+            //     PlotSize = 1,
+            //     PlotTenderness = 0.7,
+            //     AverageTreeHeight = 50,
+            //     TreeTypesInE = new List<PlotTreeTypeEntity>()
+            //     {
+            //         new PlotTreeTypeEntity()
+            //         {
+            //             TreeTypeEntityId = 2,
+            //         },
+            //         new PlotTreeTypeEntity()
+            //         {
+            //             TreeTypeEntityId = 1
+            //         }
+            //     }
+            // });
             // _ctx.PlotTreeTypes.Add(new PlotTreeTypeEntity()
             // {
             //     PlotEntityId = 1,
