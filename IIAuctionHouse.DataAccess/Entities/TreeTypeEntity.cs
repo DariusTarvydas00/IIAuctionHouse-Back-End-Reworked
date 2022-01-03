@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace IIAuctionHouse.DataAccess.Entities
 {
@@ -10,7 +11,6 @@ namespace IIAuctionHouse.DataAccess.Entities
 
         public int? PercentageEntityId { get; set; }
         public PercentageEntity PercentageEntity { get; set; }
-        //
-        // public List<PlotTreeTypeEntity> PlotTreeTypes { get; set; }
+        public ICollection<PlotTreeTypeEntity> PlotEntitiesInE { get; set; }
     }
 }

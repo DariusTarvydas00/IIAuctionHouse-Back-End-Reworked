@@ -22,9 +22,6 @@ namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailsRepositories
             {
                 Id = entity.Id,
                 ForestGroup = entity.ForestGroup,
-                ForestryEnterprise = entity.ForestryEnterprise,
-                GeoLocationX = entity.GeoLocationX,
-                GeoLocationY = entity.GeoLocationY,
                 Plots = new List<Plot>()
                 // ForestLocation = entity.ForestLocationEntityForeignKey > 0 ? new ForestLocation()
                 // {
@@ -85,9 +82,6 @@ namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailsRepositories
             {
                 Id = forest.Id,
                 ForestGroup = forest.ForestGroup,
-                ForestryEnterprise = forest.ForestryEnterprise,
-                GeoLocationX = forest.GeoLocationX,
-                GeoLocationY = forest.GeoLocationY,
             }).Entity;
             _ctx.SaveChanges();
             return new Forest()
@@ -109,9 +103,6 @@ namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailsRepositories
                 Id = delete.Id,
                 ForestUid = delete.ForestUid,
                 ForestGroup = delete.ForestGroup,
-                ForestryEnterprise = delete.ForestryEnterprise,
-                GeoLocationX = delete.GeoLocationX,
-                GeoLocationY = delete.GeoLocationY,
                 Plots = delete.Plots,
 
             };

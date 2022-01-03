@@ -11,7 +11,6 @@ namespace IIAuctionHouse.WebApi.Controllers
         public class TreeTypeController : ControllerBase
         {
             private readonly ITreeTypeService _treeTypeService;
-            private readonly IPercentageService _percentageService;
 
             public TreeTypeController(ITreeTypeService treeTypeService)
             {
@@ -32,15 +31,12 @@ namespace IIAuctionHouse.WebApi.Controllers
             }
 
             [HttpPost]
-            public ActionResult<TreeTypeDto> Post([FromBody] TreeTypeDto treeTypeDto)
+
+            public ActionResult<TreeTypeDto> Post([FromBody] TreeTypePostDto treeTypeDto)
             {
                 return Ok(_treeTypeService.Create(new TreeType()
                 {
-                    Name = treeTypeDto.Name,
-                    Percentage = new Percentage()
-                    {
-                        Id = treeTypeDto.PercentageId
-                    }
+                    Name = treeTypeDto.Name
                 }));
             }
             

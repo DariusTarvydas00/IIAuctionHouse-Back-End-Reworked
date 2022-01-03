@@ -12,9 +12,7 @@ namespace IIAuctionHouse.DataAccess.Entities
         public double PlotTenderness { get; set; }
         public int Volume { get; set; }
         public int AverageTreeHeight { get; set; }
-        // public List<TreeType> PlotTreeTypes { get; set; }
-        //
-        // public List<PlotTreeTypeEntity> TreeTypes { get; set; }
+         public virtual ICollection<PlotTreeTypeEntity> TreeTypesInE { get; set; }
         //
         // public int ForestEntityId { get; set; }
         // public ForestEntity ForestEntity { get; set; }

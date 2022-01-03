@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.Core.Models;
+using IIAuctionHouse.WebApi.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IIAuctionHouse.WebApi.Controllers
@@ -30,18 +31,28 @@ namespace IIAuctionHouse.WebApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Plot> Post([FromBody] Plot plot)
+        public ActionResult<PlotDto> Post([FromBody] PlotDto plotDto)
         {
-            var newPlot = _plotService.NewPlot(plot.Volume, plot.PlotResolution,
-                plot.PlotTenderness, plot.Volume, plot.AverageTreeHeight, plot.TreeTypes);
-            return _plotService.Create(newPlot);
+            var plotie = _plotService.NewPlot(plotDto.PlotSize, plotDto.PlotResolution, plotDto.PlotTenderness,
+                plotDto.Volume, plotDto.AverageTreeHeight,  plotDto.TreeTypes);
+            return Ok(_plotService.Create(plotie));
         }
 
-        [HttpPut]
-        public ActionResult<Plot> Put(Plot plot)
+        [HttpPut("{id}")]
+        public ActionResult<Plot> Put(int id, [FromBody] PlotDto plot)
         {
-            var update = _plotService.GetById(plot.Id);
-            return _plotService.Update(update);
+            var update = _plotService.GetById(id);
+            var upd = new Plot()
+            {
+                Id = update.Id,
+                Volume = plot.Volume,
+                PlotResolution = plot.PlotResolution,
+                PlotSize = plot.PlotSize,
+                PlotTenderness = plot.PlotTenderness,
+                AverageTreeHeight = plot.AverageTreeHeight,
+                TreeTypes = plot.TreeTypes
+            };
+            return _plotService.Update(upd);
         }
 
         [HttpDelete]

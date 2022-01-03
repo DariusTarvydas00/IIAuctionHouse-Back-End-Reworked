@@ -25,21 +25,6 @@ namespace IIAuctionHouse.Domain.Services
             return _treeTypeRepository.GetById(id);
         }
 
-        public TreeType NewTreeType(string name, int percentage)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public TreeType NewTreeType(string newTreeTypeName, Percentage newTreeTypePercentage)
-        {
-            var newTreeType = new TreeType()
-            {
-                Name = newTreeTypeName,
-                Percentage = newTreeTypePercentage
-            };
-            return newTreeType;
-        }
-
         public TreeType Create(TreeType treeType)
         {
             return _treeTypeRepository.Create(treeType);

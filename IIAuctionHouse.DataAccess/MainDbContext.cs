@@ -73,10 +73,35 @@ namespace IIAuctionHouse.DataAccess
             // //HasForeignKey(a=>a.PlotId);
             // modelBuilder.Entity<PlotEntity>().HasOne(a => a.ForestEntity).WithMany(c => c.PlotEntities)
             //     .HasForeignKey(a => new {a.ForestEntity}).OnDelete(DeleteBehavior.NoAction);
+
             
             
-            
-            
+            // modelBuilder.Entity<PlotEntity>().HasMany<TreeTypeEntity>(entity => entity.TreeTypeEntities)
+            //     .WithMany(entity => entity.PlotEntities).
+            // modelBuilder.Entity<PlotTreeTypeEntity>().HasKey(ptt => new {ptt.PlotEntityId, ptt.TreeTypeEntityId});
+            // modelBuilder.Entity<PlotTreeTypeEntity>().HasOne(p => p.PlotEntity)
+            //     .WithMany(p => p.TreeTypeEntities).HasForeignKey(ptt => ptt.PlotEntityId);
+            // modelBuilder.Entity<PlotTreeTypeEntity>().HasOne(p => p.TreeTypeEntity)
+            //     .WithMany(p => p.PlotEntities).HasForeignKey(ptt => ptt.TreeTypeEntityId);
+            modelBuilder.Entity<PlotTreeTypeEntity>().HasKey(ptt => new {ptt.TreeTypeEntityId, ptt.PlotEntityId});
+            modelBuilder.Entity<PlotTreeTypeEntity>()
+                .HasOne<PlotEntity>(e => e.PlotEntity)
+                .WithMany(entity => entity.TreeTypesInE).HasForeignKey(sc=>sc.PlotEntityId);
+            modelBuilder.Entity<PlotTreeTypeEntity>()
+                .HasOne<TreeTypeEntity>(e => e.TreeTypeEntity)
+                .WithMany(entity => entity.PlotEntitiesInE).HasForeignKey(sc=>sc.TreeTypeEntityId);
+                //
+                // .UsingEntity<>(
+                //     bg => bg
+                //         .HasOne(bg => bg.PlotEntity)
+                //         .WithMany()
+                //         .HasForeignKey("PlotEntityId"),
+                //     bg => bg
+                //         .HasOne(bg => bg.TreeTypeEntity)
+                //         .WithMany()
+                //         .HasForeignKey("TreeTypeEntityId"))
+                // .ToTable("BookGenres")
+                // .HasKey(bg => new { bg.PlotEntityId, bg.TreeTypeEntityId });
             
             
             
@@ -88,13 +113,14 @@ namespace IIAuctionHouse.DataAccess
                 .HasForeignKey(entity => entity.PercentageEntityId)
                 .OnDelete(DeleteBehavior.SetNull);
         }
+        
+        public virtual DbSet<PlotTreeTypeEntity> PlotTreeTypes { get; set; }
+        public virtual DbSet<PlotEntity> PlotEntities { get; set; }
+        public virtual DbSet<TreeTypeEntity> TreeTypeEntities { get; set; }
+        public virtual DbSet<PercentageEntity> PercentageEntities { get; set; }
 
         public virtual DbSet<ForestEntity> Forests { get; set; }
 
-        public virtual DbSet<PlotTreeTypeEntity> PlotTreeTypes { get; set; }
-        public virtual DbSet<PlotEntity> Plots { get; set; }
-        public virtual DbSet<TreeTypeEntity> TreeTypes { get; set; }
-        public virtual DbSet<PercentageEntity> PercentageEntities { get; set; }
         public virtual DbSet<UserEntity> UserEntities { get; set; }
         public virtual DbSet<ForestUIdEntity> ForestUIdEntities { get; set; }
         public virtual DbSet<BidEntity> BidEntities { get; set; }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace IIAuctionHouse.Core.Models
 {
@@ -8,6 +9,7 @@ namespace IIAuctionHouse.Core.Models
          public string Name { get; set; }
          public Percentage Percentage { get; set; }
 
-        //public List<Plot> Plots { get; set; }
+         [JsonIgnore]
+         public List<Plot> Plots { get; set; }
     }
 }

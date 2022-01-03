@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Intrinsics;
 using IIAuctionHouse.Core.Models;
+using IIAuctionHouse.DataAccess.Converters;
 using IIAuctionHouse.DataAccess.Entities;
 namespace IIAuctionHouse.DataAccess
 {
@@ -109,16 +111,48 @@ namespace IIAuctionHouse.DataAccess
             }
 
             // -------- Tree Type Entity -----------//
+            var list = new List<TreeTypeEntity>();
             for (int i = 1; i < 11; i++)
             {
                 Random randomNumber = new Random();
                 int id = randomNumber.Next(1, 10);
-                _ctx.TreeTypes.Add(new TreeTypeEntity()
+                _ctx.TreeTypeEntities.Add(new TreeTypeEntity()
+                {
+                    Name = "treeType" + i,
+                    PercentageEntityId = id
+                });
+                list.Add(new TreeTypeEntity()
                 {
                     Name = "treeType" + i,
                     PercentageEntityId = id
                 });
             }
+
+            
+            _ctx.PlotEntities.Add(new PlotEntity()
+            {
+                Volume = 12,
+                PlotResolution = "123x123",
+                PlotSize = 12,
+                PlotTenderness = 0.1,
+                AverageTreeHeight = 23,
+                TreeTypesInE = new List<PlotTreeTypeEntity>()
+                {
+                    new PlotTreeTypeEntity()
+                    {
+                        TreeTypeEntityId = 1
+                    },
+                    new PlotTreeTypeEntity()
+                    {
+                        TreeTypeEntityId = 2
+                    }
+                }
+            });
+            // _ctx.PlotTreeTypes.Add(new PlotTreeTypeEntity()
+            // {
+            //     PlotEntityId = 1,
+            //     TreeTypeEntityId = 2
+            // });
             _ctx.SaveChanges();
         }
 
@@ -134,27 +168,27 @@ namespace IIAuctionHouse.DataAccess
             }
             
             // -------- Tree Type Entity -----------//
-            _ctx.TreeTypes.Add(new TreeTypeEntity()
+            _ctx.TreeTypeEntities.Add(new TreeTypeEntity()
             {
                 Name = "Pine",
                 PercentageEntity = new PercentageEntity() { }
             });
-            _ctx.TreeTypes.Add(new TreeTypeEntity()
+            _ctx.TreeTypeEntities.Add(new TreeTypeEntity()
             {
                 Name = "Fir",
                 PercentageEntity = new PercentageEntity() { }
             });
-            _ctx.TreeTypes.Add(new TreeTypeEntity()
+            _ctx.TreeTypeEntities.Add(new TreeTypeEntity()
             {
                 Name = "Birch",
                 PercentageEntity = new PercentageEntity() { }
             });
-            _ctx.TreeTypes.Add(new TreeTypeEntity()
+            _ctx.TreeTypeEntities.Add(new TreeTypeEntity()
             {
                 Name = "Oak",
                 PercentageEntity = new PercentageEntity() { }
             });
-            _ctx.TreeTypes.Add(new TreeTypeEntity()
+            _ctx.TreeTypeEntities.Add(new TreeTypeEntity()
             {
                 Name = "Aspen",
                 PercentageEntity = new PercentageEntity() { }

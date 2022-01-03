@@ -18,7 +18,7 @@ namespace IIAuctionHouse.DataAccess.Repositories
 
         public IEnumerable<TreeType> FindAll()
         {
-            return _ctx.TreeTypes
+            return _ctx.TreeTypeEntities
                 .Include(tt=>tt.PercentageEntity)
                 .Select(treeType => new TreeType()
             {
@@ -34,7 +34,7 @@ namespace IIAuctionHouse.DataAccess.Repositories
 
         public TreeType GetById(int id)
         {
-            return _ctx.TreeTypes.Select(entity => new TreeType()
+            return _ctx.TreeTypeEntities.Select(entity => new TreeType()
             {
                 Id = entity.Id,
                 Name = entity.Name,
@@ -48,10 +48,9 @@ namespace IIAuctionHouse.DataAccess.Repositories
 
         public TreeType Create(TreeType treeType)
         {
-            var entity = _ctx.TreeTypes.Add(new TreeTypeEntity()
+            var entity = _ctx.TreeTypeEntities.Add(new TreeTypeEntity()
             {
-                Name = treeType.Name,
-                PercentageEntityId = treeType.Percentage.Id
+                Name = treeType.Name
             }).Entity;
             _ctx.SaveChanges();
             return new TreeType()
@@ -63,7 +62,7 @@ namespace IIAuctionHouse.DataAccess.Repositories
 
         public TreeType Update(TreeType updateTreeType)
         {
-            var entity = _ctx.TreeTypes.Update(new TreeTypeEntity()
+            var entity = _ctx.TreeTypeEntities.Update(new TreeTypeEntity()
             {
                 Id = updateTreeType.Id,
                 Name = updateTreeType.Name,
@@ -79,8 +78,8 @@ namespace IIAuctionHouse.DataAccess.Repositories
 
         public TreeType Delete(int id)
         {
-            var entity = _ctx.TreeTypes.FirstOrDefault(treeType => treeType.Id == id);
-            if (entity != null) _ctx.TreeTypes.Remove(entity);
+            var entity = _ctx.TreeTypeEntities.FirstOrDefault(treeType => treeType.Id == id);
+            if (entity != null) _ctx.TreeTypeEntities.Remove(entity);
             _ctx.SaveChanges();
             return new TreeType()
             {

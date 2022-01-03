@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using IIAuctionHouse.Core.Models;
 using IIAuctionHouse.DataAccess.Entities;
@@ -11,23 +12,16 @@ namespace IIAuctionHouse.DataAccess.Converters
         {
             return new Plot()
             {
-                // Volume = pe.Volume,
-                // PlotSize = pe.PlotSize,
-                // PlotTenderness = pe.PlotTenderness,
-                // AverageTreeHeight = pe.AverageTreeHeight,
-                // PlotResolutionFirstValue = pe.PlotResolutionFirstValue,
-                // PlotResolutionSecondValue = pe.PlotResolutionSecondValue,
-                // Forest = new Forest()
-                // {
-                //     Id = pe.ForestEntity != null ? pe.ForestId : 0,
-                //     ForestGroup = pe.ForestEntity != null ? pe.ForestEntity.ForestGroup : ""
-                // },
-                // TreeTypes = pe.TreeTypeEntities.Select(entity => new TreeType()
-                // {
-                //     Id = entity.Id,
-                //     Name = entity.Name,
-                //     Percentage = entity.Percentage
-                // }).ToList(),
+                Id = pe.Id,
+                Volume = pe.Volume,
+                PlotSize = pe.PlotSize,
+                PlotTenderness = pe.PlotTenderness,
+                AverageTreeHeight = pe.AverageTreeHeight,
+                PlotResolution = pe.PlotResolution,
+                TreeTypes = pe.TreeTypesInE.Select(asd=>new TreeType()
+                {
+                    Id = asd.TreeTypeEntityId,
+                }).ToList()
             };
         }
     }
@@ -38,23 +32,21 @@ namespace IIAuctionHouse.DataAccess.Converters
         {
             return new PlotEntity()
             {
+                Id = p.Id,
                 Volume = p.Volume,
                 PlotSize = p.PlotSize,
                 PlotTenderness = p.PlotTenderness,
                 AverageTreeHeight = p.AverageTreeHeight,
-                
-                // PlotTreeTypes = p.TreeTypes.Select(tt=> new TreeType()
-                // {
-                //     Id = tt.Id,
-                //     Name = tt.Name,
-                //     Percentage = tt.Percentage
-               // }).ToList()
-                // TreeTypeEntities = p.TreeTypes.Select(tt=> new TreeTypeEntity()
-                // {
-                //     Id = tt.Id,
-                //     Name = tt.Name,
-                //     Percentage = tt.Percentage
-                // }).ToList()
+                PlotResolution = p.PlotResolution,
+                TreeTypesInE = p.TreeTypes.Select(asd => new PlotTreeTypeEntity()
+                {
+                    TreeTypeEntityId = asd.Id
+                }).ToList()
+                    //                   == null ? new List<PlotTreeTypeEntity>() :
+                    // p.TreeTypes.Select(t=>new PlotTreeTypeEntity
+                    // {
+                    //     TreeTypeEntityId = t.Id,
+                    // }).ToList()
             };
         }
     }

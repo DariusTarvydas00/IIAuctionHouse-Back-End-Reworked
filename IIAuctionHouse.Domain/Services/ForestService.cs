@@ -32,9 +32,6 @@ namespace IIAuctionHouse.Domain.Services
             {
                 ForestUid = forestUid,
                 ForestGroup = forestGroup,
-                ForestryEnterprise = forestryEnterprise,
-                GeoLocationX = geoLocationX,
-                GeoLocationY = geoLocationY,
             };
             return newForest;
         }
