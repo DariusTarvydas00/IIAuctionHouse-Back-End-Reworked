@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.Core.Models;
-using IIAuctionHouse.WebApi.Dtos;
+using IIAuctionHouse.WebApi.Dtos.PlotDto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IIAuctionHouse.WebApi.Controllers
@@ -18,48 +20,74 @@ namespace IIAuctionHouse.WebApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Plot>> GetAll()
+        public ActionResult GetAll()
         {
-            return _plotService.GetAll();
+            try
+            {
+                return Ok(_plotService.GetAll());
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Plot> GetById(int id)
+        public ActionResult GetById(int id)
         {
-            var foundPlot = _plotService.GetById(id);
-            return Ok(foundPlot);
+            try
+            {
+                return Ok(_plotService.GetById(id));
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         [HttpPost]
-        public ActionResult<PlotDto> Post([FromBody] PlotDto plotDto)
+        public ActionResult Post([FromBody] PlotPostDto plotPostDto)
         {
-            var plotie = _plotService.NewPlot(plotDto.PlotSize, plotDto.PlotResolution, plotDto.PlotTenderness,
-                plotDto.Volume, plotDto.AverageTreeHeight,  plotDto.TreeTypes);
-            return Ok(_plotService.Create(plotie));
+            try
+            {
+                var newPlot = _plotService.NewPlot(plotPostDto.PlotSize, plotPostDto.PlotResolution, plotPostDto.PlotTenderness,
+                    plotPostDto.Volume, plotPostDto.AverageTreeHeight,  plotPostDto.TreeTypeDto);
+                return Ok(_plotService.Create(newPlot));
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Plot> Put(int id, [FromBody] PlotDto plot)
+        public ActionResult Put(int id, [FromBody] PlotPutDto plotPost)
         {
-            var update = _plotService.GetById(id);
-            var upd = new Plot()
+            if (id != plotPost.Id)
+                return BadRequest("Id needs to match in both url and object");
+            try
             {
-                Id = update.Id,
-                Volume = plot.Volume,
-                PlotResolution = plot.PlotResolution,
-                PlotSize = plot.PlotSize,
-                PlotTenderness = plot.PlotTenderness,
-                AverageTreeHeight = plot.AverageTreeHeight,
-                TreeTypes = plot.TreeTypes
-            };
-            return _plotService.Update(upd);
+                var plotUpdate = _plotService.UpdatePlot(plotPost.Id, plotPost.PlotSize, plotPost.PlotResolution, plotPost.PlotTenderness,
+                    plotPost.Volume, plotPost.AverageTreeHeight,  plotPost.TreeTypeDto);
+                return Ok(_plotService.Update(plotUpdate));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpDelete]
-        public ActionResult<Plot> Delete(int id)
+        public ActionResult Delete(int id)
         {
-            var deleteTypeOfTree = _plotService.Delete(id);
-            return Ok(deleteTypeOfTree);
+            try
+            {
+                return Ok(_plotService.Delete(id));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
     }
 }

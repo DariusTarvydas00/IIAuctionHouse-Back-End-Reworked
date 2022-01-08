@@ -1,18 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Intrinsics;
 using IIAuctionHouse.Core.Models;
-using IIAuctionHouse.DataAccess.Converters;
 using IIAuctionHouse.DataAccess.Entities;
+using IIAuctionHouse.Domain.IRepositories;
+
 namespace IIAuctionHouse.DataAccess
 {
     public class MainDbContextSeeder: IMainDbContextSeeder
     {
-        private MainDbContext _ctx;
+        private readonly MainDbContext _ctx;
+        private readonly IPercentageRepository _percentageRepository;
+        private readonly ITreeRepository _treeRepository;
+        private readonly IPlotRepository _plotRepository;
+        private readonly ITreeTypeRepository _treeTypeRepository;
 
-        public MainDbContextSeeder(MainDbContext ctx)
+        public MainDbContextSeeder(MainDbContext ctx, 
+            IPercentageRepository percentageRepository,
+            ITreeRepository treeRepository,
+            IPlotRepository plotRepository,
+            ITreeTypeRepository treeTypeRepository)
         {
             _ctx = ctx;
+            _percentageRepository = percentageRepository;
+            _treeRepository = treeRepository;
+            _plotRepository = plotRepository;
+            _treeTypeRepository = treeTypeRepository;
         }
 
         public void SeedDevelopment()
@@ -20,40 +31,182 @@ namespace IIAuctionHouse.DataAccess
             _ctx.Database.EnsureDeleted();
             _ctx.Database.EnsureCreated();
             
-            // _ctx.TreeTypes.Add(new TreeTypeEntity()
+            //-------- Percentage Entity -----------//
+            for (int i = 1; i < 11; i++)
+            {
+                _percentageRepository.Create(new Percentage()
+                {
+                    Value = i * 10
+                });
+            }
+            _ctx.SaveChanges();
+            
+            //-------- Tree Entity -----------------//
+            _treeRepository.Create(new Tree()
+            {
+                Name = "Pine"
+            });
+            _treeRepository.Create(new Tree()
+            {
+                Name = "Fir"
+            });
+            _treeRepository.Create(new Tree()
+            {
+                Name = "Birch"
+            });
+            _treeRepository.Create(new Tree()
+            {
+                Name = "Oak"
+            });
+            _treeRepository.Create(new Tree()
+            {
+                Name = "Aspen"
+            });
+            _ctx.SaveChanges();
+
+            //-------- Tree Type Test Entity -------------//
+            // for (int i=1; i<10; i++)
             // {
-            //     Name = "TreeType1",
-            //     Percentage = 10
-            // });
-            // _ctx.TreeTypes.Add(new TreeTypeEntity()
-            // {
-            //     Name = "TreeType2",
-            //     Percentage = 20
-            // });
-            // _ctx.TreeTypes.Add(new TreeTypeEntity()
-            // {
-            //     Name = "TreeType3",
-            //     Percentage = 30
-            // });
-            // var treeTypeList = new List<TreeType>();
-            // for (int i = 1; i <10; i++)
-            // {
-            //     var newTreeType = new TreeType()
+            //     Random random = new Random();
+            //     int randomize = random.Next(1, 10);
+            //     _treeTypeRepository.Create(new TreeType()
             //     {
-            //         Id = i,
-            //         Name = "treeType" + i,
-            //         Percentage = i * 10,
-            //     };
-            //     treeTypeList.Add(newTreeType);
-            //     _ctx.TreeTypes.Add(new TreeTypeEntity()
-            //     {
-            //         Id = i,
-            //         Name = "treeType" + i,
-            //         Percentage = i * 10,
-            //         
-            //     });
+            //         Tree = new Tree()
+            //         {
+            //             Id = randomize
+            //         },
+            //         Percentage = new Percentage()
+            //         {
+            //             Id = randomize
+            //         }
+            //     });  
+            // }
+            
+            _ctx.SaveChanges();
+            //     treeTypeList.Add(treeType);
             // }
             //
+            //
+            // _ctx.SaveChanges();
+            //
+            // _plotRepository.Create(new Plot()
+            // {
+            //     Volume = 10,
+            //     PlotResolution = "10",
+            //     PlotSize = 12.1,
+            //     PlotTenderness = 0.7,
+            //     AverageTreeHeight = 23,
+            //     TreeType = new TreeType()
+            //     {
+            //         Tree = new Tree()
+            //         {
+            //             Id = 1
+            //         },
+            //         Percentage = new Percentage()
+            //         {
+            //             Id = 1
+            //         }
+            //     }
+            // });
+            //
+            // _plotRepository.Create(new Plot()
+            // {
+            //     Volume = 10,
+            //     PlotResolution = "10",
+            //     PlotSize = 12.1,
+            //     PlotTenderness = 0.7,
+            //     AverageTreeHeight = 23,
+            //     TreeType = new TreeType()
+            //     {
+            //         Tree = new Tree()
+            //         {
+            //             Id = 1
+            //         },
+            //         Percentage = new Percentage()
+            //         {
+            //             Id = 1
+            //         }
+            //     }
+            // });
+
+            // _ctx.SaveChanges();
+            // //
+            // _plotRepository.Create(new Plot()
+            // {
+            //     Volume = 10,
+            //     PlotResolution = "10",
+            //     PlotSize = 12.1,
+            //     PlotTenderness = 0.7,
+            //     AverageTreeHeight = 23,
+            //     TreeTypes = new TreeType()
+            //     {
+            //         Id = 1,
+            //         Percentage = new Percentage()
+            //         {
+            //             Id = 5
+            //         }
+            //     }
+            // });
+            // _plotRepository.Create(new Plot()
+            // {
+            //     Volume = 10,
+            //     PlotResolution = "10",
+            //     PlotSize = 12.1,
+            //     PlotTenderness = 0.7,
+            //     AverageTreeHeight = 23,
+            //     TreeTypes = new TreeType()
+            //     {
+            //         Id = 2,
+            //         Percentage = new Percentage()
+            //         {
+            //             Value = 10
+            //         }
+            //     }
+            // });
+            //
+            // _treeTypeRepository.Create(new TreeType()
+            // {
+            //     Name = "asd",
+            //     Percentage = new Percentage()
+            //     {
+            //         Id = 1
+            //     }
+            // });
+            
+            _ctx.SaveChanges();
+            
+            // for (int i = 1; i < 11; i++)
+            // {
+            //     
+            //     var treeType =_treeTypeRepository.Create(new TreeType()
+            //     {
+            //         Name = "TreeType" + i,
+            //         Percentage = new Percentage()
+            //         {
+            //             Id = i
+            //         }
+            //     });
+            //     treeTypeList.Add(treeType);
+            // }
+            //
+            // _ctx.SaveChanges();
+            //
+            //
+            // for (int i = 1; i < 11; i++)
+            // {
+            //     var treeType =_treeTypeRepository.Create(new TreeType()
+            //     {
+            //         Name = "TreeType" + i,
+            //         Percentage = new Percentage()
+            //         {
+            //             Id = 1
+            //         }
+            //     });
+            //     
+            //     treeTypeList.Add(treeType);
+            // }
+            
+            _ctx.SaveChanges();
             // _ctx.Plots.Add(new PlotEntity()
             // {
             //     Volume = 12,
@@ -100,16 +253,6 @@ namespace IIAuctionHouse.DataAccess
             //     TreeTypeEntityForeignKey = 2
             // });
             
-            
-            // -------- Percentage Entity -----------//
-            // for (int i = 1; i < 11; i++)
-            // {
-            //     _ctx.PercentageEntities.Add(new PercentageEntity()
-            //     {
-            //         PercentageEntityValue = i * 10,
-            //     });
-            // }
-            //
             // // -------- Tree Type Entity -----------//
             // var list = new List<TreeTypeEntity>();
             // for (int i = 1; i < 11; i++)
@@ -177,41 +320,37 @@ namespace IIAuctionHouse.DataAccess
 
         public void SeedProduction()
         {
-            // -------- Percentage Entity -----------//
+            //-------- Percentage Entity -----------//
             for (int i = 1; i < 11; i++)
             {
-                _ctx.PercentageEntities.Add(new PercentageEntity()
+                _percentageRepository.Create(new Percentage()
                 {
-                    PercentageEntityValue = i * 10,
+                    Value = i * 10
                 });
             }
             
-            // -------- Tree Type Entity -----------//
-            _ctx.TreeTypeEntities.Add(new TreeTypeEntity()
+            //-------- Tree Entity -----------------//
+            _treeRepository.Create(new Tree()
             {
-                Name = "Pine",
-                PercentageEntity = new PercentageEntity() { }
+                Name = "Pine"
             });
-            _ctx.TreeTypeEntities.Add(new TreeTypeEntity()
+            _treeRepository.Create(new Tree()
             {
-                Name = "Fir",
-                PercentageEntity = new PercentageEntity() { }
+                Name = "Fir"
             });
-            _ctx.TreeTypeEntities.Add(new TreeTypeEntity()
+            _treeRepository.Create(new Tree()
             {
-                Name = "Birch",
-                PercentageEntity = new PercentageEntity() { }
+                Name = "Birch"
             });
-            _ctx.TreeTypeEntities.Add(new TreeTypeEntity()
+            _treeRepository.Create(new Tree()
             {
-                Name = "Oak",
-                PercentageEntity = new PercentageEntity() { }
+                Name = "Oak"
             });
-            _ctx.TreeTypeEntities.Add(new TreeTypeEntity()
+            _treeRepository.Create(new Tree()
             {
-                Name = "Aspen",
-                PercentageEntity = new PercentageEntity() { }
+                Name = "Aspen"
             });
+            
         }
     }
 }

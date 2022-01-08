@@ -1,51 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Collections.Generic;
 using System.Formats.Asn1;
 using System.Linq;
-using AutoMapper;
 using IIAuctionHouse.Core.Models;
-using IIAuctionHouse.DataAccess.Converters;
 using IIAuctionHouse.DataAccess.Entities;
 using IIAuctionHouse.Domain.IRepositories;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace IIAuctionHouse.DataAccess.Repositories
 {
     public class PlotRepository: IPlotRepository
     {
         private readonly MainDbContext _ctx;
-        private readonly IMapper _mapper;
+        private readonly ITreeRepository _treeRepository;
+        private readonly IPercentageRepository _percentageRepository;
 
-        public PlotRepository(MainDbContext ctx)
+        public PlotRepository(MainDbContext ctx, ITreeRepository treeRepository, IPercentageRepository percentageRepository)
         {
-            var configuration = new MapperConfiguration(cfg => {
-                cfg.CreateMap<Plot, PlotEntity>().ConvertUsing(new PlotToPlotEntityConverter());
-                cfg.CreateMap<PlotEntity, Plot>().ConvertUsing(new PlotEntityToPlotConverter());
-            });
-            configuration.AssertConfigurationIsValid();
-            _mapper = configuration.CreateMapper();
             _ctx = ctx;
-        }
-        
-        public static void TryUpdateManyToMany<T, TKey>(MainDbContext db, IEnumerable<T> currentItems, IEnumerable<T> newItems, IEqualityComparer<T>? getKey) where T : class
-        {
-            db.Set<T>().RemoveRange(currentItems.Except(newItems, getKey));
-            db.Set<T>().AddRange(newItems.Except(currentItems, getKey));
+            _treeRepository = treeRepository;
+            _percentageRepository = percentageRepository;
         }
 
-        public static IEnumerable<T> Except<T, TKey>(IEnumerable<T> items, IEnumerable<T> other, Func<T, TKey> getKeyFunc)
-        {
-            return items
-                .GroupJoin(other, getKeyFunc, getKeyFunc, (item, tempItems) => new { item, tempItems })
-                .SelectMany(t => t.tempItems.DefaultIfEmpty(), (t, temp) => new { t, temp })
-                .Where(t => ReferenceEquals(null, t.temp) || t.temp.Equals(default(T)))
-                .Select(t => t.t.item);
-        }
-        
         public IEnumerable<Plot> FindAll()
         {
-            return _ctx.PlotEntities.Select(entity => new Plot()
+            
+            return _ctx.PlotDbSet.Select(entity => new Plot()
             {
                 Id = entity.Id,
                 PlotSize = entity.PlotSize,
@@ -58,47 +38,77 @@ namespace IIAuctionHouse.DataAccess.Repositories
 
         public Plot GetById(int id)
         {
-            return _ctx.PlotEntities.Select(ae => new Plot()
+            return _ctx.PlotDbSet.Select(entity => new Plot()
             {
-                Id = ae.Id,
-                PlotSize = ae.PlotSize,
-                PlotResolution = ae.PlotResolution,
-                PlotTenderness = ae.PlotTenderness,
-                Volume = ae.Volume,
-                AverageTreeHeight = ae.AverageTreeHeight,
-                TreeTypes = ae.TreeTypesInE.Select(asd => new TreeType()
+                Id = entity.Id,
+                PlotSize = entity.PlotSize,
+                PlotResolution = entity.PlotResolution,
+                PlotTenderness = entity.PlotTenderness,
+                Volume = entity.Volume,
+                AverageTreeHeight = entity.AverageTreeHeight,
+                TreeTypes =  entity.TreeTypeSql.Select(sql => new TreeType()
                 {
-                    Id = asd.TreeTypeEntity.Id,
-                    Name = asd.TreeTypeEntity.Name,
+                    Id = sql.Id,
+                    Tree =  new Tree()
+                    {
+                        Id = sql.TreeSql.Id,
+                        Name = sql.TreeSql.Name
+                    },
                     Percentage = new Percentage()
                     {
-                        Id = asd.TreeTypeEntity.PercentageEntity.Id,
-                        PercentageValue = asd.TreeTypeEntity.PercentageEntity.PercentageEntityValue
+                        Id = sql.PercentageSql.Id,
+                        Value = sql.PercentageSql.Value
                     }
-                    
                 }).ToList()
-            }).FirstOrDefault(s=>s.Id == id); 
+            }).FirstOrDefault(plot => plot.Id == id);
         }
 
         public Plot Create(Plot plot)
         {
-                var cityEntry = _ctx.PlotEntities.Add(_mapper.Map<Plot, PlotEntity>(plot));
-                _ctx.SaveChanges();
-                var newCity = cityEntry.Entity;
-                return _mapper.Map<PlotEntity, Plot>(newCity);
+            var newPlot = new PlotSql()
+            {
+                Volume = plot.Volume,
+                PlotResolution = plot.PlotResolution,
+                PlotSize = plot.PlotSize,
+                PlotTenderness = plot.PlotTenderness,
+                AverageTreeHeight = plot.AverageTreeHeight,
+                TreeTypeSql = plot.TreeTypes.Select(asd => new TreeTypeSql()
+                {
+                    PercentageSqlId = asd.Percentage.Id,
+                    TreeSqlId = asd.Tree.Id
+                }).ToList()
+            };
+            var plotEntry = _ctx.PlotDbSet.Add(newPlot);
+            _ctx.SaveChanges();
+            return new Plot()
+            {
+                Id = plotEntry.Entity.Id,
+                PlotSize = plotEntry.Entity.PlotSize,
+                PlotResolution = plotEntry.Entity.PlotResolution,
+                PlotTenderness = plotEntry.Entity.PlotTenderness,
+                Volume = plotEntry.Entity.Volume,
+                AverageTreeHeight = plotEntry.Entity.AverageTreeHeight,
+            };
         }
 
         public Plot Update(Plot plot)
         {
-            var entity = _ctx.PlotEntities.Update(new PlotEntity()
+            var entity =new PlotSql()
             {
                 Id = plot.Id,
                 PlotSize = plot.PlotSize,
                 PlotResolution = plot.PlotResolution,
                 PlotTenderness = plot.PlotTenderness,
                 Volume = plot.Volume,
-                AverageTreeHeight = plot.AverageTreeHeight
-            }).Entity;
+                AverageTreeHeight = plot.AverageTreeHeight,
+                TreeTypeSql = plot.TreeTypes.Select(asd => new TreeTypeSql()
+                   {
+                       Id = asd.Id,
+                       PercentageSqlId = asd.Percentage.Id, 
+                       TreeSqlId = asd.Tree.Id}).ToList()
+            };
+            _ctx.PlotDbSet.Update(entity);
+
             _ctx.SaveChanges();
             return new Plot()
             {
@@ -114,9 +124,13 @@ namespace IIAuctionHouse.DataAccess.Repositories
         public Plot Delete(int id)
         {
             var entity = GetById(id);
-            _ctx.PlotEntities.Remove(new PlotEntity()
+            _ctx.PlotDbSet.Remove(new PlotSql()
             {
-                Id = id
+                Id = id,
+                TreeTypeSql = entity.TreeTypes.Select(asd => new TreeTypeSql()
+                {
+                    Id = asd.Id
+                }).ToList()
             });
             _ctx.SaveChanges();
             return new Plot()

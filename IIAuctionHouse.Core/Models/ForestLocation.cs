@@ -9,7 +9,5 @@ namespace IIAuctionHouse.Core.Models
         public double GeoLocationX { get; set; }
 
         public double GeoLocationY { get; set; }
-
-        //public Forest Forest { get; set; }
     }
 }

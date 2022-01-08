@@ -5,7 +5,7 @@ using IIAuctionHouse.Core.Models;
 using IIAuctionHouse.DataAccess.Entities;
 using IIAuctionHouse.Domain.IRepositories;
 
-namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailsRepositories
+namespace IIAuctionHouse.DataAccess.Repositories
 {
     public class ForestRepository: IForestRepository
     {
@@ -18,7 +18,7 @@ namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailsRepositories
 
         public IEnumerable<Forest> FindAll()
         {
-            return _ctx.Forests.Select(entity => new Forest()
+            return _ctx.ForestsDbSet.Select(entity => new Forest()
             {
                 Id = entity.Id,
                 ForestGroup = entity.ForestGroup,
@@ -61,7 +61,7 @@ namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailsRepositories
         
         public Forest Create(Forest forest)
         {
-            var entity = _ctx.Forests.Add(new ForestEntity()
+            var entity = _ctx.ForestsDbSet.Add(new ForestSql()
             {
             }).Entity;
             _ctx.SaveChanges();
@@ -77,7 +77,7 @@ namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailsRepositories
 
         public Forest Update(Forest forest)
         {
-            var entity = _ctx.Forests.Update(new ForestEntity()
+            var entity = _ctx.ForestsDbSet.Update(new ForestSql()
             {
                 Id = forest.Id,
                 ForestGroup = forest.ForestGroup,

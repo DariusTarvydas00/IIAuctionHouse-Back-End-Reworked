@@ -2,6 +2,8 @@
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.Core.Models;
 using IIAuctionHouse.DataAccess.Entities;
+using IIAuctionHouse.WebApi.Dto;
+using IIAuctionHouse.WebApi.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IIAuctionHouse.WebApi.Controllers
@@ -30,6 +32,7 @@ namespace IIAuctionHouse.WebApi.Controllers
             return Ok(new Forest()
             {
                 Id = foundForest.Id,
+                ForestGroup = foundForest.ForestGroup
                 // TreeType = new TreeType()
                 // {
                 //     Id = foundForest.TreeType.Id
@@ -44,9 +47,9 @@ namespace IIAuctionHouse.WebApi.Controllers
         }
         
         [HttpPut]
-        public ActionResult<Forest> Put(ForestEntity forestEntity)
+        public ActionResult<Forest> Put(ForestSql forestSql)
         {
-            var update =_forestService.GetById(forestEntity.Id);
+            var update =_forestService.GetById(forestSql.Id);
             return _forestService.Update(update);
         }
 

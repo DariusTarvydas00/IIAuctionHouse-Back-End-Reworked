@@ -2,10 +2,10 @@
 
 namespace IIAuctionHouse.DataAccess.Entities
 {
-    public class ForestryEnterpriseEntity
+    public class ForestryEnterpriseSql
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<ForestEntity> ForestEntities { get; set; }
+        public List<ForestSql> Forests { get; set; }
     }
 }

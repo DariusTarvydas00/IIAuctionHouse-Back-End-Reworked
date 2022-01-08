@@ -1,7 +1,6 @@
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.DataAccess;
 using IIAuctionHouse.DataAccess.Repositories;
-using IIAuctionHouse.DataAccess.Repositories.ForestDetailsRepositories;
 using IIAuctionHouse.Domain.IRepositories;
 using IIAuctionHouse.Domain.Services;
 using Microsoft.AspNetCore.Builder;
@@ -45,6 +44,8 @@ namespace IIAuctionHouse.WebApi
             services.AddScoped<IForestRepository, ForestRepository>();
             services.AddScoped<IPlotService, PlotService>();
             services.AddScoped<IPlotRepository, PlotRepository>();
+            services.AddScoped<ITreeService, TreeService>();
+            services.AddScoped<ITreeRepository, TreeRepository>();
             services.AddScoped<ITreeTypeService, TreeTypeService>();
             services.AddScoped<ITreeTypeRepository, TreeTypeRepository>();
             

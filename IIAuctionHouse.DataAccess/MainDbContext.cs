@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks.Dataflow;
-using IIAuctionHouse.Core.Models;
+﻿using IIAuctionHouse.Core.Models;
 using IIAuctionHouse.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace IIAuctionHouse.DataAccess
 {
@@ -9,61 +9,134 @@ namespace IIAuctionHouse.DataAccess
     {
         public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
         {
+            base.ChangeTracker.CascadeDeleteTiming = CascadeTiming.OnSaveChanges;
+            base.ChangeTracker.DeleteOrphansTiming = CascadeTiming.OnSaveChanges;
             
         }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // //------ Many to Many Relationship -------//
-            modelBuilder.Entity<PlotTreeTypeEntity>().HasKey(ptt => new {ptt.TreeTypeEntityId, ptt.PlotEntityId});
-            modelBuilder.Entity<PlotTreeTypeEntity>()
-                .HasOne<PlotEntity>(e => e.PlotEntity)
-                .WithMany(entity => entity.TreeTypesInE).HasForeignKey(sc=>sc.PlotEntityId);
-            modelBuilder.Entity<PlotTreeTypeEntity>()
-                .HasOne<TreeTypeEntity>(e => e.TreeTypeEntity)
-                .WithMany(entity => entity.PlotEntitiesInE).HasForeignKey(sc=>sc.TreeTypeEntityId);
+              modelBuilder.Entity<Percentage>().ToTable(nameof(Percentage), t => t.ExcludeFromMigrations());
+              modelBuilder.Entity<Tree>().ToTable(nameof(Tree), t => t.ExcludeFromMigrations());
+              modelBuilder.Entity<TreeType>().ToTable(nameof(TreeType), t => t.ExcludeFromMigrations());
 
-            
-            // modelBuilder.Entity<PlotTreeTypeEntity>().HasKey(ptt => new {ptt.TreeTypeEntityId, ptt.PlotEntityId});
-            // modelBuilder.Entity<PlotTreeTypeEntity>().HasOne(ptt => ptt.TreeTypeEntity).
-            //     WithMany(tt => tt.PlotTreeTypes).
-            //     HasForeignKey(ptt => ptt.TreeTypeEntityId);
-            // modelBuilder.Entity<PlotTreeTypeEntity>().HasOne(ptt => ptt.PlotEntity).
-            //     WithMany(tt => tt.TreeTypes).
-            //     HasForeignKey(ptt => ptt.PlotEntityId);
-            //
-            //
-            
-            //------ One to Many Relationship --------//
-            modelBuilder.Entity<PercentageEntity>().HasMany(entity => entity.TreeTypeEntities)
-                .WithOne(entity => entity.PercentageEntity)
-                .HasForeignKey(entity => entity.PercentageEntityId)
-                .OnDelete(DeleteBehavior.SetNull);
-            
-            modelBuilder.Entity<ForestEntity>().HasMany(entity => entity.PlotEntities)
-                .WithOne(entity => entity.ForestEntity)
-                .HasForeignKey(entity => entity.ForestEntityId)
-                .OnDelete(DeleteBehavior.SetNull);
-            
-            modelBuilder.Entity<ForestEntity>().HasOne<ForestryEnterpriseEntity>(entity => entity.ForestryEnterpriseEntity)
-                .WithMany(entity => entity.ForestEntities).HasForeignKey(entity => entity.ForestryEnterpriseId)
-                .OnDelete(DeleteBehavior.SetNull);
-            
-            modelBuilder.Entity<PlotEntity>().HasOne<ForestEntity>(entity => entity.ForestEntity)
-                .WithMany(entity => entity.PlotEntities).HasForeignKey(entity => entity.ForestEntityId)
-                .OnDelete(DeleteBehavior.SetNull);
-            
-            
-            //------ One to one  --------//
-             // modelBuilder.Entity<ForestLocationEntity>().HasOne<ForestEntity>(f => f.ForestEntity)
-             //     .WithOne(fl => fl.ForestLocationEntity)
-             //     .HasForeignKey<ForestEntity>(f => f.ForestLocationEntityId);
-            // modelBuilder.Entity<TreeTypeEntity>().HasOne(f => f.ForestEntity)
-            //     .WithOne(fl => fl.TreeTypeEntity)
-            //     .HasForeignKey<ForestEntity>(f => f.TreeTypeEntityForeignKey);
-            
-            
-            // modelBuilder.Entity<PlotEntity>().HasOne<ForestEntity>(p => p.ForestEntity).
+              modelBuilder.Entity<TreeTypeSql>().HasOne(tree => tree.TreeSql).WithMany();
+              modelBuilder.Entity<TreeTypeSql>().HasOne(tree => tree.PercentageSql).WithMany();
+
+               modelBuilder.Entity<Plot>().ToTable(nameof(Plot), t => t.ExcludeFromMigrations());
+
+               // modelBuilder.Entity<Forest>().ToTable(nameof(Forest), t => t.ExcludeFromMigrations());
+               // modelBuilder.Entity<ForestLocation>().ToTable(nameof(ForestLocation), t => t.ExcludeFromMigrations());
+               // modelBuilder.Entity<ForestryEnterpriseSql>().ToTable(nameof(ForestryEnterpriseSql), t => t.ExcludeFromMigrations());
+               // modelBuilder.Entity<ForestUid>().ToTable(nameof(ForestUid), t => t.ExcludeFromMigrations());
+               // modelBuilder.Entity<Bid>().ToTable(nameof(Bid), t => t.ExcludeFromMigrations());
+               // modelBuilder.Entity<User>().ToTable(nameof(User), t => t.ExcludeFromMigrations());
+               // modelBuilder.Entity<Admin>().ToTable(nameof(Admin), t => t.ExcludeFromMigrations());
+
+               // modelBuilder.Entity<TreeTypeSql>().HasOne<PercentageSql>(sql => sql.PercentageSql).WithMany()
+               //     .HasForeignKey(sql => new {sql.PercentageSqlId});
+               // modelBuilder.Entity<TreeTypeSql>().HasMany<PercentageSql>(ptt => ptt.PercentageSql).
+               //     WithMany(tt => tt.PlotTreeTypes).
+               //     HasForeignKey(ptt => ptt.TreeTypeEntityId);
+               // modelBuilder.Entity<PlotTreeTypeEntity>().HasOne(ptt => ptt.PlotEntity).
+               //     WithMany(tt => tt.TreeTypes).
+               //     HasForeignKey(ptt => ptt.PlotEntityId);
+               //
+               //
+
+               //------ One to Many Relationship --------//
+
+               // modelBuilder.Entity<ForestEntity>().HasMany(entity => entity.PlotEntities)
+               //     .WithOne(entity => entity.ForestEntity)
+               //     .HasForeignKey(entity => entity.ForestEntityId)
+               //     .OnDelete(DeleteBehavior.SetNull);
+               // //
+               // modelBuilder.Entity<UserEntity>().HasMany(entity => entity.BidEntities)
+               //     .WithOne(entity => entity.UserEntity)
+               //     .HasForeignKey(entity => entity.UserEntityId)
+               //     .OnDelete(DeleteBehavior.SetNull);
+               //
+               // modelBuilder.Entity<ForestEntity>().HasOne<ForestryEnterpriseEntity>(entity => entity.ForestryEnterpriseEntity)
+               //     .WithMany(entity => entity.ForestEntities).HasForeignKey(entity => entity.ForestryEnterpriseId)
+               //     .OnDelete(DeleteBehavior.SetNull);
+               //
+               // // modelBuilder.Entity<PlotSql>().HasOne<ForestEntity>(entity => entity.ForestEntity)
+               // //     .WithMany(entity => entity.PlotEntities).HasForeignKey(entity => entity.ForestEntityId)
+               // //     .OnDelete(DeleteBehavior.SetNull);
+               // //
+               // modelBuilder.Entity<ForestUidEntity>().HasOne<UserEntity>(entity => entity.UserEntity)
+               //     .WithMany(entity => entity.ForestUidEntities).HasForeignKey(entity => entity.UserEntityId)
+               //     .OnDelete(DeleteBehavior.SetNull);
+               //
+               //
+               // //------ One to one  --------//
+               //
+               //  modelBuilder.Entity<ForestUidEntity>().HasOne<ForestEntity>(f => f.ForestEntity)
+               //      .WithOne(fl => fl.ForestUidEntity)
+               //      .HasForeignKey<ForestEntity>(f => f.ForestUidEntityId).OnDelete(DeleteBehavior.SetNull);
+               // modelBuilder.Entity<ForestLocationEntity>().HasOne(f => f.ForestEntity)
+               //     .WithOne(fl => fl.ForestLocationEntity)
+               //     .HasForeignKey<ForestEntity>(f => f.ForestLocationEntityId).OnDelete(DeleteBehavior.SetNull);
+               //
+               // /*
+               //  * Many To Many Relation Ships
+               //  */
+               //
+               // modelBuilder.Entity<TreeTypePercentageSql>().HasKey(ptt => new {ptt.TreeTypeEntityId, ptt.PercentageSqlId});
+               // modelBuilder.Entity<TreeTypePercentageSql>()
+               //     .HasOne<PercentageSql>(e => e.PercentageSql)
+               //     .WithMany(entity => entity.TreeTypePercentageSqls).HasForeignKey(sc=>sc.PercentageSqlId);
+               // modelBuilder.Entity<TreeTypePercentageSql>()
+               //     .HasOne<TreeTypeSql>(e => e.TreeTypeSql)
+               //     .WithMany(entity => entity.TreeTypePercentageSqls).HasForeignKey(sc=>sc.TreeTypeEntityId);
+               //
+
+               /*
+                * One To Many Relation Ships
+                */
+
+               /*
+               * One To One Relation Ships
+               */
+
+               // modelBuilder.Entity<PercentageSql>().HasMany()<TreeTypeSql>(entity => entity.TreeTypeSql)
+               //     .Has(entity => entity.PercentageSql)
+               //     .HasForeignKey<TreeTypeSql>(entity => entity.PercentageSqlId)
+               // //     .OnDelete(DeleteBehavior.SetNull);
+               // modelBuilder.Entity<PlotSql>().HasMany<TreeTypeSql>(entity => entity.TreeTypeSql)
+               //     .WithOne(entity => entity.PercentageSql)
+               //     .HasForeignKey<TreeTypeSql>(entity => entity.PercentageSqlId)
+               //     .OnDelete(DeleteBehavior.SetNull);
+
+
+
+               // modelBuilder.Entity<PlotSql>().HasOne<TreeTypeSql>(sql => sql.TreeTypeSql)
+               //     .WithOne(sql => sql.PlotSql).HasForeignKey<TreeTypeSql>(sql => sql.PlotSqlId);
+               //
+               // modelBuilder.Entity<TreeTypeSql>().HasOne<PercentageSql>(sql => sql.PercentageSql)
+               //     .WithOne(sql => sql.TreeTypeSql).HasForeignKey<PercentageSql>(sql => sql.TreeTypeSqlId);
+        }
+
+        public virtual DbSet<UserSql> UserDbSet { get; set; }
+        
+        public virtual DbSet<ForestUidSql> ForestUidDbSet { get; set; }
+        
+        public virtual DbSet<ForestLocationSql> ForestLocationDbSet { get; set; }
+        
+        public virtual DbSet<ForestryEnterpriseSql> ForestryEnterpriseDbSet { get; set; }
+
+        public virtual DbSet<BidSql> BidsDbSet { get; set; }
+        public virtual DbSet<ForestSql> ForestsDbSet { get; set; }
+        public virtual DbSet<PlotSql> PlotDbSet { get; set; }
+        public virtual DbSet<TreeSql> TreeDbSet { get; set; }
+        public virtual DbSet<PercentageSql> PercentageDbSet { get; set; }
+        public virtual DbSet<AdminSql> AdminDbSet { get; set; }
+        
+        public virtual DbSet<TreeTypeSql> TreeTypeDbSet { get; set; }
+        
+        
+          // modelBuilder.Entity<PlotEntity>().HasOne<ForestEntity>(p => p.ForestEntity).
             //     WithMany(f => f.PlotEntities).
             //     HasForeignKey(p => p.ForestEntityId);
             //
@@ -138,20 +211,6 @@ namespace IIAuctionHouse.DataAccess
             // modelBuilder.Entity<TreeTypeEntity>().HasOne<PercentageEntity>(tt => tt.PercentageEntity)
             //     .WithMany(entity => entity.TreeTypeEntities)
             //     .HasForeignKey(entity => entity.PercentageEntityId).OnDelete(DeleteBehavior.Cascade);
-        }
-        
-        public virtual DbSet<PlotTreeTypeEntity> PlotTreeTypes { get; set; }
-        public virtual DbSet<PlotEntity> PlotEntities { get; set; }
-        
-        public virtual DbSet<ForestLocation> ForestLocations { get; set; }
-        public virtual DbSet<ForestryEnterprise> ForestryEnterpriseEntities { get; set; }
-        public virtual DbSet<TreeTypeEntity> TreeTypeEntities { get; set; }
-        public virtual DbSet<PercentageEntity> PercentageEntities { get; set; }
-
-        public virtual DbSet<ForestEntity> Forests { get; set; }
-
-        public virtual DbSet<UserEntity> UserEntities { get; set; }
-        public virtual DbSet<BidEntity> BidEntities { get; set; }
-        
+          
     }
 }

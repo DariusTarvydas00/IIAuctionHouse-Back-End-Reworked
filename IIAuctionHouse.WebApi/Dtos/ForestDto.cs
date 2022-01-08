@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using IIAuctionHouse.Core.Models;
 
-namespace IIAuctionHouse.WebApi.Dtos
+namespace IIAuctionHouse.WebApi.Dto
 {
     public class ForestDto
     {

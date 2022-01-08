@@ -11,6 +11,8 @@ namespace IIAuctionHouse.Core.IServices
 
         TreeType Create(TreeType treeType);
         
+        TreeType NewTreeType(Tree treeType, Percentage percentage);
+        
         TreeType Update(TreeType treeType);
 
         TreeType Delete(int id);

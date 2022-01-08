@@ -17,61 +17,52 @@ namespace IIAuctionHouse.DataAccess.Repositories
 
         public IEnumerable<Percentage> FindAll()
         {
-            return _ctx.PercentageEntities.Select(percentage => new Percentage()
+            return _ctx.PercentageDbSet.Select(percentage => new Percentage()
             {
                 Id = percentage.Id,
-                PercentageValue = percentage.PercentageEntityValue
+                Value = percentage.Value
             }).ToList();
-        }
-
-        public Percentage GetById(int id)
-        {
-            return _ctx.PercentageEntities.Select(percentage => new Percentage()
-            {
-                Id = percentage.Id,
-                PercentageValue = percentage.PercentageEntityValue
-            }).FirstOrDefault(pId => pId.Id == id);
         }
 
         public Percentage Create(Percentage percentage)
         {
-            var newPercentage = _ctx.PercentageEntities.Add(new PercentageEntity()
+            var newPercentage = _ctx.PercentageDbSet.Add(new PercentageSql()
             {
-                PercentageEntityValue = percentage.PercentageValue
+                Value = percentage.Value
             }).Entity;
             _ctx.SaveChanges();
             return new Percentage()
             {
                 Id = newPercentage.Id,
-                PercentageValue = newPercentage.PercentageEntityValue
+                Value = newPercentage.Value
             };
         }
 
         public Percentage Update(Percentage percentage)
         {
-            var entity = _ctx.PercentageEntities.Update(new PercentageEntity()
+            var percentageSql = _ctx.PercentageDbSet.Update(new PercentageSql()
             {
                 Id = percentage.Id,
-                PercentageEntityValue = percentage.PercentageValue
+                Value = percentage.Value
             }).Entity;
             _ctx.SaveChanges();
             return new Percentage()
             {
-                Id = entity.Id,
-                PercentageValue = entity.PercentageEntityValue
+                Id = percentageSql.Id,
+                Value = percentageSql.Value
             };
         }
 
         public Percentage Delete(int id)
         {
-            var entity = _ctx.PercentageEntities.FirstOrDefault(percentage => percentage.Id == id);
-            if (entity != null) _ctx.PercentageEntities.Remove(entity);
+            var entity = _ctx.PercentageDbSet.FirstOrDefault(percentage => percentage.Id == id);
+            if (entity != null) _ctx.PercentageDbSet.Remove(entity);
             _ctx.SaveChanges();
-            return new Percentage()
+            return entity != null ? new Percentage()
             {
                 Id = entity.Id,
-                PercentageValue = entity.PercentageEntityValue
-            };
+                Value = entity.Value
+            } : null;
         }
     }
 }

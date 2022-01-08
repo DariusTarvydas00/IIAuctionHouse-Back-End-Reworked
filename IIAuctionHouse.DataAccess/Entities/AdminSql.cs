@@ -1,6 +1,7 @@
 ﻿namespace IIAuctionHouse.DataAccess.Entities
 {
-    public class ForestUidEntity
+    public class AdminSql
     {
+        public int Id { get; set; }
     }
 }

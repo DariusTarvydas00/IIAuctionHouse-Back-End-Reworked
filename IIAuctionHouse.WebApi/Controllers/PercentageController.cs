@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using IIAuctionHouse.Core.IServices;
-using IIAuctionHouse.Core.Models;
-using IIAuctionHouse.WebApi.Dtos;
+using IIAuctionHouse.WebApi.Dtos.PercentageDto;
+using IIAuctionHouse.WebApi.Dtos.TreeTypeDto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IIAuctionHouse.WebApi.Controllers
@@ -19,48 +19,62 @@ namespace IIAuctionHouse.WebApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Percentage>> GetAll()
+        public ActionResult GetAll()
         {
-            return _percentageService.GetAll();
-        }
-
-        [HttpGet("{id}")]
-        public ActionResult<Percentage> GetById(int id)
-        {
-            var percentage = _percentageService.GetById(id);
-            return Ok(percentage);
+            try
+            {
+                return Ok(_percentageService.GetAll());
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         [HttpPost]
-        public ActionResult<PercentageDto> Post([FromBody] PercentageDto percentageDto)
+        public ActionResult Post([FromBody] PercentagePostDto percentage)
         {
-            var newPercentage = _percentageService.NewPercentage(percentageDto.PercentageValue);
-            return Ok(_percentageService.Create(newPercentage));
+            if (percentage.Value < 1)
+                return BadRequest("Percentage Update is missing some information");
+            try
+            {
+                var newPercentage = _percentageService.NewPercentage(percentage.Value);
+                return Ok(_percentageService.Create(newPercentage));
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
         
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] PercentageDto percentageDto)
         {
-            var perc = _percentageService.GetById(id);
-            var upd = new Percentage()
-            {
-                Id = perc.Id,
-                PercentageValue = percentageDto.PercentageValue
-            };
-            return Ok(_percentageService.Update(upd));
-        }
-
-        [HttpDelete("{id}")]
-        public ActionResult<PercentageDto> Delete(int id)
-        {
+            if (id != percentageDto.Id)
+                return BadRequest("Id needs to match in both url and object");
+            if (percentageDto.Value < 1)
+                return BadRequest("Percentage Update is missing some information");
             try
             {
-                var deletePercentage = _percentageService.Delete(id);
-                return Ok(deletePercentage);
+                var percentageUpdate = _percentageService.NewPercentage(percentageDto.Value);
+                return Ok(_percentageService.Update(percentageUpdate));
             }
             catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                return Ok(_percentageService.Delete(id));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
             }
         }
     }
