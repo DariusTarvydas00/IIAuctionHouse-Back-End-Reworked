@@ -1,7 +1,6 @@
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.DataAccess;
 using IIAuctionHouse.DataAccess.Repositories;
-using IIAuctionHouse.DataAccess.Repositories.ForestDetailsRepositories;
 using IIAuctionHouse.Domain.IRepositories;
 using IIAuctionHouse.Domain.Services;
 using Microsoft.AspNetCore.Builder;
@@ -41,16 +40,17 @@ namespace IIAuctionHouse.WebApi
                         .UseSqlite("Data Source=AuctionHouseDbContext.db");
                 }, ServiceLifetime.Transient
             );
-            services.AddScoped<IForestService, ForestService>();
-            services.AddScoped<IForestRepository, ForestRepository>();
-            services.AddScoped<IPlotService, PlotService>();
-            services.AddScoped<IPlotRepository, PlotRepository>();
-            services.AddScoped<ITreeTypeService, TreeTypeService>();
-            services.AddScoped<ITreeTypeRepository, TreeTypeRepository>();
-            
             services.AddScoped<IPercentageService, PercentageService>();
             services.AddScoped<IPercentageRepository, PercentageRepository>();
-            
+            services.AddScoped<ITreeService, TreeService>();
+            services.AddScoped<ITreeRepository, TreeRepository>();
+            services.AddScoped<IPlotService, PlotService>();
+            services.AddScoped<IPlotRepository, PlotRepository>();
+            services.AddScoped<IForestService, ForestService>();
+            services.AddScoped<IForestRepository, ForestRepository>();
+            services.AddScoped<IForestEnterpriseService, ForestEnterpriseService>();
+            services.AddScoped<IForestEnterpriseRepository, ForestEnterpriseRepository>();
+
             services.AddScoped<IMainDbContextSeeder, MainDbContextSeeder>();
             
             services.AddCors(options =>

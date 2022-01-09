@@ -1,6 +1,6 @@
-﻿namespace IIAuctionHouse.Core.Models
+﻿namespace IIAuctionHouse.WebApi.Dtos.PercentageDto
 {
-    public class Percentage
+    public class PercentagePutDto
     {
         public int Id { get; set; }
         public int Value { get; set; }

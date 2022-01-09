@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.Core.Models;
-using IIAuctionHouse.DataAccess.Entities;
+using IIAuctionHouse.WebApi.Dtos.ForestDto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IIAuctionHouse.WebApi.Controllers
@@ -18,47 +18,76 @@ namespace IIAuctionHouse.WebApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Forest>> GetAll()
+        public ActionResult GetAll()
         {
-            return _forestService.GetAll();
+            try
+            {
+                return Ok(_forestService.GetAll());
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Forest> GetById(int id)
+        public ActionResult GetById(int id)
         {
-            var foundForest = _forestService.GetById(id);
-            return Ok(new Forest()
+            if (id < 1)
+                return BadRequest("Percentage Update is missing some information");
+            try
             {
-                Id = foundForest.Id,
-                // TreeType = new TreeType()
-                // {
-                //     Id = foundForest.TreeType.Id
-                // }
-            });
+                return Ok(_forestService.GetById(id));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         [HttpPost]
-        public ActionResult<Forest> Post([FromBody] Forest forest)
+        public ActionResult Post([FromBody] ForestPostDto forest)
         {
-            return _forestService.Create(forest);
+            try
+            {
+                var newForest = _forestService.NewForest(forest.ForestUid, forest.ForestGroup, forest.ForestLocation, forest.Plots, forest.Bids, forest.ForestryEnterprise);
+                return Ok(_forestService.Create(newForest));
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
         
         [HttpPut]
-        public ActionResult<Forest> Put(ForestEntity forestEntity)
+        public ActionResult Put(int id, [FromBody]ForestPutDto forest)
         {
-            var update =_forestService.GetById(forestEntity.Id);
-            return _forestService.Update(update);
+            if (id != forest.Id)
+                return BadRequest("Id needs to match in both url and object");
+            try
+            {
+                var forestUpdate = _forestService.UpdateForest(forest.Id, forest.ForestUid, forest.ForestGroup, forest.ForestLocation, forest.Plots, forest.Bids, forest.ForestryEnterprise);
+                return Ok(_forestService.Update(forestUpdate));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpDelete]
-        public ActionResult<Forest> Delete(int id)
+        public ActionResult Delete(int id)
         {
-            var deleteTypeOfTree = _forestService.Delete(id);
-            return Ok(new Forest()
+            if (id < 1)
+                return BadRequest("Percentage Update is missing some information");
+            try
             {
-                Id = deleteTypeOfTree.Id,
-                //TreeType = deleteTypeOfTree.TreeType
-            });
+                return Ok(_forestService.Delete(id));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
     }
 }

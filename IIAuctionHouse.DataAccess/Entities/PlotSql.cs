@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace IIAuctionHouse.DataAccess.Entities
 {
-    public class PlotEntity
+    public class PlotSql
     {
         public int Id { get; set; }
         public double PlotSize { get; set; }
@@ -12,11 +12,9 @@ namespace IIAuctionHouse.DataAccess.Entities
         public double PlotTenderness { get; set; }
         public int Volume { get; set; }
         public int AverageTreeHeight { get; set; }
-        // public List<TreeType> PlotTreeTypes { get; set; }
-        //
-        // public List<PlotTreeTypeEntity> TreeTypes { get; set; }
-        //
-        // public int ForestEntityId { get; set; }
-        // public ForestEntity ForestEntity { get; set; }
+        public int? ForestSqlId { get; set; }
+        public ForestSql ForestSql { get; set; }
+        public int? TreeTypeSqlId { get; set; }
+        public List<TreeTypeSql> TreeTypeSql { get; set; }
     }
 }

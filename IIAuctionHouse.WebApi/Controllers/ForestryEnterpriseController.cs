@@ -1,5 +1,8 @@
 ﻿using System;
 using IIAuctionHouse.Core.IServices;
+using IIAuctionHouse.Core.Models;
+using IIAuctionHouse.WebApi.Dtos.ForestDto;
+using IIAuctionHouse.WebApi.Dtos.ForestryEnterpriseDto;
 using IIAuctionHouse.WebApi.Dtos.PlotDto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,13 +10,13 @@ namespace IIAuctionHouse.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PlotController : Controller
+    public class ForestryEnterpriseController : Controller
     {
-        private readonly IPlotService _plotService;
+        private readonly IForestEnterpriseService _forestEnterpriseService;
 
-        public PlotController(IPlotService plotService)
+        public ForestryEnterpriseController(IForestEnterpriseService forestEnterpriseService)
         {
-            _plotService = plotService;
+            _forestEnterpriseService = forestEnterpriseService;
         }
 
         [HttpGet]
@@ -21,7 +24,7 @@ namespace IIAuctionHouse.WebApi.Controllers
         {
             try
             {
-                return Ok(_plotService.GetAll());
+                return Ok(_forestEnterpriseService.GetAll());
             }
             catch (Exception e)
             {
@@ -34,7 +37,7 @@ namespace IIAuctionHouse.WebApi.Controllers
         {
             try
             {
-                return Ok(_plotService.GetById(id));
+                return Ok(_forestEnterpriseService.GetById(id));
             }
             catch(Exception e)
             {
@@ -43,13 +46,12 @@ namespace IIAuctionHouse.WebApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] PlotPostDto plotPostDto)
+        public ActionResult Post([FromBody] ForestryEnterprisePostDto forestryEnterprisePostDto)
         {
             try
             {
-                var newPlot = _plotService.NewPlot(plotPostDto.PlotSize, plotPostDto.PlotResolution, plotPostDto.PlotTenderness,
-                    plotPostDto.Volume, plotPostDto.AverageTreeHeight,  plotPostDto.TreeTypeDto);
-                return Ok(_plotService.Create(newPlot));
+                var newForestEnterprise = _forestEnterpriseService.NewForestEnterprise(forestryEnterprisePostDto.Name);
+                return Ok(_forestEnterpriseService.Create(newForestEnterprise));
             }
             catch(Exception e)
             {
@@ -58,15 +60,13 @@ namespace IIAuctionHouse.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] PlotPutDto plotPost)
+        public ActionResult Put(int id, [FromBody] ForestryEnterprise forestryEnterprise)
         {
-            if (id != plotPost.Id)
+            if (id != forestryEnterprise.Id)
                 return BadRequest("Id needs to match in both url and object");
             try
             {
-                var plotUpdate = _plotService.UpdatePlot(plotPost.Id, plotPost.PlotSize, plotPost.PlotResolution, plotPost.PlotTenderness,
-                    plotPost.Volume, plotPost.AverageTreeHeight,  plotPost.TreeTypeDto);
-                return Ok(_plotService.Update(plotUpdate));
+                return Ok(_forestEnterpriseService.Update(forestryEnterprise));
             }
             catch (Exception e)
             {
@@ -79,7 +79,7 @@ namespace IIAuctionHouse.WebApi.Controllers
         {
             try
             {
-                return Ok(_plotService.Delete(id));
+                return Ok(_forestEnterpriseService.Delete(id));
             }
             catch (Exception e)
             {
