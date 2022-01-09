@@ -1,6 +1,6 @@
-﻿namespace IIAuctionHouse.WebApi.Dtos.TreeTypeDto
+﻿namespace IIAuctionHouse.WebApi.Dtos.PercentageDto
 {
-    public class PercentageDto
+    public class PercentagePutDto
     {
         public int Id { get; set; }
         public int Value { get; set; }

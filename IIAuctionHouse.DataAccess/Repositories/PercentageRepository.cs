@@ -17,7 +17,7 @@ namespace IIAuctionHouse.DataAccess.Repositories
 
         public IEnumerable<Percentage> FindAll()
         {
-            return _ctx.PercentageDbSet.Select(percentage => new Percentage()
+            return _ctx.PercentageDbSet.OrderBy(sql => sql.Value).Select(percentage => new Percentage()
             {
                 Id = percentage.Id,
                 Value = percentage.Value
@@ -40,11 +40,12 @@ namespace IIAuctionHouse.DataAccess.Repositories
 
         public Percentage Update(Percentage percentage)
         {
-            var percentageSql = _ctx.PercentageDbSet.Update(new PercentageSql()
+            var percentageSql = new PercentageSql()
             {
                 Id = percentage.Id,
                 Value = percentage.Value
-            }).Entity;
+            };
+            _ctx.PercentageDbSet.Update(percentageSql);
             _ctx.SaveChanges();
             return new Percentage()
             {

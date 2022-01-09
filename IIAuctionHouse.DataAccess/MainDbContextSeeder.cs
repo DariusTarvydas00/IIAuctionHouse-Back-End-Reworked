@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using IIAuctionHouse.Core.Models;
 using IIAuctionHouse.DataAccess.Entities;
 using IIAuctionHouse.Domain.IRepositories;
@@ -11,19 +12,16 @@ namespace IIAuctionHouse.DataAccess
         private readonly IPercentageRepository _percentageRepository;
         private readonly ITreeRepository _treeRepository;
         private readonly IPlotRepository _plotRepository;
-        private readonly ITreeTypeRepository _treeTypeRepository;
 
         public MainDbContextSeeder(MainDbContext ctx, 
             IPercentageRepository percentageRepository,
             ITreeRepository treeRepository,
-            IPlotRepository plotRepository,
-            ITreeTypeRepository treeTypeRepository)
+            IPlotRepository plotRepository)
         {
             _ctx = ctx;
             _percentageRepository = percentageRepository;
             _treeRepository = treeRepository;
             _plotRepository = plotRepository;
-            _treeTypeRepository = treeTypeRepository;
         }
 
         public void SeedDevelopment()
@@ -64,23 +62,26 @@ namespace IIAuctionHouse.DataAccess
             });
             _ctx.SaveChanges();
 
-            //-------- Tree Type Test Entity -------------//
-            // for (int i=1; i<10; i++)
-            // {
-            //     Random random = new Random();
-            //     int randomize = random.Next(1, 10);
-            //     _treeTypeRepository.Create(new TreeType()
-            //     {
-            //         Tree = new Tree()
-            //         {
-            //             Id = randomize
-            //         },
-            //         Percentage = new Percentage()
-            //         {
-            //             Id = randomize
-            //         }
-            //     });  
-            // }
+            //-------- Plot Test Entity -------------//
+             // for (int i=1; i<10; i++)
+             // {
+             //     Random random = new Random();
+             //     int randomize = random.Next(1, 10);
+             //     var newPlot = new PlotSql()
+             //     {
+             //         Volume = randomize*10,
+             //         PlotResolution = "10"+randomize+"x"+"10"+randomize,
+             //         PlotSize = randomize*10,
+             //         PlotTenderness = randomize*10,
+             //         AverageTreeHeight = randomize*10,
+             //         TreeTypeSql = _ctx.TreeTypeDbSet.Add(new TreeTypeSql()
+             //         {
+             //             TreeSqlId = randomize,
+             //             PercentageSqlId = randomize
+             //         }).Entity
+             //     };
+             //     _ctx.PlotDbSet.Add(newPlot);
+             // }
             
             _ctx.SaveChanges();
             //     treeTypeList.Add(treeType);

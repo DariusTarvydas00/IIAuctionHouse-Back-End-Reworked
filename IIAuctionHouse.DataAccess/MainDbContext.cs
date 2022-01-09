@@ -20,11 +20,12 @@ namespace IIAuctionHouse.DataAccess
               modelBuilder.Entity<Percentage>().ToTable(nameof(Percentage), t => t.ExcludeFromMigrations());
               modelBuilder.Entity<Tree>().ToTable(nameof(Tree), t => t.ExcludeFromMigrations());
               modelBuilder.Entity<TreeType>().ToTable(nameof(TreeType), t => t.ExcludeFromMigrations());
+              modelBuilder.Entity<Plot>().ToTable(nameof(Plot), t => t.ExcludeFromMigrations());
+              modelBuilder.Entity<Forest>().ToTable(nameof(Forest), t => t.ExcludeFromMigrations());
+              modelBuilder.Entity<ForestLocation>().ToTable(nameof(ForestLocation), t => t.ExcludeFromMigrations());
 
               modelBuilder.Entity<TreeTypeSql>().HasOne(tree => tree.TreeSql).WithMany();
               modelBuilder.Entity<TreeTypeSql>().HasOne(tree => tree.PercentageSql).WithMany();
-
-               modelBuilder.Entity<Plot>().ToTable(nameof(Plot), t => t.ExcludeFromMigrations());
 
                // modelBuilder.Entity<Forest>().ToTable(nameof(Forest), t => t.ExcludeFromMigrations());
                // modelBuilder.Entity<ForestLocation>().ToTable(nameof(ForestLocation), t => t.ExcludeFromMigrations());
@@ -117,23 +118,25 @@ namespace IIAuctionHouse.DataAccess
                // modelBuilder.Entity<TreeTypeSql>().HasOne<PercentageSql>(sql => sql.PercentageSql)
                //     .WithOne(sql => sql.TreeTypeSql).HasForeignKey<PercentageSql>(sql => sql.TreeTypeSqlId);
         }
+        
+        public virtual DbSet<TreeSql> TreeDbSet { get; set; }
+        public virtual DbSet<PercentageSql> PercentageDbSet { get; set; }
+        public virtual DbSet<TreeTypeSql> TreeTypeDbSet { get; set; }
+        public virtual DbSet<PlotSql> PlotDbSet { get; set; }
+        public virtual DbSet<ForestSql> ForestsDbSet { get; set; }
+        public virtual DbSet<ForestLocationSql> ForestLocationDbSet { get; set; }
+        
+        
 
         public virtual DbSet<UserSql> UserDbSet { get; set; }
         
         public virtual DbSet<ForestUidSql> ForestUidDbSet { get; set; }
-        
-        public virtual DbSet<ForestLocationSql> ForestLocationDbSet { get; set; }
-        
+
         public virtual DbSet<ForestryEnterpriseSql> ForestryEnterpriseDbSet { get; set; }
 
         public virtual DbSet<BidSql> BidsDbSet { get; set; }
-        public virtual DbSet<ForestSql> ForestsDbSet { get; set; }
-        public virtual DbSet<PlotSql> PlotDbSet { get; set; }
-        public virtual DbSet<TreeSql> TreeDbSet { get; set; }
-        public virtual DbSet<PercentageSql> PercentageDbSet { get; set; }
         public virtual DbSet<AdminSql> AdminDbSet { get; set; }
         
-        public virtual DbSet<TreeTypeSql> TreeTypeDbSet { get; set; }
         
         
           // modelBuilder.Entity<PlotEntity>().HasOne<ForestEntity>(p => p.ForestEntity).

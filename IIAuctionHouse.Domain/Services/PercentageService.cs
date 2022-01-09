@@ -46,6 +46,13 @@ namespace IIAuctionHouse.Domain.Services
             return _percentageRepository.Update(percentage);
         }
 
+        public Percentage UpdatePercentage(int id, int value)
+        {
+            if (id < 1 || value < 1)
+                throw new InvalidDataException("Incorrect Percentage Id or value");
+            return new Percentage() {Id = id,Value = value};
+        }
+
         public Percentage Delete(int id)
         {
             if (id < 1 || string.IsNullOrEmpty(id.ToString()))

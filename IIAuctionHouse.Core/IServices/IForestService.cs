@@ -7,10 +7,12 @@ namespace IIAuctionHouse.Core.IServices
     {
         List<Forest> GetAll();
         Forest GetById(int id);
-        Forest NewForest(ForestUid forestUid, string forestGroup, string forestryEnterprise, 
-            double geoLocationX, double geoLocationY, List<Plot> plots, List<Bid> bids);
+        Forest NewForest(ForestUid forestUid, string forestGroup, ForestLocation forestLocation, 
+            List<Plot> plots, List<Bid> forestBids, ForestryEnterprise forestryEnterprise);
         Forest Create(Forest forest);
         Forest Update(Forest forest);
         Forest Delete(int id);
+        Forest UpdateForest(int id, ForestUid forestForestUid, string forestForestGroup, ForestLocation forestForestLocation, 
+            List<Plot> plots, List<Bid> forestBids, ForestryEnterprise forestryEnterprise);
     }
 }

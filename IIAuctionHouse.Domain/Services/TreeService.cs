@@ -29,11 +29,18 @@ namespace IIAuctionHouse.Domain.Services
             return _treeRepository.Create(tree);
         }
         
-        public Tree NewTreeType(string name)
+        public Tree NewTree(string name)
         {
             if (name.Any(char.IsDigit) || string.IsNullOrEmpty(name))
                 throw new InvalidDataException("Incorrect Tree Name");
             return new Tree() {Name = name};
+        }
+        
+        public Tree UpdateTree(int id, string name)
+        {
+            if (id <1 || name.Any(char.IsDigit) || string.IsNullOrEmpty(name))
+                throw new InvalidDataException("Incorrect Tree Name or Id");
+            return new Tree() {Id = id,Name = name};
         }
 
         public Tree Update(Tree tree)

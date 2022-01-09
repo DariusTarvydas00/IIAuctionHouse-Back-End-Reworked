@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.WebApi.Dtos.TreeDto;
@@ -39,7 +38,7 @@ namespace IIAuctionHouse.WebApi.Controllers
                     return BadRequest("Tree to Update is missing some information");
                 try
                 {
-                    var newTreeType = _treeService.NewTreeType(treeDto.Name);
+                    var newTreeType = _treeService.NewTree(treeDto.Name);
                     return Ok(_treeService.Create(newTreeType));
                 }
                 catch(Exception e)
@@ -49,15 +48,16 @@ namespace IIAuctionHouse.WebApi.Controllers
             }
             
             [HttpPut("{id}")]
-            public ActionResult Put(int id, [FromBody] TreeDto treeDto)
+            public ActionResult Put(int id, [FromBody] TreePutDto treePutDto)
             {
-                if (id != treeDto.Id || id < 1)
+                if (id != treePutDto.Id || id < 1)
                     return BadRequest("Id needs to match in both url and object");
-                if (string.IsNullOrEmpty(treeDto.Name) || treeDto.Name.Any(char.IsDigit))
+                if (string.IsNullOrEmpty(treePutDto.Name) || treePutDto.Name.Any(char.IsDigit))
                     return BadRequest("Tree to Update is missing some information");
+                Console.WriteLine(id+" "+ treePutDto.Id + " " + treePutDto.Name);
                 try
                 {
-                    var treeTypeUpdate = _treeService.NewTreeType(treeDto.Name);
+                    var treeTypeUpdate = _treeService.UpdateTree(treePutDto.Id, treePutDto.Name);
                     return Ok(_treeService.Update(treeTypeUpdate));
                 }
                 catch (Exception e)

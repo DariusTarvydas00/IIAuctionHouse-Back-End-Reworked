@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.WebApi.Dtos.PercentageDto;
-using IIAuctionHouse.WebApi.Dtos.TreeTypeDto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IIAuctionHouse.WebApi.Controllers
@@ -48,15 +46,15 @@ namespace IIAuctionHouse.WebApi.Controllers
         }
         
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] PercentageDto percentageDto)
+        public ActionResult Put(int id, [FromBody] PercentagePutDto percentagePutDto)
         {
-            if (id != percentageDto.Id)
+            if (id != percentagePutDto.Id)
                 return BadRequest("Id needs to match in both url and object");
-            if (percentageDto.Value < 1)
+            if (percentagePutDto.Value < 1 || id < 1)
                 return BadRequest("Percentage Update is missing some information");
             try
             {
-                var percentageUpdate = _percentageService.NewPercentage(percentageDto.Value);
+                var percentageUpdate = _percentageService.UpdatePercentage(percentagePutDto.Id,percentagePutDto.Value);
                 return Ok(_percentageService.Update(percentageUpdate));
             }
             catch (Exception e)
@@ -68,6 +66,8 @@ namespace IIAuctionHouse.WebApi.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
+            if (id < 1)
+                return BadRequest("Percentage Update is missing some information");
             try
             {
                 return Ok(_percentageService.Delete(id));

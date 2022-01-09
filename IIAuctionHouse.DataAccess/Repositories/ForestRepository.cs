@@ -22,56 +22,140 @@ namespace IIAuctionHouse.DataAccess.Repositories
             {
                 Id = entity.Id,
                 ForestGroup = entity.ForestGroup,
-                // ForestLocation = entity.ForestLocationEntityForeignKey > 0 ? new ForestLocation()
-                // {
-                //     Id = entity.ForestLocationEntity.Id,
-                //     ForestryEnterprise = entity.ForestLocationEntity.ForestryEnterprise
-                // } : null,
-                // Contingent = entity.TreeGroupEntityForeignKey > 0 ? new Contingent() {
-                //     Id = entity.TreeGroupEntity.Id,
-                //     ForestGroup = entity.TreeGroupEntity.GroupOfTree
-                // } : null,
-                // TreeType = entity.TreeTypeEntityForeignKey > 0 ? new TreeType()
-                // {
-                //     Id = entity.TreeTypeEntity.Id,
-                //     TypeOfTree = entity.TreeTypeEntity.TypeOfTree
-                // } : null
+                ForestLocation = new ForestLocation()
+                {
+                    Id = entity.ForestLocationSql.Id,
+                    GeoLocationX = entity.ForestLocationSql.GeoLocationX,
+                    GeoLocationY = entity.ForestLocationSql.GeoLocationY
+                },
+                ForestUid = new ForestUid()
+                {
+                    Id = entity.ForestUidSql.Id,
+                    FirstUid = entity.ForestUidSql.FirstUid,
+                    SecondUid = entity.ForestUidSql.SecondUid,
+                    ThirdUid = entity.ForestUidSql.ThirdUid
+                },
+                ForestryEnterprise = new ForestryEnterprise()
+                {
+                    Id = entity.ForestryEnterpriseSql.Id,
+                    Name = entity.ForestryEnterpriseSql.Name
+                },
             }).ToList();
         }
 
         public Forest GetById(int id)
         {
-            throw new NotImplementedException();
-            // return _ctx.Forests.Select(entity => new Forest()
-            // {
-            //     Id = entity.Id,
-            //     ForestLocation = new ForestLocation()
-            //     {
-            //         ForestryEnterprise = entity.ForestLocationEntity.ForestryEnterprise
-            //     },
-            //     Contingent = new Contingent() {
-            //         ForestGroup = entity.TreeGroupEntity.GroupOfTree
-            //     },
-            //     TreeType = new TreeType()
-            //     {
-            //         TypeOfTree = entity.TreeTypeEntity.TypeOfTree
-            //     }
-            // }).FirstOrDefault(forest => forest.Id == id);
+            return _ctx.ForestsDbSet.Select(entity => new Forest()
+            {
+                Id = entity.Id,
+                ForestGroup = entity.ForestGroup,
+                ForestLocation = new ForestLocation()
+                {
+                    Id = entity.ForestLocationSql.Id,
+                    GeoLocationX = entity.ForestLocationSql.GeoLocationX,
+                    GeoLocationY = entity.ForestLocationSql.GeoLocationY
+                },
+                ForestUid = new ForestUid()
+                {
+                    Id = entity.ForestUidSql.Id,
+                    FirstUid = entity.ForestUidSql.FirstUid,
+                    SecondUid = entity.ForestUidSql.SecondUid,
+                    ThirdUid = entity.ForestUidSql.ThirdUid
+                },
+                Plots = entity.PlotSqls.Select(sql => new Plot()
+                {
+                    Id = sql.Id,
+                    Volume = sql.Volume,
+                    PlotResolution = sql.PlotResolution,
+                    PlotSize = sql.PlotSize,
+                    PlotTenderness = sql.PlotTenderness,
+                    AverageTreeHeight = sql.AverageTreeHeight,
+                    TreeTypes = sql.TreeTypeSql.Select(treeTypeSql => new TreeType()
+                    {
+                        Id = treeTypeSql.Id,
+                        Percentage = new Percentage()
+                        {
+                            Id = treeTypeSql.PercentageSql.Id,
+                            Value = treeTypeSql.PercentageSql.Value
+                        },
+                        Tree = new Tree()
+                        {
+                            Id = treeTypeSql.TreeSql.Id,
+                            Name = treeTypeSql.TreeSql.Name
+                        }
+                        
+                    }).ToList()
+                }).ToList(),
+                Bids = entity.BidSqls.Select(asd => new Bid()
+                {
+                    Id = asd.Id,
+                    BidAmount = asd.BidAmount,
+                    BidDateTime = asd.BidDateTime
+                }).ToList(),
+                ForestryEnterprise = new ForestryEnterprise()
+                {
+                    Id = entity.ForestryEnterpriseSql.Id,
+                    Name = entity.ForestryEnterpriseSql.Name
+                }
+            }).FirstOrDefault(forest => forest.Id == id);
         }
         
         public Forest Create(Forest forest)
         {
-            var entity = _ctx.ForestsDbSet.Add(new ForestSql()
+            var newForest = new ForestSql()
             {
-            }).Entity;
+                ForestGroup = forest.ForestGroup,
+                ForestLocationSql = new ForestLocationSql()
+                {
+                    GeoLocationX = forest.ForestLocation.GeoLocationX,
+                    GeoLocationY = forest.ForestLocation.GeoLocationY
+                },
+                ForestUidSql = new ForestUidSql()
+                {
+                    FirstUid = forest.ForestUid.FirstUid,
+                    SecondUid = forest.ForestUid.SecondUid,
+                    ThirdUid = forest.ForestUid.ThirdUid
+                },
+                ForestryEnterpriseSqlId = forest.ForestryEnterprise.Id,
+                PlotSqls = forest.Plots.Select(asd => new PlotSql()
+                {
+                    TreeTypeSql = asd.TreeTypes.Select(asdd => new TreeTypeSql()
+                    {
+                        PercentageSqlId = asdd.Percentage.Id,
+                        TreeSqlId = asdd.Tree.Id
+                    }).ToList()
+                }).ToList(),
+                BidSqls = forest.Bids.Select(asdd=> new BidSql()
+                {
+                    Id = asdd.Id,
+                    BidAmount = asdd.BidAmount,
+                    BidDateTime = asdd.BidDateTime
+                }).ToList()
+            };
+            _ctx.ForestsDbSet.Add(newForest);
             _ctx.SaveChanges();
             return new Forest()
             {
-                Id = entity.Id,
-               // TreeType = new TreeType()
-               // {
-                   // TypeOfTree = entity.TreeTypeEntity.TypeOfTree
-               // }
+                Id = newForest.Id,
+                ForestGroup = newForest.ForestGroup,
+                ForestLocation = new ForestLocation()
+                {
+                    Id = newForest.ForestLocationSql.Id,
+                    GeoLocationX = newForest.ForestLocationSql.GeoLocationX,
+                    GeoLocationY = newForest.ForestLocationSql.GeoLocationY
+                },
+                ForestUid = new ForestUid()
+                {
+                    Id = newForest.ForestUidSql.Id,
+                    FirstUid = newForest.ForestUidSql.FirstUid,
+                    SecondUid = newForest.ForestUidSql.SecondUid,
+                    ThirdUid = newForest.ForestUidSql.ThirdUid
+                },
+                // ForestryEnterprise = new ForestryEnterprise()
+                // {
+                //     Id = newForest.ForestryEnterpriseSql.Id,
+                //     Name = newForest.ForestryEnterpriseSql.Name
+                // }
             };
         }
 
@@ -81,31 +165,79 @@ namespace IIAuctionHouse.DataAccess.Repositories
             {
                 Id = forest.Id,
                 ForestGroup = forest.ForestGroup,
+                ForestLocationSql = new ForestLocationSql()
+                {
+                    Id = forest.ForestLocation.Id,
+                    GeoLocationX = forest.ForestLocation.GeoLocationX,
+                    GeoLocationY = forest.ForestLocation.GeoLocationY
+                },
+                ForestUidSql = new ForestUidSql()
+                {
+                    Id = forest.ForestUid.Id,
+                    FirstUid = forest.ForestUid.FirstUid,
+                    SecondUid = forest.ForestUid.SecondUid,
+                    ThirdUid = forest.ForestUid.ThirdUid
+                },
+                ForestryEnterpriseSql = new ForestryEnterpriseSql()
+                {
+                    Id = forest.ForestryEnterprise.Id,
+                    Name = forest.ForestryEnterprise.Name
+                }
             }).Entity;
             _ctx.SaveChanges();
             return new Forest()
             {
                 Id = entity.Id,
-            //     TreeType = new TreeType()
-            //     {
-            //         Id = entity.TreeTypeEntity.Id,
-            //         TypeOfTree = entity.TreeTypeEntity.TypeOfTree
-            //     }
+                ForestGroup = entity.ForestGroup, 
+                ForestLocation = new ForestLocation() 
+                {
+                    Id = entity.ForestLocationSql.Id, 
+                    GeoLocationX = entity.ForestLocationSql.GeoLocationX, 
+                    GeoLocationY = entity.ForestLocationSql.GeoLocationY
+                }, 
+                ForestUid = new ForestUid() 
+                {
+                    Id = entity.ForestUidSql.Id, 
+                    FirstUid = entity.ForestUidSql.FirstUid, 
+                    SecondUid = entity.ForestUidSql.SecondUid, 
+                    ThirdUid = entity.ForestUidSql.ThirdUid
+                },
+                ForestryEnterprise = new ForestryEnterprise()
+                {
+                    Id = entity.ForestryEnterpriseSql.Id,
+                    Name = entity.ForestryEnterpriseSql.Name
+                }
              };
         }
 
         public Forest Delete(int id)
         {
-            var delete = GetById(id);
-            var deletedForest = new Forest()
-            {
-                Id = delete.Id,
-                ForestGroup = delete.ForestGroup,
-
-            };
-            _ctx.Remove(delete);
+            var entity = _ctx.ForestsDbSet.FirstOrDefault(percentage => percentage.Id == id);
+            if (entity != null) _ctx.Remove(entity);
             _ctx.SaveChanges();
-            return deletedForest;
+            return entity != null ? new Forest()
+            {
+                Id = entity.Id,
+                ForestGroup = entity.ForestGroup,
+                ForestLocation = new ForestLocation() 
+                {
+                    Id = entity.ForestLocationSql.Id, 
+                    GeoLocationX = entity.ForestLocationSql.GeoLocationX, 
+                    GeoLocationY = entity.ForestLocationSql.GeoLocationY
+                }, 
+                ForestUid = new ForestUid() 
+                {
+                    Id = entity.ForestUidSql.Id, 
+                    FirstUid = entity.ForestUidSql.FirstUid, 
+                    SecondUid = entity.ForestUidSql.SecondUid, 
+                    ThirdUid = entity.ForestUidSql.ThirdUid
+                },
+                ForestryEnterprise = new ForestryEnterprise()
+                {
+                    Id = entity.ForestryEnterpriseSql.Id,
+                    Name = entity.ForestryEnterpriseSql.Name
+                }
+            } : null;
         }
     }
 }

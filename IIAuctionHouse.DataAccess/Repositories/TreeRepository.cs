@@ -18,7 +18,7 @@ namespace IIAuctionHouse.DataAccess.Repositories
 
         public IEnumerable<Tree> FindAll()
         {
-            return _ctx.TreeDbSet.Select(tree => new Tree()
+            return _ctx.TreeDbSet.OrderBy(sql => sql.Name).Select(tree => new Tree()
             {
                 Id = tree.Id,
                 Name = tree.Name,
@@ -42,16 +42,17 @@ namespace IIAuctionHouse.DataAccess.Repositories
 
         public Tree Update(Tree updateTree)
         {
-            var entity = _ctx.TreeDbSet.Update(new TreeSql()
+            var newTree = new TreeSql()
             {
                 Id = updateTree.Id,
                 Name = updateTree.Name
-            }).Entity;
+            };
+            _ctx.TreeDbSet.Update(newTree);
             _ctx.SaveChanges();
             return new Tree()
             {
-                Id = entity.Id,
-                Name = entity.Name
+                Id = newTree.Id,
+                Name = newTree.Name
             };
         }
 
