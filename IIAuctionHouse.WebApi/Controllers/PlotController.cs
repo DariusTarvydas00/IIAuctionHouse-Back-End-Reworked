@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using IIAuctionHouse.Core.IServices;
+using IIAuctionHouse.Core.Models;
 using IIAuctionHouse.WebApi.Dtos.PlotDto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,6 +47,13 @@ namespace IIAuctionHouse.WebApi.Controllers
         [HttpPost]
         public ActionResult Post([FromBody] PlotPostDto plotPostDto)
         {
+            Console.WriteLine(plotPostDto + " " + plotPostDto.Volume + " " + plotPostDto.PlotResolution + " " + plotPostDto.PlotSize +" " + plotPostDto.PlotTenderness + " " + plotPostDto.AverageTreeHeight);
+            Console.WriteLine(plotPostDto.TreeTypeDto.Count);
+            // foreach (var tree in plotPostDto.TreeTypeDto)
+            // {
+            //     Console.WriteLine(tree.Id + " " +tree.Percentage.Id + " " + tree.Percentage.Value);
+            //     Console.WriteLine(tree.Id + " " +tree.Tree.Id + " " + tree.Tree.Name);
+            // }
             try
             {
                 var newPlot = _plotService.NewPlot(plotPostDto.PlotSize, plotPostDto.PlotResolution, plotPostDto.PlotTenderness,
@@ -74,7 +83,7 @@ namespace IIAuctionHouse.WebApi.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
             try

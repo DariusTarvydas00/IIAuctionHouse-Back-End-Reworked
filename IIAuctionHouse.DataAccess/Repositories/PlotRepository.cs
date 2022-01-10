@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Formats.Asn1;
 using System.Linq;
 using IIAuctionHouse.Core.Models;
@@ -33,6 +34,20 @@ namespace IIAuctionHouse.DataAccess.Repositories
                 PlotTenderness = entity.PlotTenderness,
                 Volume = entity.Volume,
                 AverageTreeHeight = entity.AverageTreeHeight,
+                TreeTypes =  entity.TreeTypeSql.Select(sql => new TreeType()
+                {
+                    Id = sql.Id,
+                    Tree =  new Tree()
+                    {
+                        Id = sql.TreeSql.Id,
+                        Name = sql.TreeSql.Name
+                    },
+                    Percentage = new Percentage()
+                    {
+                        Id = sql.PercentageSql.Id,
+                        Value = sql.PercentageSql.Value
+                    }
+                }).ToList()
             }).ToList();
         }
 
@@ -65,6 +80,7 @@ namespace IIAuctionHouse.DataAccess.Repositories
 
         public Plot Create(Plot plot)
         {
+            
             var newPlot = new PlotSql()
             {
                 Volume = plot.Volume,
