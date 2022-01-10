@@ -31,6 +31,7 @@ namespace IIAuctionHouse.Domain.Services
         public Plot NewPlot(double plotSize, string plotResolution, double plotTenderness,
             int volume, int averageTreeHeight, List<TreeType> treeTypes)
         {
+            
             if (volume < 1 || plotSize < 1 || plotTenderness < 0.1 ||
                 averageTreeHeight < 1 || string.IsNullOrEmpty(plotResolution) || treeTypes == null)
                 throw new InvalidDataException("Plot is missing some information");
@@ -47,11 +48,13 @@ namespace IIAuctionHouse.Domain.Services
                     Id = asd.Id,
                         Percentage = new Percentage()
                         {
-                            Id = asd.Percentage.Id
+                            Id = asd.Percentage.Id,
+                            Value = asd.Percentage.Value
                         },
                         Tree = new Tree()
                         {
-                            Id = asd.Tree.Id
+                            Id = asd.Tree.Id,
+                            Name = asd.Tree.Name
                         }
                 }).ToList()
             };
