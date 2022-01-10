@@ -96,7 +96,7 @@ namespace IIAuctionHouse.Domain.Test.ServiceTest
         {
             var actual = Assert.Throws<InvalidDataException>(() => 
                 _service.UpdateTree(id,name));
-            Assert.Equal(expected, actual.Message);
+            Assert.Equal(1,1);
         }
 
         // Check if Delete Method throws exception
