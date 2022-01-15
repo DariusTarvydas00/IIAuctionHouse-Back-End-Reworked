@@ -5,7 +5,7 @@ namespace IIAuctionHouse.DataAccess.Entities
     public class ForestSql
     {
         public int Id { get; set; }
-        public string ForestGroup { get; set; }
+        public ForestGroupSql ForestGroupSql { get; set; }
 
         public int ForestryEnterpriseSqlId { get; set; }
          public ForestryEnterpriseSql ForestryEnterpriseSql { get; set; }

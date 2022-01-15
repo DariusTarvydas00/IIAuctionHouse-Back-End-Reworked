@@ -74,7 +74,8 @@ namespace IIAuctionHouse.WebApi.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
+
         public ActionResult Delete(int id)
         {
             try

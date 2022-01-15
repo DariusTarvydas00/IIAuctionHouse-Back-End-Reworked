@@ -9,7 +9,7 @@ namespace IIAuctionHouse.Core.Models
         public ForestryEnterprise ForestryEnterprise { get; set; }
 
         public ForestLocation ForestLocation { get; set; }
-        public string ForestGroup { get; set; }
+        public ForestGroup ForestGroup { get; set; }
         public List<Plot> Plots { get; set; }
 
         public List<Bid> Bids { get; set; }

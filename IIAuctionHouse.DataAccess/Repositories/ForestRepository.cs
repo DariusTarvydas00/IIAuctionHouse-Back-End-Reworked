@@ -21,7 +21,11 @@ namespace IIAuctionHouse.DataAccess.Repositories
             return _ctx.ForestsDbSet.Select(entity => new Forest()
             {
                 Id = entity.Id,
-                ForestGroup = entity.ForestGroup,
+                ForestGroup = new ForestGroup()
+                {
+                    Id = entity.ForestGroupSql.Id,
+                    Name = entity.ForestGroupSql.Name
+                },
                 ForestLocation = new ForestLocation()
                 {
                     Id = entity.ForestLocationSql.Id,
@@ -48,7 +52,11 @@ namespace IIAuctionHouse.DataAccess.Repositories
             return _ctx.ForestsDbSet.Select(entity => new Forest()
             {
                 Id = entity.Id,
-                ForestGroup = entity.ForestGroup,
+                ForestGroup = new ForestGroup()
+                {
+                    Id = entity.ForestGroupSql.Id,
+                    Name = entity.ForestGroupSql.Name
+                },
                 ForestLocation = new ForestLocation()
                 {
                     Id = entity.ForestLocationSql.Id,
@@ -104,7 +112,12 @@ namespace IIAuctionHouse.DataAccess.Repositories
         {
             var newForest = new ForestSql()
             {
-                ForestGroup = forest.ForestGroup,
+                ForestGroupSql = new ForestGroupSql()
+                {
+                        Id = forest.ForestGroup.Id,
+                        Name = forest.ForestGroup.Name
+                    
+                },
                 ForestLocationSql = new ForestLocationSql()
                 {
                     GeoLocationX = forest.ForestLocation.GeoLocationX,
@@ -137,7 +150,11 @@ namespace IIAuctionHouse.DataAccess.Repositories
             return new Forest()
             {
                 Id = newForest.Id,
-                ForestGroup = newForest.ForestGroup,
+                ForestGroup = new ForestGroup()
+                {
+                    Id = newForest.ForestGroupSql.Id,
+                    Name = newForest.ForestGroupSql.Name
+                },
                 ForestLocation = new ForestLocation()
                 {
                     Id = newForest.ForestLocationSql.Id,
@@ -164,7 +181,12 @@ namespace IIAuctionHouse.DataAccess.Repositories
             var entity = _ctx.ForestsDbSet.Update(new ForestSql()
             {
                 Id = forest.Id,
-                ForestGroup = forest.ForestGroup,
+                ForestGroupSql = new ForestGroupSql()
+                {
+                    Id = forest.ForestGroup.Id,
+                    Name = forest.ForestGroup.Name
+                    
+                },
                 ForestLocationSql = new ForestLocationSql()
                 {
                     Id = forest.ForestLocation.Id,
@@ -188,7 +210,11 @@ namespace IIAuctionHouse.DataAccess.Repositories
             return new Forest()
             {
                 Id = entity.Id,
-                ForestGroup = entity.ForestGroup, 
+                ForestGroup = new ForestGroup()
+                {
+                    Id = entity.ForestGroupSql.Id,
+                    Name = entity.ForestGroupSql.Name
+                },
                 ForestLocation = new ForestLocation() 
                 {
                     Id = entity.ForestLocationSql.Id, 
@@ -218,7 +244,11 @@ namespace IIAuctionHouse.DataAccess.Repositories
             return entity != null ? new Forest()
             {
                 Id = entity.Id,
-                ForestGroup = entity.ForestGroup,
+                ForestGroup = new ForestGroup()
+                {
+                    Id = entity.ForestGroupSql.Id,
+                    Name = entity.ForestGroupSql.Name
+                },
                 ForestLocation = new ForestLocation() 
                 {
                     Id = entity.ForestLocationSql.Id, 

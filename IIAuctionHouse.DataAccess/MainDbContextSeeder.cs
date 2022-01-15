@@ -12,16 +12,22 @@ namespace IIAuctionHouse.DataAccess
         private readonly IPercentageRepository _percentageRepository;
         private readonly ITreeRepository _treeRepository;
         private readonly IPlotRepository _plotRepository;
+        private readonly IForestEnterpriseRepository _forestEnterpriseRepository;
+        private readonly IForestGroupRepository _forestGroupRepository;
 
         public MainDbContextSeeder(MainDbContext ctx, 
             IPercentageRepository percentageRepository,
             ITreeRepository treeRepository,
-            IPlotRepository plotRepository)
+            IPlotRepository plotRepository,
+            IForestEnterpriseRepository forestEnterpriseRepository,
+            IForestGroupRepository forestGroupRepository)
         {
             _ctx = ctx;
             _percentageRepository = percentageRepository;
             _treeRepository = treeRepository;
             _plotRepository = plotRepository;
+            _forestEnterpriseRepository = forestEnterpriseRepository;
+            _forestGroupRepository = forestGroupRepository;
         }
 
         public void SeedDevelopment()
@@ -59,6 +65,56 @@ namespace IIAuctionHouse.DataAccess
             _treeRepository.Create(new Tree()
             {
                 Name = "Aspen"
+            });
+            _ctx.SaveChanges();
+            
+            //------ Forestry Enterprise Entity -----//
+            _forestEnterpriseRepository.Create(new ForestryEnterprise()
+            {
+                Name = "Vilnius"
+            });
+            _forestEnterpriseRepository.Create(new ForestryEnterprise()
+            {
+                Name = "Kaunas"
+            });
+            _forestEnterpriseRepository.Create(new ForestryEnterprise()
+            {
+                Name = "Taurage"
+            });
+            _forestEnterpriseRepository.Create(new ForestryEnterprise()
+            {
+                Name = "Klaipeda"
+            });
+            _forestEnterpriseRepository.Create(new ForestryEnterprise()
+            {
+                Name = "Silale"
+            });
+            _forestEnterpriseRepository.Create(new ForestryEnterprise()
+            {
+                Name = "Siauliai"
+            });
+            _forestEnterpriseRepository.Create(new ForestryEnterprise()
+            {
+                Name = "Silute"
+            });
+            _ctx.SaveChanges();
+            
+            //------ Forestry Group Entity -----//
+            _forestGroupRepository.Create(new ForestGroup()
+            {
+                Name = "A"
+            });
+            _forestGroupRepository.Create(new ForestGroup()
+            {
+                Name = "B"
+            });
+            _forestGroupRepository.Create(new ForestGroup()
+            {
+                Name = "C"
+            });
+            _forestGroupRepository.Create(new ForestGroup()
+            {
+                Name = "D"
             });
             _ctx.SaveChanges();
 

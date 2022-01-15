@@ -48,12 +48,16 @@ namespace IIAuctionHouse.WebApi.Controllers
         public ActionResult Post([FromBody] PlotPostDto plotPostDto)
         {
             Console.WriteLine(plotPostDto + " " + plotPostDto.Volume + " " + plotPostDto.PlotResolution + " " + plotPostDto.PlotSize +" " + plotPostDto.PlotTenderness + " " + plotPostDto.AverageTreeHeight);
-            Console.WriteLine(plotPostDto.TreeTypeDto.Count);
-            // foreach (var tree in plotPostDto.TreeTypeDto)
-            // {
-            //     Console.WriteLine(tree.Id + " " +tree.Percentage.Id + " " + tree.Percentage.Value);
-            //     Console.WriteLine(tree.Id + " " +tree.Tree.Id + " " + tree.Tree.Name);
-            // }
+            if (plotPostDto.TreeTypeDto != null)
+            {
+                Console.WriteLine(plotPostDto.TreeTypeDto.Count);
+                foreach (var tree in plotPostDto.TreeTypeDto)
+                {
+                    Console.WriteLine(tree.Id + " " +tree.Percentage.Id + " " + tree.Percentage.Value);
+                    Console.WriteLine(tree.Id + " " +tree.Tree.Id + " " + tree.Tree.Name);
+                }   
+            }
+            
             try
             {
                 var newPlot = _plotService.NewPlot(plotPostDto.PlotSize, plotPostDto.PlotResolution, plotPostDto.PlotTenderness,

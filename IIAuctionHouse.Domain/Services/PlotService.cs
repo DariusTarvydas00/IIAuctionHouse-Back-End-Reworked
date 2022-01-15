@@ -45,7 +45,6 @@ namespace IIAuctionHouse.Domain.Services
                 AverageTreeHeight = averageTreeHeight,
                 TreeTypes = treeTypes.Select(asd => new TreeType()
                 {
-                    Id = asd.Id,
                         Percentage = new Percentage()
                         {
                             Id = asd.Percentage.Id,
