@@ -126,6 +126,8 @@ namespace IIAuctionHouse.DataAccess
         public virtual DbSet<ForestSql> ForestsDbSet { get; set; }
         public virtual DbSet<ForestLocationSql> ForestLocationDbSet { get; set; }
         
+        public virtual DbSet<ForestGroupSql> ForestGroupDbSet { get; set; }
+        
         
 
         public virtual DbSet<UserSql> UserDbSet { get; set; }

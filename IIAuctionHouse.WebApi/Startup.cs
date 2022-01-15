@@ -50,6 +50,8 @@ namespace IIAuctionHouse.WebApi
             services.AddScoped<IForestRepository, ForestRepository>();
             services.AddScoped<IForestEnterpriseService, ForestEnterpriseService>();
             services.AddScoped<IForestEnterpriseRepository, ForestEnterpriseRepository>();
+            services.AddScoped<IForestGroupService, ForestGroupService>();
+            services.AddScoped<IForestGroupRepository, ForestGroupRepository>();
 
             services.AddScoped<IMainDbContextSeeder, MainDbContextSeeder>();
             
