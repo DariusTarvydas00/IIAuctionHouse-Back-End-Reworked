@@ -3,9 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using IIAuctionHouse.Core.IServices;
+using IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailServices.ITreeTypeServices;
 using IIAuctionHouse.Core.Models;
+using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels.TreeTypeModels;
 using IIAuctionHouse.Domain.IRepositories;
+using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IPlotDetailRepositories.ITreeTypeRepositories;
 using IIAuctionHouse.Domain.Services;
+using IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices.TreeTypeServices;
 using Moq;
 using Xunit;
 

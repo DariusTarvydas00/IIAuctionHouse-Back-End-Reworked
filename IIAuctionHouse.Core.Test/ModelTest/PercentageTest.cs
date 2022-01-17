@@ -1,4 +1,5 @@
 ﻿using IIAuctionHouse.Core.Models;
+using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels.TreeTypeModels;
 using Xunit;
 
 namespace IIAuctionHouse.Core.Test.ModelTest

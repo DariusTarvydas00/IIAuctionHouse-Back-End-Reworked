@@ -1,12 +1,24 @@
 using IIAuctionHouse.Core.IServices;
-using IIAuctionHouse.Core.IServices.IForestUidServices;
+using IIAuctionHouse.Core.IServices.IForestDetailServices;
+using IIAuctionHouse.Core.IServices.IForestDetailServices.IForestUidServices;
+using IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailServices;
+using IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailServices.ITreeTypeServices;
 using IIAuctionHouse.DataAccess;
 using IIAuctionHouse.DataAccess.Repositories;
-using IIAuctionHouse.DataAccess.Repositories.ForestUidRepositories;
+using IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories;
+using IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories.ForestUidRepositories;
+using IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories.PlotRepositories;
+using IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories.PlotRepositories.TreeTypeRepositories;
 using IIAuctionHouse.Domain.IRepositories;
-using IIAuctionHouse.Domain.IRepositories.IForestUidRepositories;
+using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories;
+using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IForestUidRepositories;
+using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IPlotDetailRepositories;
+using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IPlotDetailRepositories.ITreeTypeRepositories;
 using IIAuctionHouse.Domain.Services;
-using IIAuctionHouse.Domain.Services.ForestUidServices;
+using IIAuctionHouse.Domain.Services.ForestDetailServices;
+using IIAuctionHouse.Domain.Services.ForestDetailServices.ForestUidServices;
+using IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices;
+using IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices.TreeTypeServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -62,6 +74,14 @@ namespace IIAuctionHouse.WebApi
             services.AddScoped<IForestSecondUidRepository, ForestSecondUidRepository>();
             services.AddScoped<IForestThirdUidService, ForestThirdUidService>();
             services.AddScoped<IForestThirdUidRepository, ForestThirdUidRepository>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IBidService, BidService>();
+            services.AddScoped<IBidRepository, BidRepository>();
+            services.AddScoped<IForestUidService, ForestUidService>();
+            services.AddScoped<ITreeTypeService, TreeTypeService>();
+            services.AddScoped<IForestLocationService, ForestLocationService>();
+            services.AddScoped<IBidRepository, BidRepository>();
 
             services.AddScoped<IMainDbContextSeeder, MainDbContextSeeder>();
             

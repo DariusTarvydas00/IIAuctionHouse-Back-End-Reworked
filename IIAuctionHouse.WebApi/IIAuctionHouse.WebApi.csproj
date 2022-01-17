@@ -18,4 +18,8 @@
       <ProjectReference Include="..\IIAuctionHouse.Domain\IIAuctionHouse.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Exceptions\ForestDetailsControllersExceptions\PlotControllerExceptions" />
+    </ItemGroup>
+
 </Project>

@@ -11,8 +11,8 @@ namespace IIAuctionHouse.DataAccess.Entities
         
         public int ForestSqlId { get; set; }
         public ForestSql ForestSql { get; set; }
-        //
-        // public int UserSqlId { get; set; }
-        // public UserSql UserSql { get; set; }
+        
+        public int UserSqlId { get; set; }
+        public UserSql UserSql { get; set; }
     }
 }

@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.Core.Models;
-using IIAuctionHouse.Core.Models.ForestUid;
+using IIAuctionHouse.Core.Models.ForestDetailModels;
+using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels;
+using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels.TreeTypeModels;
 using IIAuctionHouse.DataAccess.Entities;
+using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities.ForestUidEntities;
 using IIAuctionHouse.Domain.IRepositories;
-using IIAuctionHouse.Domain.IRepositories.IForestUidRepositories;
+using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories;
+using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IForestUidRepositories;
+using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IPlotDetailRepositories;
+using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IPlotDetailRepositories.ITreeTypeRepositories;
 
 namespace IIAuctionHouse.DataAccess
 {
@@ -154,6 +161,7 @@ namespace IIAuctionHouse.DataAccess
             {
                 _forestFirstUidRepository.Create(new ForestUidFirst()
                 {
+                    Id = 1,
                     Value = i*10
                 });
             }
@@ -167,6 +175,7 @@ namespace IIAuctionHouse.DataAccess
             {
                 _forestSecondUidRepository.Create(new ForestUidSecond()
                 {
+                    Id = 1,
                     Value = i*40
                 });
             }
@@ -180,6 +189,7 @@ namespace IIAuctionHouse.DataAccess
             {
                 _forestThirdUidRepository.Create(new ForestUidThird()
                 {
+                    Id = 1,
                     Value = i*80
                 });
             }
@@ -188,272 +198,10 @@ namespace IIAuctionHouse.DataAccess
             #endregion
 
             #endregion
-            
-            //
-            // //------ Forest Uid Third Entity -----//
-            // for (int i = 0; i < 10; i++)
-            // {
-            //     _forestUidRepository.CreateForestUidThird(i*10);
-            // }
-            // _ctx.SaveChanges();
-
-            //-------- Plot Test Entity -------------//
-             // for (int i=1; i<10; i++)
-             // {
-             //     Random random = new Random();
-             //     int randomize = random.Next(1, 10);
-             //     var newPlot = new PlotSql()
-             //     {
-             //         Volume = randomize*10,
-             //         PlotResolution = "10"+randomize+"x"+"10"+randomize,
-             //         PlotSize = randomize*10,
-             //         PlotTenderness = randomize*10,
-             //         AverageTreeHeight = randomize*10,
-             //         TreeTypeSql = _ctx.TreeTypeDbSet.Add(new TreeTypeSql()
-             //         {
-             //             TreeSqlId = randomize,
-             //             PercentageSqlId = randomize
-             //         }).Entity
-             //     };
-             //     _ctx.PlotDbSet.Add(newPlot);
-             // }
-            
-            _ctx.SaveChanges();
-            //     treeTypeList.Add(treeType);
-            // }
-            //
-            //
-            // _ctx.SaveChanges();
-            //
-            // _plotRepository.Create(new Plot()
-            // {
-            //     Volume = 10,
-            //     PlotResolution = "10",
-            //     PlotSize = 12.1,
-            //     PlotTenderness = 0.7,
-            //     AverageTreeHeight = 23,
-            //     TreeType = new TreeType()
-            //     {
-            //         Tree = new Tree()
-            //         {
-            //             Id = 1
-            //         },
-            //         Percentage = new Percentage()
-            //         {
-            //             Id = 1
-            //         }
-            //     }
-            // });
-            //
-            // _plotRepository.Create(new Plot()
-            // {
-            //     Volume = 10,
-            //     PlotResolution = "10",
-            //     PlotSize = 12.1,
-            //     PlotTenderness = 0.7,
-            //     AverageTreeHeight = 23,
-            //     TreeType = new TreeType()
-            //     {
-            //         Tree = new Tree()
-            //         {
-            //             Id = 1
-            //         },
-            //         Percentage = new Percentage()
-            //         {
-            //             Id = 1
-            //         }
-            //     }
-            // });
-
-            // _ctx.SaveChanges();
-            // //
-            // _plotRepository.Create(new Plot()
-            // {
-            //     Volume = 10,
-            //     PlotResolution = "10",
-            //     PlotSize = 12.1,
-            //     PlotTenderness = 0.7,
-            //     AverageTreeHeight = 23,
-            //     TreeTypes = new TreeType()
-            //     {
-            //         Id = 1,
-            //         Percentage = new Percentage()
-            //         {
-            //             Id = 5
-            //         }
-            //     }
-            // });
-            // _plotRepository.Create(new Plot()
-            // {
-            //     Volume = 10,
-            //     PlotResolution = "10",
-            //     PlotSize = 12.1,
-            //     PlotTenderness = 0.7,
-            //     AverageTreeHeight = 23,
-            //     TreeTypes = new TreeType()
-            //     {
-            //         Id = 2,
-            //         Percentage = new Percentage()
-            //         {
-            //             Value = 10
-            //         }
-            //     }
-            // });
-            //
-            // _treeTypeRepository.Create(new TreeType()
-            // {
-            //     Name = "asd",
-            //     Percentage = new Percentage()
-            //     {
-            //         Id = 1
-            //     }
-            // });
-            
-            _ctx.SaveChanges();
-            
-            // for (int i = 1; i < 11; i++)
-            // {
-            //     
-            //     var treeType =_treeTypeRepository.Create(new TreeType()
-            //     {
-            //         Name = "TreeType" + i,
-            //         Percentage = new Percentage()
-            //         {
-            //             Id = i
-            //         }
-            //     });
-            //     treeTypeList.Add(treeType);
-            // }
-            //
-            // _ctx.SaveChanges();
-            //
-            //
-            // for (int i = 1; i < 11; i++)
-            // {
-            //     var treeType =_treeTypeRepository.Create(new TreeType()
-            //     {
-            //         Name = "TreeType" + i,
-            //         Percentage = new Percentage()
-            //         {
-            //             Id = 1
-            //         }
-            //     });
-            //     
-            //     treeTypeList.Add(treeType);
-            // }
-            
-            _ctx.SaveChanges();
-            // _ctx.Plots.Add(new PlotEntity()
-            // {
-            //     Volume = 12,
-            //
-            // });
-            //
-            // var asd = new List<TreeTypeEntity>()
-            // {
-            //     new TreeTypeEntity()
-            //     {
-            //         Id = 1,
-            //         Name = "treeType",
-            //         Percentage = 10,
-            //         PlotTreeTypes = new List<PlotTreeTypeEntity>()
-            //         {
-            //             new PlotTreeTypeEntity()
-            //             {
-            //                 PlotEntityId = 1
-            //             }
-            //         }
-            //     }
-            // };
-            // _ctx.Plots.Add(new ()
-            // {
-            //     PlotSize = 1.1,
-            //     PlotResolutionFirstValue = 22,
-            //     PlotResolutionSecondValue = 137,
-            //     PlotTenderness = 0.2,
-            //     Volume = 600,
-            //     AverageTreeHeight = 24,
-            // });
-            //
-           
-            // _ctx.Forests.Add(new ForestEntity()
-            // {
-            //     ForestLocationEntityForeignKey = 1,
-            //     TreeGroupEntityForeignKey = 1,
-            //     TreeTypeEntityForeignKey = 1
-            // });
-            // _ctx.Forests.Add(new ForestEntity()
-            // {
-            //     ForestLocationEntityForeignKey = 2,
-            //     TreeGroupEntityForeignKey = 2,
-            //     TreeTypeEntityForeignKey = 2
-            // });
-            
-            // // -------- Tree Type Entity -----------//
-            // var list = new List<TreeTypeEntity>();
-            // for (int i = 1; i < 11; i++)
-            // {
-            //     Random randomNumber = new Random();
-            //     int id = randomNumber.Next(1, 10);
-            //     _ctx.TreeTypeEntities.Add(new TreeTypeEntity()
-            //     {
-            //         Name = "treeType" + i,
-            //         PercentageEntityId = id
-            //     });
-            //     list.Add(new TreeTypeEntity()
-            //     {
-            //         Name = "treeType" + i,
-            //         PercentageEntityId = id
-            //     });
-            // }
-            //
-            //
-            // _ctx.PlotEntities.Add(new PlotEntity()
-            // {
-            //     Volume = 12,
-            //     PlotResolution = "123x123",
-            //     PlotSize = 12,
-            //     PlotTenderness = 0.1,
-            //     AverageTreeHeight = 23,
-            //     TreeTypesInE = new List<PlotTreeTypeEntity>()
-            //     {
-            //         new PlotTreeTypeEntity()
-            //         {
-            //             TreeTypeEntityId = 1
-            //         },
-            //         new PlotTreeTypeEntity()
-            //         {
-            //             TreeTypeEntityId = 2
-            //         }
-            //     }
-            // });
-            // _ctx.PlotEntities.Add(new PlotEntity()
-            // {
-            //     Volume = 1,
-            //     PlotResolution = "1x1",
-            //     PlotSize = 1,
-            //     PlotTenderness = 0.7,
-            //     AverageTreeHeight = 50,
-            //     TreeTypesInE = new List<PlotTreeTypeEntity>()
-            //     {
-            //         new PlotTreeTypeEntity()
-            //         {
-            //             TreeTypeEntityId = 2,
-            //         },
-            //         new PlotTreeTypeEntity()
-            //         {
-            //             TreeTypeEntityId = 1
-            //         }
-            //     }
-            // });
-            // _ctx.PlotTreeTypes.Add(new PlotTreeTypeEntity()
-            // {
-            //     PlotEntityId = 1,
-            //     TreeTypeEntityId = 2
-            // });
-            _ctx.SaveChanges();
         }
 
+        #region Production
+        
         public void SeedProduction()
         {
             //-------- Percentage Entity -----------//
@@ -487,6 +235,35 @@ namespace IIAuctionHouse.DataAccess
                 Name = "Aspen"
             });
             
+            //-------- Forest Uid Entities -----------------//
+            
+            var list = new List<ForestUidFirstSql>();
+            var list2 = new List<ForestUidSecondSql>();
+            var list3 = new List<ForestUidThirdSql>();
+            for (int i = 1; i < 10000; i++)
+            {
+                list.Add(new ForestUidFirstSql()
+                {
+                    Id = i,
+                    Value = i
+                });
+                list2.Add(new ForestUidSecondSql()
+                {
+                    Id = i,
+                    Value = i
+                });
+                list3.Add(new ForestUidThirdSql()
+                {
+                    Id = i,
+                    Value = i
+                });
+            }
+            _ctx.ForestUidFirstDbSet.AddRange(list);
+            _ctx.ForestUidSecondDbSet.AddRange(list2); 
+            _ctx.ForestUidThirdDbSet.AddRange(list3);
+            
         }
+        
+        #endregion
     }
 }

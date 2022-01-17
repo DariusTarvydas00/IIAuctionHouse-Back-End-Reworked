@@ -3,7 +3,10 @@ using System.IO;
 using System.Linq;
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.Core.Models;
-using IIAuctionHouse.Core.Models.ForestUid;
+using IIAuctionHouse.Core.Models.ForestDetailModels;
+using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels;
+using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels;
+using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels.TreeTypeModels;
 using IIAuctionHouse.Domain.IRepositories;
 
 namespace IIAuctionHouse.Domain.Services
@@ -42,9 +45,9 @@ namespace IIAuctionHouse.Domain.Services
         //     };
         // }
         
-        public Forest NewForest(ForestUid forestUid, ForestGroup forestGroup, ForestLocation forestLocation, ForestryEnterprise forestryEnterprise, List<Plot> plots)
+        public Forest NewForest(ForestUid forestUid, ForestGroup forestGroup, ForestLocation forestLocation, ForestryEnterprise forestryEnterprise, User user)
         {
-            if (forestGroup == null || forestLocation == null || forestUid == null || forestryEnterprise == null)
+            if (forestGroup == null || forestLocation == null || forestUid == null || forestryEnterprise == null || user == null)
                 throw new InvalidDataException("Forest is missing some information");
             return new Forest()
             {
@@ -76,34 +79,10 @@ namespace IIAuctionHouse.Domain.Services
                 {
                     Id = forestryEnterprise.Id,
                 },
-                // Plots = new List<Plot>(),
-                // Bids = new List<Bid>(),
-                Plots = plots.Select(asd => new Plot()
+                User = new User()
                 {
-                   Id = asd.Id,
-                   Volume = asd.Volume,
-                   PlotResolution = asd.PlotResolution,
-                   PlotSize = asd.PlotSize,
-                   PlotTenderness = asd.PlotTenderness,
-                   AverageTreeHeight = asd.AverageTreeHeight,
-                   TreeTypes = asd.TreeTypes.Select(asdd =>new TreeType()
-                   {
-                           Percentage = new Percentage()
-                           {
-                               Id = asdd.Percentage.Id
-                           },
-                           Tree = new Tree()
-                           {
-                               Id = asdd.Tree.Id
-                           }
-                   }).ToList()
-                }).ToList()
-                // Bids = bids.Select(asd => new Bid()
-                // {
-                //     Id = asd.Id,
-                //     BidAmount = asd.BidAmount,
-                //     BidDateTime = asd.BidDateTime
-                // }).ToList(),
+                    Id = user.Id
+                }
             };
         }
 
@@ -122,7 +101,7 @@ namespace IIAuctionHouse.Domain.Services
             return _forestRepository.Delete(id);
         }
 
-        public Forest UpdateForest(int id, ForestUid forestUid, ForestGroup forestGroup, ForestLocation forestLocation, ForestryEnterprise forestryEnterprise, List<Plot> plots)
+        public Forest UpdateForest(int id, ForestUid forestUid, ForestGroup forestGroup, ForestLocation forestLocation, ForestryEnterprise forestryEnterprise, User user)
         {
             if (id < 1 ||  forestGroup == null || forestLocation == null || forestUid == null  || forestryEnterprise == null )
                 throw new InvalidDataException("Forest is missing some information");
@@ -147,41 +126,14 @@ namespace IIAuctionHouse.Domain.Services
                     SecondUid = forestUid.SecondUid,
                     ThirdUid = forestUid.ThirdUid
                 },
-                // Plots = new List<Plot>(),
-                Bids = new List<Bid>(),
                 ForestryEnterprise = new ForestryEnterprise()
                 {
                     Id = forestryEnterprise.Id,
                 },
-                Plots = plots.Select(asd => new Plot()
+                User = new User()
                 {
-                    Id = asd.Id,
-                    Volume = asd.Volume,
-                    PlotResolution = asd.PlotResolution,
-                    PlotSize = asd.PlotSize,
-                    PlotTenderness = asd.PlotTenderness,
-                    AverageTreeHeight = asd.AverageTreeHeight,
-                    TreeTypes = asd.TreeTypes.Select(asdd => new TreeType()
-                    {
-                        Id = asdd.Id,
-                        Percentage = new Percentage()
-                        {
-                            Id = asdd.Percentage.Id,
-                            Value = asdd.Percentage.Value
-                        },
-                        Tree = new Tree()
-                        {
-                            Id = asdd.Tree.Id,
-                            Name = asdd.Tree.Name
-                        }
-                    }).ToList()
-                }).ToList()
-                // Bids = forestBids.Select(asd=>new Bid()
-                // {
-                //     Id = asd.Id,
-                //     BidAmount = asd.BidAmount,
-                //     BidDateTime = asd.BidDateTime
-                // }).ToList(),
+                    Id = user.Id
+                }
             };
             }
     }

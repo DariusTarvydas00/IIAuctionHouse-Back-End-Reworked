@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using IIAuctionHouse.Core.IServices;
+using IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailServices.ITreeTypeServices;
 using IIAuctionHouse.Core.Models;
+using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels.TreeTypeModels;
 using Moq;
 using Xunit;
 

@@ -2,8 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using IIAuctionHouse.Core.Models;
-using IIAuctionHouse.Core.Models.ForestUid;
+using IIAuctionHouse.Core.Models.ForestDetailModels;
+using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels;
+using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels;
+using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels.TreeTypeModels;
 using IIAuctionHouse.DataAccess.Entities;
+using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities;
+using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities.ForestUidEntities;
+using IIAuctionHouse.DataAccess.Exceptions;
 using IIAuctionHouse.Domain.IRepositories;
 
 namespace IIAuctionHouse.DataAccess.Repositories
@@ -14,12 +20,15 @@ namespace IIAuctionHouse.DataAccess.Repositories
 
         public ForestRepository(MainDbContext ctx)
         {
-            _ctx = ctx;
+            _ctx = ctx ?? throw new NullReferenceException(DataAccessExceptions.NullContext);
         }
 
         public IEnumerable<Forest> FindAll()
         {
-            return _ctx.ForestsDbSet.Select(entity => new Forest()
+            return _ctx.ForestsDbSet.OrderBy(sql => sql.ForestUidSql.ForestUidFirstSql.Id)
+                .ThenBy(sql => sql.ForestUidSql.ForestUidSecondSql.Id)
+                .ThenBy(sql => sql.ForestUidSql.ForestUidThirdSql.Id)
+                .Select(entity => new Forest()
             {
                 Id = entity.Id,
                 ForestGroup = new ForestGroup()
@@ -94,40 +103,38 @@ namespace IIAuctionHouse.DataAccess.Repositories
                         Id = entity.ForestUidSql.ForestUidThirdSql.Id,
                         Value = entity.ForestUidSql.ForestUidThirdSql.Value
                     },
-                    // FirstUid = entity.ForestUidSql.FirstUid,
-                    // SecondUid = entity.ForestUidSql.SecondUid,
-                    // ThirdUid = entity.ForestUidSql.ThirdUid
                 },
-                // Plots = entity.PlotSqls.Select(sql => new Plot()
-                // {
-                //     Id = sql.Id,
-                //     Volume = sql.Volume,
-                //     PlotResolution = sql.PlotResolution,
-                //     PlotSize = sql.PlotSize,
-                //     PlotTenderness = sql.PlotTenderness,
-                //     AverageTreeHeight = sql.AverageTreeHeight,
-                //     TreeTypes = sql.TreeTypeSql.Select(treeTypeSql => new TreeType()
-                //     {
-                //         Id = treeTypeSql.Id,
-                //         Percentage = new Percentage()
-                //         {
-                //             Id = treeTypeSql.PercentageSql.Id,
-                //             Value = treeTypeSql.PercentageSql.Value
-                //         },
-                //         Tree = new Tree()
-                //         {
-                //             Id = treeTypeSql.TreeSql.Id,
-                //             Name = treeTypeSql.TreeSql.Name
-                //         }
-                //         
-                //     }).ToList()
-                // }).ToList(),
-                // Bids = entity.BidSqls.Select(asd => new Bid()
-                // {
-                //     Id = asd.Id,
-                //     BidAmount = asd.BidAmount,
-                //     BidDateTime = asd.BidDateTime
-                // }).ToList(),
+                Plots = entity.PlotSqls.Select(sql => new Plot()
+                {
+                    Id = sql.Id,
+                    Volume = sql.Volume,
+                    PlotResolution = sql.PlotResolution,
+                    PlotSize = sql.PlotSize,
+                    PlotTenderness = sql.PlotTenderness,
+                    AverageTreeHeight = sql.AverageTreeHeight,
+                    TreeTypes = sql.TreeTypeSql.Select(treeTypeSql => new TreeType()
+                    {
+                        Id = treeTypeSql.Id,
+                        Percentage = new Percentage()
+                        {
+                            Id = treeTypeSql.PercentageSql.Id,
+                            Value = treeTypeSql.PercentageSql.Value
+                        },
+                        Tree = new Tree()
+                        {
+                            Id = treeTypeSql.TreeSql.Id,
+                            Name = treeTypeSql.TreeSql.Name
+                        }
+                        
+                    }).ToList()
+                    
+                }).ToList(),
+                Bids = entity.BidSqls.Select(asd => new Bid()
+                {
+                    Id = asd.Id,
+                    BidAmount = asd.BidAmount,
+                    BidDateTime = asd.BidDateTime
+                }).ToList(),
                 ForestryEnterprise = new ForestryEnterprise()
                 {
                     Id = entity.ForestryEnterpriseSql.Id,
@@ -153,20 +160,7 @@ namespace IIAuctionHouse.DataAccess.Repositories
                     ForestUidThirdSqlId = forest.ForestUid.ThirdUid.Id
                 },
                 ForestryEnterpriseSqlId = forest.ForestryEnterprise.Id,
-                // PlotSqls = forest.Plots.Select(asd => new PlotSql()
-                // {
-                //     TreeTypeSql = asd.TreeTypes.Select(asdd => new TreeTypeSql()
-                //     {
-                //         PercentageSqlId = asdd.Percentage.Id,
-                //         TreeSqlId = asdd.Tree.Id
-                //     }).ToList()
-                // }).ToList(),
-                // BidSqls = forest.Bids.Select(asdd=> new BidSql()
-                // {
-                //     Id = asdd.Id,
-                //     BidAmount = asdd.BidAmount,
-                //     BidDateTime = asdd.BidDateTime
-                // }).ToList()
+                
             };
             _ctx.ForestsDbSet.Add(newForest);
             _ctx.SaveChanges();
@@ -231,9 +225,18 @@ namespace IIAuctionHouse.DataAccess.Repositories
                 ForestUidSql = new ForestUidSql()
                 {
                     Id = forest.ForestUid.Id,
-                    // FirstUid = forest.ForestUid.FirstUid,
-                    // SecondUid = forest.ForestUid.SecondUid,
-                    // ThirdUid = forest.ForestUid.ThirdUid
+                    ForestUidFirstSql = new ForestUidFirstSql()
+                    {
+                        Value = forest.ForestUid.FirstUid.Value,
+                    },
+                    ForestUidSecondSql = new ForestUidSecondSql()
+                    {
+                        Value = forest.ForestUid.SecondUid.Value,
+                    },
+                    ForestUidThirdSql = new ForestUidThirdSql()
+                    {
+                        Value = forest.ForestUid.ThirdUid.Value,
+                    },
                 },
                 ForestryEnterpriseSql = new ForestryEnterpriseSql()
                 {
