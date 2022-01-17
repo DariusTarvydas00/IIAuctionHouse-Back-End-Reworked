@@ -1,4 +1,5 @@
 ﻿using IIAuctionHouse.Core.Models;
+using IIAuctionHouse.Core.Models.ForestUid;
 using IIAuctionHouse.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -9,9 +10,6 @@ namespace IIAuctionHouse.DataAccess
     {
         public MainDbContext(DbContextOptions<MainDbContext> options) : base(options)
         {
-            base.ChangeTracker.CascadeDeleteTiming = CascadeTiming.OnSaveChanges;
-            base.ChangeTracker.DeleteOrphansTiming = CascadeTiming.OnSaveChanges;
-            
         }
 
 
@@ -23,9 +21,102 @@ namespace IIAuctionHouse.DataAccess
               modelBuilder.Entity<Plot>().ToTable(nameof(Plot), t => t.ExcludeFromMigrations());
               modelBuilder.Entity<Forest>().ToTable(nameof(Forest), t => t.ExcludeFromMigrations());
               modelBuilder.Entity<ForestLocation>().ToTable(nameof(ForestLocation), t => t.ExcludeFromMigrations());
+              modelBuilder.Entity<ForestUidFirst>().ToTable(nameof(ForestUidFirst), t => t.ExcludeFromMigrations());
+              modelBuilder.Entity<ForestUidSecond>().ToTable(nameof(ForestUidSecond), t => t.ExcludeFromMigrations());
+              modelBuilder.Entity<ForestUidThird>().ToTable(nameof(ForestUidThird), t => t.ExcludeFromMigrations());
+              modelBuilder.Entity<ForestUid>().ToTable(nameof(ForestUid), t => t.ExcludeFromMigrations());
 
+              modelBuilder.Entity<ForestUid>().HasOne(first => first.FirstUid).WithMany();
+              modelBuilder.Entity<ForestUid>().HasOne(second => second.SecondUid).WithMany();
+              modelBuilder.Entity<ForestUid>().HasOne(third => third.ThirdUid).WithMany();
+              
               modelBuilder.Entity<TreeTypeSql>().HasOne(tree => tree.TreeSql).WithMany();
               modelBuilder.Entity<TreeTypeSql>().HasOne(tree => tree.PercentageSql).WithMany();
+        }
+
+        #region Forest Uid Db Sets
+
+        public virtual DbSet<ForestUidSql> ForestUidDbSet { get; set; }
+        public virtual DbSet<ForestUidFirstSql> ForestUidFirstDbSet { get; set; }
+        public virtual DbSet<ForestUidSecondSql> ForestUidSecondDbSet { get; set; }
+        public virtual DbSet<ForestUidThirdSql> ForestUidThirdDbSet { get; set; }
+        
+        #endregion
+
+        #region TreeType Tree and Percentage DbSets
+
+        
+        public virtual DbSet<TreeSql> TreeDbSet { get; set; }
+        public virtual DbSet<PercentageSql> PercentageDbSet { get; set; }
+        public virtual DbSet<TreeTypeSql> TreeTypeDbSet { get; set; }
+
+        #endregion
+        
+        
+        public virtual DbSet<PlotSql> PlotDbSet { get; set; }
+        public virtual DbSet<ForestSql> ForestsDbSet { get; set; }
+        public virtual DbSet<ForestLocationSql> ForestLocationDbSet { get; set; }
+        
+        public virtual DbSet<ForestGroupSql> ForestGroupDbSet { get; set; }
+        
+        
+
+        public virtual DbSet<UserSql> UserDbSet { get; set; }
+        
+        public virtual DbSet<ForestryEnterpriseSql> ForestryEnterpriseDbSet { get; set; }
+
+        public virtual DbSet<BidSql> BidsDbSet { get; set; }
+        public virtual DbSet<AdminSql> AdminDbSet { get; set; }
+        
+        
+        
+          // modelBuilder.Entity<PlotEntity>().HasOne<ForestEntity>(p => p.ForestEntity).
+            //     WithMany(f => f.PlotEntities).
+            //     HasForeignKey(p => p.ForestEntityId);
+            //
+            // modelBuilder.Entity<BidEntity>().HasOne<ForestEntity>(b => b.ForestEntity).
+            //     WithMany(f => f.BidEntities).
+            //     HasForeignKey(b => b.ForestEntityId);
+            //
+            // modelBuilder.Entity<BidEntity>().HasOne<UserEntity>(u => u.UserEntity).
+            //     WithMany(f => f.BidEntities).
+            //     HasForeignKey(b => b.UserEntityId);
+            //
+            // modelBuilder.Entity<ForestUIdEntity>().HasOne<UserEntity>(u => u.UserEntity).
+            //     WithMany(f => f.ForestUIdsEntities).
+            //     HasForeignKey(b => b.UserEntityId);
+            //
+            //------ One to One Relationship ---------//
+            // modelBuilder.Entity<ForestUIdEntity>().HasOne<ForestEntity>(fu => fu.ForestEntity)
+            //     .WithOne(f => f.ForestUidEntity).
+            //     HasForeignKey<ForestEntity>(f => f.ForestUidId);
+            //
+            //------ One to one  --------//
+            // modelBuilder.Entity<ForestLocationEntity>().HasOne(f => f.ForestEntity)
+            //     .WithOne(fl => fl.ForestLocationEntity)
+            //     .HasForeignKey<ForestEntity>(f => f.ForestLocationEntityForeignKey);
+            // modelBuilder.Entity<TreeGroupEntity>().HasOne(f => f.ForestEntity)
+            //     .WithOne(fl => fl.TreeGroupEntity)
+            //     .HasForeignKey<ForestEntity>(f => f.TreeGroupEntityForeignKey);
+            // modelBuilder.Entity<TreeTypeEntity>().HasOne(f => f.ForestEntity)
+            //     .WithOne(fl => fl.TreeTypeEntity)
+            //     .HasForeignKey<ForestEntity>(f => f.TreeTypeEntityForeignKey);
+            //------ One to many --------//
+            // modelBuilder.Entity<ForestEntity>().HasOne(fl => fl.ForestLocationEntity).
+            //     WithMany().HasForeignKey(fl=> new {fl.ForestLocationEntityForeignKey}).OnDelete(DeleteBehavior.SetNull);
+            // modelBuilder.Entity<ForestEntity>().HasOne(tg => tg.TreeGroupEntity).
+            //     WithMany().HasForeignKey(tg=> new {tg.TreeGroupEntityForeignKey}).OnDelete(DeleteBehavior.SetNull);
+            // modelBuilder.Entity<ForestEntity>().HasOne(tt => tt.TreeTypeEntity).
+            //     WithMany().HasForeignKey(tt=> new {tt.TreeTypeEntityForeignKey}).OnDelete(DeleteBehavior.SetNull);
+            //
+            //
+            //     modelBuilder.Entity<TreeTypeEntity>().HasOne(p => p.PercentageEntity).WithOne()
+            //         .HasForeignKey<TreeTypeEntity>(p=>p.PercentageEntityForeignKey).OnDelete(DeleteBehavior.Cascade);
+
+            //modelBuilder.Entity<TreeTypeEntity>().HasOne(a => a.PlotEntity).WithMany(b => b.TreeTypeEntities).
+            // //HasForeignKey(a=>a.PlotId);
+            // modelBuilder.Entity<PlotEntity>().HasOne(a => a.ForestEntity).WithMany(c => c.PlotEntities)
+            //     .HasForeignKey(a => new {a.ForestEntity}).OnDelete(DeleteBehavior.NoAction);
 
                // modelBuilder.Entity<Forest>().ToTable(nameof(Forest), t => t.ExcludeFromMigrations());
                // modelBuilder.Entity<ForestLocation>().ToTable(nameof(ForestLocation), t => t.ExcludeFromMigrations());
@@ -117,78 +208,6 @@ namespace IIAuctionHouse.DataAccess
                //
                // modelBuilder.Entity<TreeTypeSql>().HasOne<PercentageSql>(sql => sql.PercentageSql)
                //     .WithOne(sql => sql.TreeTypeSql).HasForeignKey<PercentageSql>(sql => sql.TreeTypeSqlId);
-        }
-        
-        public virtual DbSet<TreeSql> TreeDbSet { get; set; }
-        public virtual DbSet<PercentageSql> PercentageDbSet { get; set; }
-        public virtual DbSet<TreeTypeSql> TreeTypeDbSet { get; set; }
-        public virtual DbSet<PlotSql> PlotDbSet { get; set; }
-        public virtual DbSet<ForestSql> ForestsDbSet { get; set; }
-        public virtual DbSet<ForestLocationSql> ForestLocationDbSet { get; set; }
-        
-        public virtual DbSet<ForestGroupSql> ForestGroupDbSet { get; set; }
-        
-        
-
-        public virtual DbSet<UserSql> UserDbSet { get; set; }
-        
-        public virtual DbSet<ForestUidSql> ForestUidDbSet { get; set; }
-
-        public virtual DbSet<ForestryEnterpriseSql> ForestryEnterpriseDbSet { get; set; }
-
-        public virtual DbSet<BidSql> BidsDbSet { get; set; }
-        public virtual DbSet<AdminSql> AdminDbSet { get; set; }
-        
-        
-        
-          // modelBuilder.Entity<PlotEntity>().HasOne<ForestEntity>(p => p.ForestEntity).
-            //     WithMany(f => f.PlotEntities).
-            //     HasForeignKey(p => p.ForestEntityId);
-            //
-            // modelBuilder.Entity<BidEntity>().HasOne<ForestEntity>(b => b.ForestEntity).
-            //     WithMany(f => f.BidEntities).
-            //     HasForeignKey(b => b.ForestEntityId);
-            //
-            // modelBuilder.Entity<BidEntity>().HasOne<UserEntity>(u => u.UserEntity).
-            //     WithMany(f => f.BidEntities).
-            //     HasForeignKey(b => b.UserEntityId);
-            //
-            // modelBuilder.Entity<ForestUIdEntity>().HasOne<UserEntity>(u => u.UserEntity).
-            //     WithMany(f => f.ForestUIdsEntities).
-            //     HasForeignKey(b => b.UserEntityId);
-            //
-            //------ One to One Relationship ---------//
-            // modelBuilder.Entity<ForestUIdEntity>().HasOne<ForestEntity>(fu => fu.ForestEntity)
-            //     .WithOne(f => f.ForestUidEntity).
-            //     HasForeignKey<ForestEntity>(f => f.ForestUidId);
-            //
-            //------ One to one  --------//
-            // modelBuilder.Entity<ForestLocationEntity>().HasOne(f => f.ForestEntity)
-            //     .WithOne(fl => fl.ForestLocationEntity)
-            //     .HasForeignKey<ForestEntity>(f => f.ForestLocationEntityForeignKey);
-            // modelBuilder.Entity<TreeGroupEntity>().HasOne(f => f.ForestEntity)
-            //     .WithOne(fl => fl.TreeGroupEntity)
-            //     .HasForeignKey<ForestEntity>(f => f.TreeGroupEntityForeignKey);
-            // modelBuilder.Entity<TreeTypeEntity>().HasOne(f => f.ForestEntity)
-            //     .WithOne(fl => fl.TreeTypeEntity)
-            //     .HasForeignKey<ForestEntity>(f => f.TreeTypeEntityForeignKey);
-            //------ One to many --------//
-            // modelBuilder.Entity<ForestEntity>().HasOne(fl => fl.ForestLocationEntity).
-            //     WithMany().HasForeignKey(fl=> new {fl.ForestLocationEntityForeignKey}).OnDelete(DeleteBehavior.SetNull);
-            // modelBuilder.Entity<ForestEntity>().HasOne(tg => tg.TreeGroupEntity).
-            //     WithMany().HasForeignKey(tg=> new {tg.TreeGroupEntityForeignKey}).OnDelete(DeleteBehavior.SetNull);
-            // modelBuilder.Entity<ForestEntity>().HasOne(tt => tt.TreeTypeEntity).
-            //     WithMany().HasForeignKey(tt=> new {tt.TreeTypeEntityForeignKey}).OnDelete(DeleteBehavior.SetNull);
-            //
-            //
-            //     modelBuilder.Entity<TreeTypeEntity>().HasOne(p => p.PercentageEntity).WithOne()
-            //         .HasForeignKey<TreeTypeEntity>(p=>p.PercentageEntityForeignKey).OnDelete(DeleteBehavior.Cascade);
-
-            //modelBuilder.Entity<TreeTypeEntity>().HasOne(a => a.PlotEntity).WithMany(b => b.TreeTypeEntities).
-            // //HasForeignKey(a=>a.PlotId);
-            // modelBuilder.Entity<PlotEntity>().HasOne(a => a.ForestEntity).WithMany(c => c.PlotEntities)
-            //     .HasForeignKey(a => new {a.ForestEntity}).OnDelete(DeleteBehavior.NoAction);
-
             
             
             // modelBuilder.Entity<PlotEntity>().HasMany<TreeTypeEntity>(entity => entity.TreeTypeEntities)

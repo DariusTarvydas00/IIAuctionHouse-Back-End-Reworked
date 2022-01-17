@@ -1,6 +1,7 @@
 ﻿using System;
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.Core.Models;
+using IIAuctionHouse.Core.Models.ForestUid;
 using IIAuctionHouse.WebApi.Dtos.ForestDto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -50,7 +51,27 @@ namespace IIAuctionHouse.WebApi.Controllers
         {
             try
             {
-                var newForest = _forestService.NewForest(forest.ForestUid, forest.ForestGroup, forest.ForestLocation, forest.Plots, forest.Bids, forest.ForestryEnterprise);
+                var newForestLocation = new ForestLocation()
+                {
+                    GeoLocationX = forest.ForestLocationPostDto.GeoLocationX,
+                    GeoLocationY = forest.ForestLocationPostDto.GeoLocationY
+                };
+                var newForestUid = new ForestUid()
+                {
+                    FirstUid = new ForestUidFirst()
+                    {
+                        Id = forest.ForestUidPostDto.ForestFirstUidDto.Id
+                    },
+                    SecondUid = new ForestUidSecond()
+                    {
+                        Id = forest.ForestUidPostDto.ForestSecondUidDto.Id
+                    },
+                    ThirdUid = new ForestUidThird()
+                    {
+                        Id = forest.ForestUidPostDto.ForestThirdUidDto.Id
+                    },
+                };
+                var newForest = _forestService.NewForest(newForestUid,forest.ForestGroup,newForestLocation,forest.ForestryEnterprise, forest.Plots);
                 return Ok(_forestService.Create(newForest));
             }
             catch(Exception e)
@@ -60,13 +81,13 @@ namespace IIAuctionHouse.WebApi.Controllers
         }
         
         [HttpPut]
-        public ActionResult Put(int id, [FromBody]ForestPutDto forest)
+        public ActionResult Put(int id, [FromBody]Forest forest)
         {
             if (id != forest.Id)
                 return BadRequest("Id needs to match in both url and object");
             try
             {
-                var forestUpdate = _forestService.UpdateForest(forest.Id, forest.ForestUid, forest.ForestGroup, forest.ForestLocation, forest.Plots, forest.Bids, forest.ForestryEnterprise);
+                var forestUpdate = _forestService.UpdateForest(forest.Id, forest.ForestUid, forest.ForestGroup, forest.ForestLocation, forest.ForestryEnterprise, forest.Plots);
                 return Ok(_forestService.Update(forestUpdate));
             }
             catch (Exception e)
