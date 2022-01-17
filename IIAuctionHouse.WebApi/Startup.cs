@@ -1,8 +1,12 @@
 using IIAuctionHouse.Core.IServices;
+using IIAuctionHouse.Core.IServices.IForestUidServices;
 using IIAuctionHouse.DataAccess;
 using IIAuctionHouse.DataAccess.Repositories;
+using IIAuctionHouse.DataAccess.Repositories.ForestUidRepositories;
 using IIAuctionHouse.Domain.IRepositories;
+using IIAuctionHouse.Domain.IRepositories.IForestUidRepositories;
 using IIAuctionHouse.Domain.Services;
+using IIAuctionHouse.Domain.Services.ForestUidServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -52,6 +56,12 @@ namespace IIAuctionHouse.WebApi
             services.AddScoped<IForestEnterpriseRepository, ForestEnterpriseRepository>();
             services.AddScoped<IForestGroupService, ForestGroupService>();
             services.AddScoped<IForestGroupRepository, ForestGroupRepository>();
+            services.AddScoped<IForestFirstUidService, ForestFirstUidService>();
+            services.AddScoped<IForestFirstUidRepository, ForestFirstUidRepository>();
+            services.AddScoped<IForestSecondUidService, ForestSecondUidService>();
+            services.AddScoped<IForestSecondUidRepository, ForestSecondUidRepository>();
+            services.AddScoped<IForestThirdUidService, ForestThirdUidService>();
+            services.AddScoped<IForestThirdUidRepository, ForestThirdUidRepository>();
 
             services.AddScoped<IMainDbContextSeeder, MainDbContextSeeder>();
             
@@ -83,7 +93,7 @@ namespace IIAuctionHouse.WebApi
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "IIAuctionHouse.WebApi v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("./v1/swagger.json", "IIAuctionHouse.WebApi v1"));
                 app.UseCors("Dev-cors");
                 mainDbContextSeeder.SeedDevelopment();
             }

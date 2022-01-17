@@ -30,6 +30,7 @@ namespace IIAuctionHouse.DataAccess.Repositories
             
             var entity = _ctx.ForestGroupDbSet.Add(new ForestGroupSql()
             {
+                Id = forestGroup.Id,
                 Name = forestGroup.Name,
             }).Entity;
             _ctx.SaveChanges();

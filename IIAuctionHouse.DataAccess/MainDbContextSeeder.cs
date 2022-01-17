@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.Core.Models;
+using IIAuctionHouse.Core.Models.ForestUid;
 using IIAuctionHouse.DataAccess.Entities;
 using IIAuctionHouse.Domain.IRepositories;
+using IIAuctionHouse.Domain.IRepositories.IForestUidRepositories;
 
 namespace IIAuctionHouse.DataAccess
 {
@@ -14,13 +17,19 @@ namespace IIAuctionHouse.DataAccess
         private readonly IPlotRepository _plotRepository;
         private readonly IForestEnterpriseRepository _forestEnterpriseRepository;
         private readonly IForestGroupRepository _forestGroupRepository;
+        private readonly IForestFirstUidRepository _forestFirstUidRepository;
+        private readonly IForestSecondUidRepository _forestSecondUidRepository;
+        private readonly IForestThirdUidRepository _forestThirdUidRepository;
 
         public MainDbContextSeeder(MainDbContext ctx, 
             IPercentageRepository percentageRepository,
             ITreeRepository treeRepository,
             IPlotRepository plotRepository,
             IForestEnterpriseRepository forestEnterpriseRepository,
-            IForestGroupRepository forestGroupRepository)
+            IForestGroupRepository forestGroupRepository,
+            IForestFirstUidRepository forestFirstUidRepository,
+            IForestSecondUidRepository forestSecondUidRepository,
+            IForestThirdUidRepository forestThirdUidRepository)
         {
             _ctx = ctx;
             _percentageRepository = percentageRepository;
@@ -28,14 +37,19 @@ namespace IIAuctionHouse.DataAccess
             _plotRepository = plotRepository;
             _forestEnterpriseRepository = forestEnterpriseRepository;
             _forestGroupRepository = forestGroupRepository;
+            _forestFirstUidRepository = forestFirstUidRepository;
+            _forestSecondUidRepository = forestSecondUidRepository;
+            _forestThirdUidRepository = forestThirdUidRepository;
+
         }
 
         public void SeedDevelopment()
         {
             _ctx.Database.EnsureDeleted();
             _ctx.Database.EnsureCreated();
-            
-            //-------- Percentage Entity -----------//
+
+            #region Percentage Entities
+
             for (int i = 1; i < 11; i++)
             {
                 _percentageRepository.Create(new Percentage()
@@ -44,8 +58,11 @@ namespace IIAuctionHouse.DataAccess
                 });
             }
             _ctx.SaveChanges();
-            
-            //-------- Tree Entity -----------------//
+
+            #endregion
+
+            #region Tree Entities
+
             _treeRepository.Create(new Tree()
             {
                 Name = "Pine"
@@ -68,7 +85,11 @@ namespace IIAuctionHouse.DataAccess
             });
             _ctx.SaveChanges();
             
-            //------ Forestry Enterprise Entity -----//
+
+            #endregion
+
+            #region Forestry Enterprise Entites
+
             _forestEnterpriseRepository.Create(new ForestryEnterprise()
             {
                 Name = "Vilnius"
@@ -99,7 +120,11 @@ namespace IIAuctionHouse.DataAccess
             });
             _ctx.SaveChanges();
             
-            //------ Forestry Group Entity -----//
+
+            #endregion
+
+            #region Forest Group Entities
+
             _forestGroupRepository.Create(new ForestGroup()
             {
                 Name = "A"
@@ -117,6 +142,60 @@ namespace IIAuctionHouse.DataAccess
                 Name = "D"
             });
             _ctx.SaveChanges();
+            
+
+            #endregion
+
+            #region Forest Uid Entities
+
+            #region Forest First Uid Entites
+
+            for (int i = 1; i < 10; i++)
+            {
+                _forestFirstUidRepository.Create(new ForestUidFirst()
+                {
+                    Value = i*10
+                });
+            }
+            _ctx.SaveChanges();
+
+            #endregion
+
+            #region Forest Second Uid Entities
+
+            for (int i = 1; i < 10; i++)
+            {
+                _forestSecondUidRepository.Create(new ForestUidSecond()
+                {
+                    Value = i*40
+                });
+            }
+            _ctx.SaveChanges();
+
+            #endregion
+
+            #region Forest Third Uid Entities
+
+            for (int i = 1; i < 10; i++)
+            {
+                _forestThirdUidRepository.Create(new ForestUidThird()
+                {
+                    Value = i*80
+                });
+            }
+            _ctx.SaveChanges();
+
+            #endregion
+
+            #endregion
+            
+            //
+            // //------ Forest Uid Third Entity -----//
+            // for (int i = 0; i < 10; i++)
+            // {
+            //     _forestUidRepository.CreateForestUidThird(i*10);
+            // }
+            // _ctx.SaveChanges();
 
             //-------- Plot Test Entity -------------//
              // for (int i=1; i<10; i++)

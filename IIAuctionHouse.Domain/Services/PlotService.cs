@@ -33,7 +33,7 @@ namespace IIAuctionHouse.Domain.Services
         {
             
             if (volume < 1 || plotSize < 1 || plotTenderness < 0.1 ||
-                averageTreeHeight < 1 || string.IsNullOrEmpty(plotResolution) || treeTypes == null)
+                averageTreeHeight < 1 || string.IsNullOrEmpty(plotResolution))
                 throw new InvalidDataException("Plot is missing some information");
             
             var newPlot = new Plot()
@@ -65,7 +65,7 @@ namespace IIAuctionHouse.Domain.Services
         {
             
             if (volume < 1 || plotSize < 1 || plotTenderness < 0.1 ||
-                averageTreeHeight < 1 || string.IsNullOrEmpty(plotResolution) || treeTypes == null)
+                averageTreeHeight < 1 || string.IsNullOrEmpty(plotResolution))
                 throw new InvalidDataException("Plot is missing some information");
             
             var newPlot = new Plot()

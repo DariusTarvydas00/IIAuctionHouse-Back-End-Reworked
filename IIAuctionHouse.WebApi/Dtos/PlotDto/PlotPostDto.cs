@@ -10,6 +10,7 @@ namespace IIAuctionHouse.WebApi.Dtos.PlotDto
         public double PlotTenderness { get; set; }
         public int Volume { get; set; }
         public int AverageTreeHeight { get; set; }
+        
         public List<TreeType> TreeTypeDto { get; set; }
     }
 }

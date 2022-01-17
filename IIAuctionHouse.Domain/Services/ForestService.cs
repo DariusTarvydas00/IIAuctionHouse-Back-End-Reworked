@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.Core.Models;
+using IIAuctionHouse.Core.Models.ForestUid;
 using IIAuctionHouse.Domain.IRepositories;
 
 namespace IIAuctionHouse.Domain.Services
@@ -41,27 +42,42 @@ namespace IIAuctionHouse.Domain.Services
         //     };
         // }
         
-        public Forest NewForest(ForestUid forestUid, ForestGroup forestGroup, ForestLocation forestLocation, List<Plot> plots, List<Bid> bids, ForestryEnterprise forestryEnterprise)
+        public Forest NewForest(ForestUid forestUid, ForestGroup forestGroup, ForestLocation forestLocation, ForestryEnterprise forestryEnterprise, List<Plot> plots)
         {
-            if (forestGroup == null || forestLocation == null || forestUid == null || plots == null || forestryEnterprise == null)
+            if (forestGroup == null || forestLocation == null || forestUid == null || forestryEnterprise == null)
                 throw new InvalidDataException("Forest is missing some information");
             return new Forest()
             {
                 ForestUid = new ForestUid()
                 {
-                    FirstUid = forestUid.FirstUid,
-                    SecondUid = forestUid.SecondUid,
-                    ThirdUid = forestUid.ThirdUid
+                    FirstUid = new ForestUidFirst()
+                    {
+                        Id = forestUid.FirstUid.Id
+                    },
+                    SecondUid = new ForestUidSecond()
+                    {
+                        Id = forestUid.SecondUid.Id
+                    },
+                    ThirdUid = new ForestUidThird()
+                    {
+                        Id = forestUid.ThirdUid.Id
+                    }
                 },
                 ForestGroup = new ForestGroup()
                 {
-                    Name = forestGroup.Name
+                    Id = forestGroup.Id,
                 },
                 ForestLocation = new ForestLocation()
                 {
                     GeoLocationX = forestLocation.GeoLocationX,
                     GeoLocationY = forestLocation.GeoLocationY
                 },
+                ForestryEnterprise = new ForestryEnterprise()
+                {
+                    Id = forestryEnterprise.Id,
+                },
+                // Plots = new List<Plot>(),
+                // Bids = new List<Bid>(),
                 Plots = plots.Select(asd => new Plot()
                 {
                    Id = asd.Id,
@@ -81,18 +97,13 @@ namespace IIAuctionHouse.Domain.Services
                                Id = asdd.Tree.Id
                            }
                    }).ToList()
-                }).ToList(),
-                Bids = bids.Select(asd => new Bid()
-                {
-                    Id = asd.Id,
-                    BidAmount = asd.BidAmount,
-                    BidDateTime = asd.BidDateTime
-                }).ToList(),
-                ForestryEnterprise = new ForestryEnterprise()
-                {
-                    Id = forestryEnterprise.Id,
-                    Name = forestryEnterprise.Name
-                }
+                }).ToList()
+                // Bids = bids.Select(asd => new Bid()
+                // {
+                //     Id = asd.Id,
+                //     BidAmount = asd.BidAmount,
+                //     BidDateTime = asd.BidDateTime
+                // }).ToList(),
             };
         }
 
@@ -111,9 +122,9 @@ namespace IIAuctionHouse.Domain.Services
             return _forestRepository.Delete(id);
         }
 
-        public Forest UpdateForest(int id, ForestUid forestUid, ForestGroup forestGroup, ForestLocation forestLocation, List<Plot> plots, List<Bid> forestBids, ForestryEnterprise forestryEnterprise)
+        public Forest UpdateForest(int id, ForestUid forestUid, ForestGroup forestGroup, ForestLocation forestLocation, ForestryEnterprise forestryEnterprise, List<Plot> plots)
         {
-            if (id < 1 ||  forestGroup == null || forestLocation == null || forestUid == null  || plots == null || forestBids == null || forestryEnterprise == null)
+            if (id < 1 ||  forestGroup == null || forestLocation == null || forestUid == null  || forestryEnterprise == null )
                 throw new InvalidDataException("Forest is missing some information");
             return new Forest()
             {
@@ -135,6 +146,12 @@ namespace IIAuctionHouse.Domain.Services
                     FirstUid = forestUid.FirstUid,
                     SecondUid = forestUid.SecondUid,
                     ThirdUid = forestUid.ThirdUid
+                },
+                // Plots = new List<Plot>(),
+                Bids = new List<Bid>(),
+                ForestryEnterprise = new ForestryEnterprise()
+                {
+                    Id = forestryEnterprise.Id,
                 },
                 Plots = plots.Select(asd => new Plot()
                 {
@@ -158,19 +175,14 @@ namespace IIAuctionHouse.Domain.Services
                             Name = asdd.Tree.Name
                         }
                     }).ToList()
-                }).ToList(),
-                Bids = forestBids.Select(asd=>new Bid()
-                {
-                    Id = asd.Id,
-                    BidAmount = asd.BidAmount,
-                    BidDateTime = asd.BidDateTime
-                }).ToList(),
-                ForestryEnterprise = new ForestryEnterprise()
-                {
-                    Id = forestryEnterprise.Id,
-                    Name = forestryEnterprise.Name
-                }
+                }).ToList()
+                // Bids = forestBids.Select(asd=>new Bid()
+                // {
+                //     Id = asd.Id,
+                //     BidAmount = asd.BidAmount,
+                //     BidDateTime = asd.BidDateTime
+                // }).ToList(),
             };
-        }
+            }
     }
 }
