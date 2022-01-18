@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.Core.Models;
-using IIAuctionHouse.Core.Models.ForestDetailModels;
 using IIAuctionHouse.Core.Models.UserDetailModels;
 using IIAuctionHouse.Domain.IRepositories;
+using IIAuctionHouse.Domain.ServiceExceptions;
 
 namespace IIAuctionHouse.Domain.Services
 {
@@ -16,7 +16,7 @@ namespace IIAuctionHouse.Domain.Services
 
         public UserService(IUserRepository userRepository)
         {
-            _userRepository = userRepository ?? throw new NullReferenceException("User Repository Cannot be null");
+            _userRepository = userRepository ?? throw new NullReferenceException(ServicesExceptions.NullRepository);
         }
 
         public List<User> GetAll()
@@ -26,13 +26,15 @@ namespace IIAuctionHouse.Domain.Services
 
         public User GetById(int id)
         {
+            if (id < 1)
+                throw new InvalidDataException(ServicesExceptions.InvalidId);
             return _userRepository.GetById(id);
         }
 
         public User NewUser(string firstName, string lastName, UserDetails userDetails)
         {
             if (firstName.Any(char.IsDigit) || string.IsNullOrEmpty(firstName) || lastName.Any(char.IsDigit) || string.IsNullOrEmpty(lastName) || userDetails == null)
-                throw new InvalidDataException("User is missing some information");
+                throw new InvalidDataException(ServicesExceptions.MissingInformation);
             return new User()
             {
                 FirstName = firstName,
@@ -43,6 +45,8 @@ namespace IIAuctionHouse.Domain.Services
 
         public User NewUserCheck(int id)
         {
+            if (id < 1)
+                throw new InvalidDataException(ServicesExceptions.InvalidId);
             return new User()
             {
                 Id = id
@@ -51,23 +55,29 @@ namespace IIAuctionHouse.Domain.Services
 
         public User Create(User user)
         {
+            if (user ==null)
+                throw new InvalidDataException(ServicesExceptions.MissingInformation);
             return _userRepository.Create(user);
         }
 
         public User Update(User user)
         {
+            if (user ==null)
+                throw new InvalidDataException(ServicesExceptions.MissingInformation);
             return _userRepository.Update(user);
         }
 
         public User Delete(int id)
         {
+            if (id < 1)
+                throw new InvalidDataException(ServicesExceptions.InvalidId);
             return _userRepository.Delete(id);
         }
 
         public User UpdateUser(int id, string firstName, string lastName, UserDetails userDetails)
         {
             if (id < 1 || firstName.Any(char.IsDigit) || string.IsNullOrEmpty(firstName) || lastName.Any(char.IsDigit) || string.IsNullOrEmpty(lastName) || userDetails == null)
-                throw new InvalidDataException("User is missing some information");
+                throw new InvalidDataException(ServicesExceptions.MissingInformation);
             return new User()
             {
                 Id = id,

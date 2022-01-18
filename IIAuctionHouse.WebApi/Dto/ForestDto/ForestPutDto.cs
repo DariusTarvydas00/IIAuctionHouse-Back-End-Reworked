@@ -8,11 +8,11 @@ namespace IIAuctionHouse.WebApi.Dto.ForestDto
     public class ForestPutDto
     {
         public int Id { get; set; }
-        public ForestryEnterpriseIdDto ForestryEnterpriseIdDto { get; set; }
+        public OnlyIdDto ForestryEnterpriseIdDto { get; set; }
         public ForestLocation ForestLocation { get; set; }
         public ForestGroup ForestGroup { get; set; }
         public ForestUid ForestUid { get; set; }
         public OnlyIdDto UserIdDto { get; set; }
-        public ForestUidIdDto ForestUidIdDto { get; set; }
+        public OnlyIdDto ForestUidIdDto { get; set; }
     }
 }

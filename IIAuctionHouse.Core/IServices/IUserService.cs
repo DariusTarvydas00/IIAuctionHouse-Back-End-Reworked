@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using IIAuctionHouse.Core.Models;
-using IIAuctionHouse.Core.Models.ForestDetailModels;
 using IIAuctionHouse.Core.Models.UserDetailModels;
 
 namespace IIAuctionHouse.Core.IServices

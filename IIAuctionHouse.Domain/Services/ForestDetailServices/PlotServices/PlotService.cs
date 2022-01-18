@@ -33,10 +33,10 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices
         }
 
         public Plot NewPlot(double plotSize, string plotResolution, double plotTenderness,
-            int volume, int averageTreeHeight, List<TreeType> treeTypes , ForestUid forestUid)
+            int volume, int averageTreeHeight, List<TreeType> treeTypes, ForestUid forestUid)
         {
             if (volume < 1 || plotSize < 1 || plotTenderness < 0.1 ||
-                averageTreeHeight < 1 || string.IsNullOrEmpty(plotResolution))
+                averageTreeHeight < 1 || string.IsNullOrEmpty(plotResolution) || plotResolution.Any(char.IsDigit))
                 throw new InvalidDataException(ServicesExceptions.MissingInformation);
             
             var newPlot = new Plot()
@@ -50,33 +50,33 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices
                 {
                     Percentage = asd.Percentage != null ? new Percentage()
                     {
-                        Id = asd.Percentage.Id,
+                        Id = asd.Percentage?.Id ?? throw new InvalidDataException(ServicesExceptions.InvalidId),
                         Value = asd.Percentage.Value
                     } : throw new InvalidDataException(ServicesExceptions.MissingInformation),
                     Tree = asd.Tree != null ? new Tree()
                     {
-                        Id = asd.Tree.Id,
+                        Id = asd.Tree?.Id ?? throw new InvalidDataException(ServicesExceptions.InvalidId),
                         Name = asd.Tree.Name
                     } : throw new InvalidDataException(ServicesExceptions.MissingInformation),
                 }).ToList() : throw new InvalidDataException(ServicesExceptions.MissingInformation),
-                ForestUid = new ForestUid()
+                ForestUid = forestUid != null ? new ForestUid()
                 {
                     FirstUid = new ForestUidFirst()
                     {
-                        Id = forestUid.FirstUid.Id,
-                        Value = forestUid.FirstUid.Value
+                        Id = forestUid.FirstUid?.Id ?? throw new InvalidDataException(ServicesExceptions.InvalidId),
+                        Value = forestUid.FirstUid.Value,
                     },
                     SecondUid = new ForestUidSecond()
                     {
-                        Id = forestUid.SecondUid.Id,
+                        Id = forestUid.SecondUid?.Id ?? throw new InvalidDataException(ServicesExceptions.InvalidId),
                         Value = forestUid.SecondUid.Value
                     },
                     ThirdUid = new ForestUidThird()
                     {
-                        Id = forestUid.ThirdUid.Id,
+                        Id = forestUid.ThirdUid?.Id ?? throw new InvalidDataException(ServicesExceptions.InvalidId),
                         Value = forestUid.ThirdUid.Value
                     }
-                }
+                } : null
             };
             return newPlot;
         }
@@ -85,7 +85,7 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices
             int averageTreeHeight, List<TreeType> treeTypes, ForestUid forestUid)
         {
             if (id < 1 || volume < 1 || plotSize < 1 || plotTenderness < 0.1 ||
-                averageTreeHeight < 1 || string.IsNullOrEmpty(plotResolution))
+                averageTreeHeight < 1 || string.IsNullOrEmpty(plotResolution) || treeTypes == null || forestUid == null)
                 throw new InvalidDataException(ServicesExceptions.MissingInformation);
             
             var newPlot = new Plot()
@@ -100,12 +100,12 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices
                 {
                     Percentage = asd.Percentage != null ? new Percentage()
                     {
-                        Id = asd.Percentage.Id,
+                        Id = asd.Percentage?.Id ?? throw new InvalidDataException(ServicesExceptions.InvalidId),
                         Value = asd.Percentage.Value
                     } : throw new InvalidDataException(ServicesExceptions.MissingInformation),
                     Tree = asd.Tree != null ? new Tree()
                     {
-                        Id = asd.Tree.Id,
+                        Id = asd.Tree?.Id ?? throw new InvalidDataException(ServicesExceptions.InvalidId),
                         Name = asd.Tree.Name
                     } : throw new InvalidDataException(ServicesExceptions.MissingInformation),
                 }).ToList() : throw new InvalidDataException(ServicesExceptions.MissingInformation),
@@ -113,17 +113,17 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices
                 {
                     FirstUid = new ForestUidFirst()
                     {
-                        Id = forestUid.FirstUid.Id,
+                        Id = forestUid.FirstUid?.Id ?? throw new InvalidDataException(ServicesExceptions.InvalidId),
                         Value = forestUid.FirstUid.Value
                     },
                     SecondUid = new ForestUidSecond()
                     {
-                        Id = forestUid.SecondUid.Id,
+                        Id = forestUid.SecondUid?.Id ?? throw new InvalidDataException(ServicesExceptions.InvalidId),
                         Value = forestUid.SecondUid.Value
                     },
                     ThirdUid = new ForestUidThird()
                     {
-                        Id = forestUid.ThirdUid.Id,
+                        Id = forestUid.ThirdUid?.Id ?? throw new InvalidDataException(ServicesExceptions.InvalidId),
                         Value = forestUid.ThirdUid.Value
                     }
                 }

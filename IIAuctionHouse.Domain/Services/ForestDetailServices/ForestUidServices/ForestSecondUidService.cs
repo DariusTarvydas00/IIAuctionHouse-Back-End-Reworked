@@ -5,6 +5,7 @@ using System.Linq;
 using IIAuctionHouse.Core.IServices.IForestDetailServices.IForestUidServices;
 using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels;
 using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IForestUidRepositories;
+using IIAuctionHouse.Domain.ServiceExceptions;
 
 namespace IIAuctionHouse.Domain.Services.ForestDetailServices.ForestUidServices
 {
@@ -14,7 +15,7 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.ForestUidServices
 
         public ForestSecondUidService(IForestSecondUidRepository forestSecondUidRepository)
         {
-            _forestSecondUidRepository = forestSecondUidRepository ?? throw new NullReferenceException("Second Forest Uid Repository Cannot be null");;;
+            _forestSecondUidRepository = forestSecondUidRepository ?? throw new NullReferenceException(ServicesExceptions.NullRepository);
         }
         
         public List<ForestUidSecond> GetAll()
@@ -25,7 +26,7 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.ForestUidServices
         public ForestUidSecond NewSecondUid(int value)
         {
             if (value < 1)
-                throw new InvalidDataException("Second Forest Uid is missing some information");
+                throw new InvalidDataException(ServicesExceptions.InvalidId);
             return new ForestUidSecond()
             {
                 Value = value
@@ -35,7 +36,7 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.ForestUidServices
         public ForestUidSecond Create(ForestUidSecond forestUidSecond)
         {
             if (forestUidSecond == null)
-                throw new InvalidDataException("Second Forest Uid is missing some information");
+                throw new InvalidDataException(ServicesExceptions.MissingInformation);
             return _forestSecondUidRepository.Create(forestUidSecond);
             throw new System.NotImplementedException();
         }
@@ -43,21 +44,21 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.ForestUidServices
         public ForestUidSecond Update(ForestUidSecond forestUidSecond)
         {
             if (forestUidSecond == null)
-                throw new InvalidDataException("Second Forest Uid to update is missing some information");
+                throw new InvalidDataException(ServicesExceptions.MissingInformation);
             return _forestSecondUidRepository.Update(forestUidSecond);
         }
 
         public ForestUidSecond Delete(int id)
         {
             if (id < 1)
-                throw new InvalidDataException("Incorrect Second Forest Uid Id");
+                throw new InvalidDataException(ServicesExceptions.InvalidId);
             return _forestSecondUidRepository.Delete(id);
         }
 
         public ForestUidSecond UpdateSecondUid(int id, int value)
         {
             if (id < 1 || value < 1 )
-                throw new InvalidDataException("Incorrect Second Forest Uid Id");
+                throw new InvalidDataException(ServicesExceptions.InvalidId +" or "+ ServicesExceptions.InvalidValue);
             return new ForestUidSecond() {Id = id,Value = value};
         }
     }

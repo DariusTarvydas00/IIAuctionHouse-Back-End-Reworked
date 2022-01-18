@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.Core.Models;
 using IIAuctionHouse.Core.Models.ForestDetailModels;
 using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels;
-using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels;
-using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels.TreeTypeModels;
 using IIAuctionHouse.Domain.IRepositories;
+using IIAuctionHouse.Domain.ServiceExceptions;
 
 namespace IIAuctionHouse.Domain.Services
 {
@@ -17,7 +17,7 @@ namespace IIAuctionHouse.Domain.Services
 
         public ForestService(IForestRepository forestRepository)
         {
-            _forestRepository = forestRepository;
+            _forestRepository = forestRepository ?? throw new NullReferenceException(ServicesExceptions.NullRepository);
         }
 
         public List<Forest> GetAll()
@@ -27,28 +27,15 @@ namespace IIAuctionHouse.Domain.Services
 
         public Forest GetById(int id)
         {
+            if (id < 1)
+                throw new InvalidDataException(ServicesExceptions.InvalidId);
             return _forestRepository.GetById(id);
         }
-
-        // public Forest NewForest(ForestryEnterprise forestryEnterprise, 
-        //     List<Bid> bids)
-        // {
-        //     if (
-        //         forestryEnterprise == null || plots == null || bids ==null)
-        //         throw new InvalidDataException("Forest is missing some information");
-        //     return new Forest()
-        //     {
-        //         ForestGroup = forestGroup,
-        //        // ForestryEnterprise = forestryEnterprise,
-        //        // Plots = plots,
-        //        // Bids = bids
-        //     };
-        // }
         
         public Forest NewForest(ForestUid forestUid, ForestGroup forestGroup, ForestLocation forestLocation, ForestryEnterprise forestryEnterprise, User user)
         {
             if (forestGroup == null || forestLocation == null || forestUid == null || forestryEnterprise == null || user == null)
-                throw new InvalidDataException("Forest is missing some information");
+                throw new InvalidDataException(ServicesExceptions.MissingInformation);
             return new Forest()
             {
                 ForestUid = new ForestUid()
@@ -88,23 +75,29 @@ namespace IIAuctionHouse.Domain.Services
 
         public Forest Create(Forest forest)
         {
+            if (forest ==null)
+                throw new InvalidDataException(ServicesExceptions.MissingInformation);
             return _forestRepository.Create(forest);
         }
 
         public Forest Update(Forest forest)
         {
+            if (forest ==null)
+                throw new InvalidDataException(ServicesExceptions.MissingInformation);
             return _forestRepository.Update(forest);
         }
 
         public Forest Delete(int id)
         {
+            if (id < 1)
+                throw new InvalidDataException(ServicesExceptions.InvalidId);
             return _forestRepository.Delete(id);
         }
 
         public Forest UpdateForest(int id, ForestUid forestUid, ForestGroup forestGroup, ForestLocation forestLocation, ForestryEnterprise forestryEnterprise, User user)
         {
-            if (id < 1 ||  forestGroup == null || forestLocation == null || forestUid == null  || forestryEnterprise == null )
-                throw new InvalidDataException("Forest is missing some information");
+            if (id < 1 ||  forestGroup == null || forestLocation == null || forestUid == null  || forestryEnterprise == null || user == null )
+                throw new InvalidDataException(ServicesExceptions.MissingInformation);
             return new Forest()
             {
                 Id = id,
@@ -135,6 +128,16 @@ namespace IIAuctionHouse.Domain.Services
                     Id = user.Id
                 }
             };
-            }
+        }
+
+        public Forest NewForestCheck(int id)
+        {
+            if (id < 1)
+                throw new InvalidDataException(ServicesExceptions.InvalidId);
+            return new Forest()
+            {
+                Id = id
+            };
+        }
     }
 }

@@ -51,7 +51,7 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] ForestryEnterprise forestryEnterprise)
+        public ActionResult Put(int id, [FromBody] ForestryEnterprisePutDto forestryEnterprise)
         {
             if (forestryEnterprise == null)
                 return BadRequest(ForestryEnterpriseControlletExceptions.MissingSomeInformation);
@@ -59,7 +59,8 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers
                 return BadRequest(GeneralExceptions.NotMatchingId);
             try
             {
-                return Ok(_forestEnterpriseService.Update(forestryEnterprise));
+                var newForestryEnterprise = _forestEnterpriseService.NewForestEnterprise(forestryEnterprise.Name);
+                return Ok(_forestEnterpriseService.Update(newForestryEnterprise));
             }
             catch (Exception e)
             {
