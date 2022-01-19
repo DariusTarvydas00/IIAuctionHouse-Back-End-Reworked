@@ -1,4 +1,4 @@
-﻿namespace IIAuctionHouse.WebApi.Dto.ForestDetailDto.PlotDetailsDto.TreeTypeDto
+﻿namespace IIAuctionHouse.WebApi.Dto.ForestDetailDto.PlotDetailsDto.TreeTypesDto
 {
     public class PercentageDto
     {

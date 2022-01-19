@@ -4,7 +4,6 @@ namespace IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailService
 {
     public interface ITreeTypeService
     {
-        TreeType NewTreeType(int treeId, int percentageId);
-        TreeType UpdateTreeType(int id, int treeId, int percentageId);
+        TreeType NewTreeType(int id, int treeId, int percentageId);
     }
 }

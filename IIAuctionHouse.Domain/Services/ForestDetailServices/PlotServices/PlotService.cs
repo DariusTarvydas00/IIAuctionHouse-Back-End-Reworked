@@ -3,23 +3,31 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailServices;
-using IIAuctionHouse.Core.Models.ForestDetailModels;
 using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels;
 using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels.EachUidModels;
 using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels;
 using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels.TreeTypeModels;
 using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IPlotDetailRepositories;
 using IIAuctionHouse.Domain.ServiceExceptions;
+using IIAuctionHouse.Domain.Validators.ForestDetailsValidators.PlotDetailsValidators;
+using IIAuctionHouse.Domain.Validators.ForestDetailsValidators.PlotDetailsValidators.TreeTypeValidators;
 
 namespace IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices
 {
     public class PlotService: IPlotService
     {
         private readonly IPlotRepository _plotRepository;
+        private readonly PlotValidator _plotValidator;
+        private readonly TreeValidator _treeValidator;
+        private readonly PercentageValidator _percentageValidator;
 
-        public PlotService(IPlotRepository plotRepository)
+        public PlotService(IPlotRepository plotRepository, PlotValidator plotValidator, 
+            TreeValidator treeValidator, PercentageValidator percentageValidator)
         {
             _plotRepository = plotRepository ?? throw new NullReferenceException(ServicesExceptions.NullRepository);
+            _plotValidator = plotValidator ?? throw new NullReferenceException(ServicesExceptions.NullValidator);
+            _treeValidator = treeValidator ?? throw new NullReferenceException(ServicesExceptions.NullValidator);
+            _percentageValidator = percentageValidator ?? throw new NullReferenceException(ServicesExceptions.NullValidator);
         }
         public List<Plot> GetAll()
         {
@@ -28,38 +36,30 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices
 
         public Plot GetById(int id)
         {
-            if (id < 1)
-                throw new InvalidDataException(ServicesExceptions.InvalidId);
+            _plotValidator.ValidateId(id);
             return _plotRepository.GetById(id);
         }
 
-        public Plot NewPlot(double plotSize, string plotResolution, double plotTenderness,
+        public Plot NewPlot(int id, double plotSize, string plotResolution, double plotTenderness,
             int volume, int averageTreeHeight, List<TreeType> treeTypes, ForestUid forestUid)
         {
-            if (volume < 1 || plotSize < 1 || plotTenderness < 0.1 ||
-                averageTreeHeight < 1 || string.IsNullOrEmpty(plotResolution) || plotResolution.Any(char.IsDigit))
-                throw new InvalidDataException(ServicesExceptions.MissingInformation);
-            
-            var newPlot = new Plot()
+            _plotValidator.ValidateId(id);
+            _plotValidator.ValidateValue(volume,plotSize,plotTenderness,averageTreeHeight,plotResolution);
+            foreach (var treeType in treeTypes)
             {
+                _plotValidator.ValidateId(treeType.Id);
+                _treeValidator.DefaultValidation(treeType.Tree);
+                _percentageValidator.DefaultValidation(treeType.Percentage);
+            }
+            return new Plot()
+            {
+                Id = id,
                 PlotSize = plotSize,
                 PlotResolution = plotResolution,
                 PlotTenderness = plotTenderness,
                 Volume = volume,
                 AverageTreeHeight = averageTreeHeight,
-                TreeTypes = treeTypes != null ? treeTypes.Select(asd => new TreeType()
-                {
-                    Percentage = asd.Percentage != null ? new Percentage()
-                    {
-                        Id = asd.Percentage?.Id ?? throw new InvalidDataException(ServicesExceptions.InvalidId),
-                        Value = asd.Percentage.Value
-                    } : throw new InvalidDataException(ServicesExceptions.MissingInformation),
-                    Tree = asd.Tree != null ? new Tree()
-                    {
-                        Id = asd.Tree?.Id ?? throw new InvalidDataException(ServicesExceptions.InvalidId),
-                        Name = asd.Tree.Name
-                    } : throw new InvalidDataException(ServicesExceptions.MissingInformation),
-                }).ToList() : throw new InvalidDataException(ServicesExceptions.MissingInformation),
+                TreeTypes = treeTypes,
                 ForestUid = forestUid != null ? new ForestUid()
                 {
                     FirstUid = new ForestUidFirst()
@@ -79,15 +79,19 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices
                     }
                 } : null
             };
-            return newPlot;
         }
 
         public Plot UpdatePlot(int id, double plotSize, string plotResolution, double plotTenderness, int volume,
             int averageTreeHeight, List<TreeType> treeTypes, ForestUid forestUid)
         {
-            if (id < 1 || volume < 1 || plotSize < 1 || plotTenderness < 0.1 ||
-                averageTreeHeight < 1 || string.IsNullOrEmpty(plotResolution) || treeTypes == null || forestUid == null)
-                throw new InvalidDataException(ServicesExceptions.MissingInformation);
+            _plotValidator.ValidateId(id);
+            _plotValidator.ValidateValue(volume,plotSize,plotTenderness,averageTreeHeight,plotResolution);
+            foreach (var treeType in treeTypes)
+            {
+                _plotValidator.ValidateId(treeType.Id);
+                _treeValidator.DefaultValidation(treeType.Tree);
+                _percentageValidator.DefaultValidation(treeType.Percentage);
+            }
             
             var newPlot = new Plot()
             {
@@ -97,19 +101,7 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices
                 PlotTenderness = plotTenderness,
                 Volume = volume,
                 AverageTreeHeight = averageTreeHeight,
-                TreeTypes = treeTypes != null ? treeTypes.Select(asd => new TreeType()
-                {
-                    Percentage = asd.Percentage != null ? new Percentage()
-                    {
-                        Id = asd.Percentage?.Id ?? throw new InvalidDataException(ServicesExceptions.InvalidId),
-                        Value = asd.Percentage.Value
-                    } : throw new InvalidDataException(ServicesExceptions.MissingInformation),
-                    Tree = asd.Tree != null ? new Tree()
-                    {
-                        Id = asd.Tree?.Id ?? throw new InvalidDataException(ServicesExceptions.InvalidId),
-                        Name = asd.Tree.Name
-                    } : throw new InvalidDataException(ServicesExceptions.MissingInformation),
-                }).ToList() : throw new InvalidDataException(ServicesExceptions.MissingInformation),
+                TreeTypes = treeTypes,
                 ForestUid = new ForestUid()
                 {
                     FirstUid = new ForestUidFirst()
@@ -134,22 +126,19 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices
 
         public Plot Create(Plot plot)
         {
-            if (plot == null)
-                throw new InvalidDataException(ServicesExceptions.MissingInformation);
+            _plotValidator.DefaultValidation(plot);
             return _plotRepository.Create(plot);
         }
 
         public Plot Update(Plot plot)
         {
-            if (plot == null)
-                throw new InvalidDataException(ServicesExceptions.MissingInformation);
+            _plotValidator.DefaultValidation(plot);
             return _plotRepository.Update(plot);
         }
 
         public Plot Delete(int id)
         {
-            if (id < 1)
-                throw new InvalidDataException(ServicesExceptions.InvalidId);
+            _plotValidator.ValidateId(id);
             return _plotRepository.Delete(id);
         }
     }

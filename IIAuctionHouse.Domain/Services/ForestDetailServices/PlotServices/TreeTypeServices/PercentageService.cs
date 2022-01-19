@@ -27,7 +27,7 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices.TreeT
 
         public Percentage NewPercentage(int value)
         {
-            _percentageValidator.ValidateNumber(value);
+            _percentageValidator.ValidateId(value);
             return new Percentage()
             {
                 Value = value
@@ -36,8 +36,8 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices.TreeT
         
         public Percentage NewPercentage(int id, int value)
         {
-            _percentageValidator.ValidateNumber(value);
-            _percentageValidator.ValidateNumber(id);
+            _percentageValidator.ValidateId(value);
+            _percentageValidator.ValidateId(id);
             return new Percentage()
             {
                 Id = id,
@@ -59,7 +59,7 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices.TreeT
 
         public Percentage Delete(int id)
         {
-            _percentageValidator.ValidateNumber(id);
+            _percentageValidator.ValidateId(id);
             return _percentageRepository.Delete(id);
         }
     }

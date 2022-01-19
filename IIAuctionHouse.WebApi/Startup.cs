@@ -28,6 +28,7 @@ using IIAuctionHouse.Domain.Services.ForestDetailServices.ForestUidServices;
 using IIAuctionHouse.Domain.Services.ForestDetailServices.ForestUidServices.EachUidRepositories;
 using IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices;
 using IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices.TreeTypeServices;
+using IIAuctionHouse.Domain.Validators.ForestDetailsValidators.PlotDetailsValidators;
 using IIAuctionHouse.Domain.Validators.ForestDetailsValidators.PlotDetailsValidators.TreeTypeValidators;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -57,6 +58,7 @@ namespace IIAuctionHouse.WebApi
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "IIAuctionHouse.WebApi", Version = "v1"});
+                c.CustomSchemaIds(type => type.ToString());
             });
 
             var loggerFactory = LoggerFactory.Create(builder => { builder.AddConsole(); });
@@ -112,7 +114,8 @@ namespace IIAuctionHouse.WebApi
             
             services.AddScoped<PercentageValidator>();
             services.AddScoped<TreeValidator>();
-
+            services.AddScoped<PlotValidator>();
+            
             services.AddScoped<IMainDbContextSeeder, MainDbContextSeeder>();
             
             services.AddCors(options =>

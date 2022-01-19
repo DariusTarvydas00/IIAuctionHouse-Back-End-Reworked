@@ -8,7 +8,7 @@ namespace IIAuctionHouse.WebApi.Dto.ForestDetailDto.ForestUidDto
     {
         public int Id { get; set; }
         public ForestUidFirstIdDto ForestFirstUidDto { get; set; }
-        public ForestUidSecondIdDto ForestSecondUidDto { get; set; }
+        public PercentageDto ForestSecondUidDto { get; set; }
         public ForestUidThirdIdDto ForestThirdUidDto { get; set; }
     }
 }

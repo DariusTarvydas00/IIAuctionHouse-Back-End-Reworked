@@ -37,7 +37,7 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices.TreeT
         public Tree NewTree(int id, string name)
         {
             _treeValidator.ValidateValue(name);
-            _treeValidator.ValidateNumber(id);
+            _treeValidator.ValidateId(id);
             return new Tree()
             {
                 Id = id,
@@ -59,7 +59,7 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices.TreeT
 
         public Tree Delete(int id)
         {
-            _treeValidator.ValidateNumber(id);
+            _treeValidator.ValidateId(id);
             return _treeRepository.Delete(id);
         }
     }

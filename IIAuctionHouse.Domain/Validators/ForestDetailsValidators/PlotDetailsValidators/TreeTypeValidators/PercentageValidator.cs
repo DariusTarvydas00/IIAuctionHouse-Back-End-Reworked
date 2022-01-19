@@ -20,10 +20,10 @@ namespace IIAuctionHouse.Domain.Validators.ForestDetailsValidators.PlotDetailsVa
             }
         }
         
-        public void ValidateNumber(int number) {
+        public void ValidateId(int number) {
             if (number < 1)
             {
-                throw new InvalidDataException("Percentage or Id Cannot be less than 1");
+                throw new InvalidDataException("Percentage Id Cannot be less than 1");
             }
         }
     }

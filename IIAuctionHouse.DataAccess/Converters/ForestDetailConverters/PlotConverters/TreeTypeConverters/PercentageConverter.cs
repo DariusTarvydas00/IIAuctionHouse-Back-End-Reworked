@@ -1,6 +1,5 @@
 ﻿using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels.TreeTypeModels;
 using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities.PlotEntities.TreeTypeEntities;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace IIAuctionHouse.DataAccess.Converters.ForestDetailConverters.PlotConverters.TreeTypeConverters
 {
@@ -10,8 +9,8 @@ namespace IIAuctionHouse.DataAccess.Converters.ForestDetailConverters.PlotConver
         {
             return new Percentage()
             {
-                Id = percentageSql.Id,
-                Value = percentageSql.Value
+                Id = percentageSql?.Id ?? 0,
+                Value = percentageSql?.Value ?? 0,
             };
         }
 
@@ -19,8 +18,8 @@ namespace IIAuctionHouse.DataAccess.Converters.ForestDetailConverters.PlotConver
         {
             return new PercentageSql()
             {
-                Id = percentage.Id,
-                Value = percentage.Value
+                Id = percentage?.Id ?? 0,
+                Value = percentage?.Value ?? 0,
             };
         }
     }

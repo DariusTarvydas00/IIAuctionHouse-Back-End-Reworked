@@ -9,8 +9,8 @@ namespace IIAuctionHouse.DataAccess.Converters.ForestDetailConverters.PlotConver
         {
             return new Tree()
             {
-                Id = treeSql.Id,
-                Name = treeSql.Name
+                Id = treeSql?.Id ?? 0,
+                Name = treeSql?.Name ?? "",
             };
         }
 
@@ -18,8 +18,8 @@ namespace IIAuctionHouse.DataAccess.Converters.ForestDetailConverters.PlotConver
         {
             return new TreeSql()
             {
-                Id = tree.Id,
-                Name = tree.Name
+                Id = tree?.Id ?? 0,
+                Name = tree?.Name ?? "",
             };
         }
     }

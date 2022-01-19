@@ -14,6 +14,6 @@ namespace IIAuctionHouse.WebApi.Dto.ForestDto
         public ForestGroup ForestGroup { get; set; }
         public ForestUid ForestUid { get; set; }
         public UserIdDto UserIdDto { get; set; }
-        public ForestUidPostDto ForestUidIdDto { get; set; }
+        public ForestUIdDto ForestUidIdDto { get; set; }
     }
 }

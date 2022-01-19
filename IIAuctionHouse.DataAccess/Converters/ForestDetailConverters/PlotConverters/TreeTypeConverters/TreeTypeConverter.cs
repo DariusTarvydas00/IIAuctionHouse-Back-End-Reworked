@@ -7,38 +7,42 @@ namespace IIAuctionHouse.DataAccess.Converters.ForestDetailConverters.PlotConver
     {
         public TreeType Convert(TreeTypeSql treeTypeSql)
         {
-            return new TreeType()
-            {
-                Id = treeTypeSql.Id,
-                Percentage = new Percentage()
+            if (treeTypeSql != null)
+                return new TreeType()
                 {
-                    Id = treeTypeSql.PercentageSql.Id,
-                    Value = treeTypeSql.PercentageSql.Value
-                },
-                Tree = new Tree()
-                {
-                    Id = treeTypeSql.TreeSql.Id,
-                    Name = treeTypeSql.TreeSql.Name
-                }
-            };
+                    Id = treeTypeSql?.Id ?? 0,
+                    Percentage = new Percentage()
+                    {
+                        Id = treeTypeSql.PercentageSql?.Id ?? 0,
+                        Value = treeTypeSql.PercentageSql?.Value ?? 0,
+                    },
+                    Tree = new Tree()
+                    {
+                        Id = treeTypeSql.TreeSql?.Id ?? 0,
+                        Name = treeTypeSql.TreeSql?.Name ?? "",
+                    }
+                };
+            return null;
         }
 
         public TreeTypeSql Convert(TreeType treeType)
         {
-            return new TreeTypeSql()
-            {
-                Id = treeType.Id,
-                PercentageSql = new PercentageSql()
+            if (treeType != null)
+                return new TreeTypeSql()
                 {
-                    Id = treeType.Percentage.Id,
-                    Value = treeType.Percentage.Value
-                },
-                TreeSql = new TreeSql()
-                {
-                    Id = treeType.Tree.Id,
-                    Name = treeType.Tree.Name
-                }
-            };
+                    Id = treeType?.Id ?? 0,
+                    PercentageSql = new PercentageSql()
+                    {
+                        Id = treeType.Percentage?.Id ?? 0,
+                        Value = treeType.Percentage?.Value ?? 0,
+                    },
+                    TreeSql = new TreeSql()
+                    {
+                        Id = treeType.Tree?.Id ?? 0,
+                        Name = treeType.Tree?.Name ?? "",
+                    }
+                };
+            return null;
         }
     }
 }

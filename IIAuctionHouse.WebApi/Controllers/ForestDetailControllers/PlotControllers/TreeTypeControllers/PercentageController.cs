@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailServices.ITreeTypeServices;
-using IIAuctionHouse.WebApi.Dto.ForestDetailDto.PlotDetailsDto.TreeTypeDto;
+using IIAuctionHouse.WebApi.Dto.ForestDetailDto.PlotDetailsDto.TreeTypesDto;
 using IIAuctionHouse.WebApi.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 

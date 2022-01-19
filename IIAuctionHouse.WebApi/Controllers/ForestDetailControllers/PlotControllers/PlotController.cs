@@ -4,7 +4,7 @@ using System.Linq;
 using IIAuctionHouse.Core.IServices.IForestDetailServices.IForestUidServices;
 using IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailServices;
 using IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailServices.ITreeTypeServices;
-using IIAuctionHouse.WebApi.Dto.ForestDetailDto.PlotDetailsDto.PlotDto;
+using IIAuctionHouse.WebApi.Dto.ForestDetailDto.PlotDetailsDto;
 using IIAuctionHouse.WebApi.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,8 +41,6 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.PlotControll
         [HttpGet("{id}")]
         public ActionResult GetById(int id)
         {
-            if (id < 1)
-                return BadRequest(ControllersExceptions.IdNullOrLess);
             try
             {
                 return Ok(_plotService.GetById(id));
@@ -54,20 +52,18 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.PlotControll
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] PlotPostDto plotPostDto)
+        public ActionResult Post([FromBody] PlotDto plotDto)
         {
-            if (plotPostDto == null)
-                return BadRequest(ControllersExceptions.MissingSomeInformation);
             try
             {
                 var newForestUidPostDto = _forestUidService.NewForestUid(
-                    plotPostDto.ForestUidDto.ForestFirstUidDto.Id,
-                    plotPostDto.ForestUidDto.ForestSecondUidDto.Id,
-                    plotPostDto.ForestUidDto.ForestThirdUidDto.Id);
-                var newTreeType = plotPostDto.TreeTypePostDtos.Select(dto =>
-                    _treeTypeService.NewTreeType(dto.TreeTypeIdDto.Id, dto.PercentageIdDto.Id)).ToList();
-                var newPlot = _plotService.NewPlot(plotPostDto.PlotSize, plotPostDto.PlotResolution, plotPostDto.PlotTenderness,
-                    plotPostDto.Volume, plotPostDto.AverageTreeHeight, newTreeType, newForestUidPostDto);
+                    plotDto.ForestUid.ForestFirstUidDto.Id,
+                    plotDto.ForestUid.ForestSecondUidDto.Id,
+                    plotDto.ForestUid.ForestThirdUidDto.Id);
+                var newTreeType = plotDto.TreeTypes.Select(dto =>
+                    _treeTypeService.NewTreeType(dto.Id,dto.Tree.Id, dto.Percentage.Id)).ToList();
+                var newPlot = _plotService.NewPlot(plotDto.Id,plotDto.PlotSize, plotDto.PlotResolution, plotDto.PlotTenderness,
+                    plotDto.Volume, plotDto.AverageTreeHeight, newTreeType, newForestUidPostDto);
                 return Ok(_plotService.Create(newPlot));
             }
             catch(Exception e)
@@ -77,22 +73,18 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.PlotControll
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] PlotPutDto plotPut)
+        public ActionResult Put(int id, [FromBody] PlotDto plotPut)
         {
-            if (plotPut == null)
-                return BadRequest(ControllersExceptions.MissingSomeInformation);
-            if (id != plotPut.Id || id < 1)
-                return BadRequest(ControllersExceptions.NotMatchingId);
             try
             {
                 var newForestUidPostDto = _forestUidService.UpdateForestUid(
-                    plotPut.ForestUidDto.Id,
-                    plotPut.ForestUidDto.ForestFirstUidDto.Id,
-                    plotPut.ForestUidDto.ForestSecondUidDto.Id,
-                    plotPut.ForestUidDto.ForestThirdUidDto.Id);
-                var newTreeType = plotPut.TreeTypeDtos.Select(dto =>
-                    _treeTypeService.UpdateTreeType( dto.Id, dto.TreeTypeIdDto.Id, dto.PercentageIdDto.Id)).ToList();
-                var plotUpdate = _plotService.UpdatePlot(plotPut.Id, plotPut.PlotSize, plotPut.PlotResolution, plotPut.PlotTenderness,
+                    plotPut.ForestUid.Id,
+                    plotPut.ForestUid.ForestFirstUidDto.Id,
+                    plotPut.ForestUid.ForestSecondUidDto.Id,
+                    plotPut.ForestUid.ForestThirdUidDto.Id);
+                var newTreeType = plotPut.TreeTypes.Select(dto =>
+                    _treeTypeService.NewTreeType(plotPut.Id, dto.Tree.Id, dto.Percentage.Id)).ToList();
+                var plotUpdate = _plotService.NewPlot(plotPut.Id, plotPut.PlotSize, plotPut.PlotResolution, plotPut.PlotTenderness,
                     plotPut.Volume, plotPut.AverageTreeHeight, newTreeType, newForestUidPostDto);
                 return Ok(_plotService.Update(plotUpdate));
             }
@@ -105,8 +97,6 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.PlotControll
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            if (id < 1)
-                return BadRequest(ControllersExceptions.IdNullOrLess);
             try
             {
                 return Ok(_plotService.Delete(id));
