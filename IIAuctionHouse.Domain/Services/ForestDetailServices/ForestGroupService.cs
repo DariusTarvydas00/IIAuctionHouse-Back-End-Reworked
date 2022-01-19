@@ -22,6 +22,20 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices
         {
             return _forestGroupRepository.FindAll().ToList();
         }
+        
+        public ForestGroup GetById(int id)
+        {
+            if (id < 1)
+                throw new InvalidDataException(ServicesExceptions.InvalidId);
+            return _forestGroupRepository.GetByIdIncludeDetails(id);
+        }
+
+        public ForestGroup NewForestGroup(int id)
+        {
+            if (id < 1)
+                throw new InvalidDataException(ServicesExceptions.InvalidName);
+            return new ForestGroup() {Id = id};
+        }
 
         public ForestGroup Create(ForestGroup forestGroup)
         {

@@ -4,13 +4,14 @@ using System.Linq;
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.Core.Models;
 using IIAuctionHouse.Core.Models.ForestDetailModels;
-using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels;
+using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels.EachUidModels;
 using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels.TreeTypeModels;
 using IIAuctionHouse.DataAccess.Entities;
 using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities.ForestUidEntities;
 using IIAuctionHouse.Domain.IRepositories;
 using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories;
 using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IForestUidRepositories;
+using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IForestUidRepositories.IEachUidRepositories;
 using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IPlotDetailRepositories;
 using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IPlotDetailRepositories.ITreeTypeRepositories;
 
@@ -161,7 +162,6 @@ namespace IIAuctionHouse.DataAccess
             {
                 _forestFirstUidRepository.Create(new ForestUidFirst()
                 {
-                    Id = 1,
                     Value = i*10
                 });
             }
@@ -175,7 +175,6 @@ namespace IIAuctionHouse.DataAccess
             {
                 _forestSecondUidRepository.Create(new ForestUidSecond()
                 {
-                    Id = 1,
                     Value = i*40
                 });
             }
@@ -189,7 +188,6 @@ namespace IIAuctionHouse.DataAccess
             {
                 _forestThirdUidRepository.Create(new ForestUidThird()
                 {
-                    Id = 1,
                     Value = i*80
                 });
             }

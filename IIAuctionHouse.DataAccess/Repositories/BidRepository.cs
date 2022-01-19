@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using IIAuctionHouse.Core.Models;
 using IIAuctionHouse.Core.Models.ForestDetailModels;
-using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels;
 using IIAuctionHouse.Core.Models.UserDetailModels;
 using IIAuctionHouse.DataAccess.Entities;
 using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities;
@@ -56,7 +55,7 @@ namespace IIAuctionHouse.DataAccess.Repositories
         public Bid Create(Bid bid)
         {
             var forest = _ctx.ForestsDbSet.FirstOrDefault(sql => 
-                sql.ForestUidSql.ForestUidFirstSql.Id == bid.Forest.ForestUid.FirstUid.Id &&
+                sql.ForestUidSql.Id == bid.Forest.ForestUid.FirstUid.Id &&
                 sql.ForestUidSql.ForestUidSecondSql.Id == bid.Forest.ForestUid.SecondUid.Id &&
                 sql.ForestUidSql.ForestUidSecondSql.Id == bid.Forest.ForestUid.SecondUid.Id);
             var user = _ctx.UserDbSet.FirstOrDefault(sql => 

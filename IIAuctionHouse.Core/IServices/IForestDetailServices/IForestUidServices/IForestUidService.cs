@@ -1,4 +1,5 @@
 ﻿using IIAuctionHouse.Core.Models.ForestDetailModels;
+using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels;
 
 namespace IIAuctionHouse.Core.IServices.IForestDetailServices.IForestUidServices
 {

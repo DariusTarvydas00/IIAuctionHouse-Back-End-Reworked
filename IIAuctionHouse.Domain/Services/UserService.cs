@@ -43,7 +43,7 @@ namespace IIAuctionHouse.Domain.Services
             };
         }
 
-        public User NewUserCheck(int id)
+        public User NewUser(int id)
         {
             if (id < 1)
                 throw new InvalidDataException(ServicesExceptions.InvalidId);

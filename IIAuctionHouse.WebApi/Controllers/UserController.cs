@@ -2,7 +2,6 @@
 using System.IO;
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.Core.IServices.IForestDetailServices.IUserDetailServices;
-using IIAuctionHouse.Core.Models;
 using IIAuctionHouse.WebApi.Dto.UserDto;
 using IIAuctionHouse.WebApi.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +18,9 @@ namespace IIAuctionHouse.WebApi.Controllers
 
         public UserController(IUserService userService, IUserDetailService userDetailService, IAddressService addressService)
         {
-            _userService = userService ?? throw new InvalidDataException(UserControllerExceptions.ServiceIsNull);
-            _userDetailService = userDetailService ?? throw new InvalidDataException(UserControllerExceptions.ServiceIsNull);
-            _addressService = addressService ?? throw new InvalidDataException(UserControllerExceptions.ServiceIsNull);
+            _userService = userService ?? throw new InvalidDataException(ControllersExceptions.NullService);
+            _userDetailService = userDetailService ?? throw new InvalidDataException(ControllersExceptions.NullService);
+            _addressService = addressService ?? throw new InvalidDataException(ControllersExceptions.NullService);
         }
 
         [HttpGet]
@@ -41,7 +40,7 @@ namespace IIAuctionHouse.WebApi.Controllers
         public ActionResult GetById(int id)
         {
             if (id < 1)
-                return BadRequest(GeneralExceptions.IdNullOrLess);
+                return BadRequest(ControllersExceptions.IdNullOrLess);
             try
             {
                 return Ok(_userService.GetById(id));
@@ -56,7 +55,7 @@ namespace IIAuctionHouse.WebApi.Controllers
         public ActionResult Post([FromBody] UserPostDto userPostDto)
         {
             if (userPostDto == null)
-                return BadRequest(UserControllerExceptions.MissingSomeInformation); 
+                return BadRequest(ControllersExceptions.MissingSomeInformation); 
             try { 
                 var newUserAddress = _addressService.NewAddress(userPostDto.UserDetailsPostDto.AddressPostDto.Country,userPostDto.UserDetailsPostDto.AddressPostDto.City,
                 userPostDto.UserDetailsPostDto.AddressPostDto.StreetName,userPostDto.UserDetailsPostDto.AddressPostDto.StreetOrHouseNumber);
@@ -75,9 +74,9 @@ namespace IIAuctionHouse.WebApi.Controllers
         public ActionResult Put(int id, [FromBody]UserPutDto userPutDto)
         {
             if (userPutDto == null)
-                return BadRequest(UserControllerExceptions.MissingSomeInformation);
+                return BadRequest(ControllersExceptions.MissingSomeInformation);
             if (id != userPutDto.Id || id < 1)
-                return BadRequest(GeneralExceptions.NotMatchingId);
+                return BadRequest(ControllersExceptions.NotMatchingId);
             try
             {
                 var newUserAddress = _addressService.NewAddress(userPutDto.UserDetailPutDto.AddressPutDto.Country,userPutDto.UserDetailPutDto.AddressPutDto.City,
@@ -97,7 +96,7 @@ namespace IIAuctionHouse.WebApi.Controllers
         public ActionResult Delete(int id)
         {
             if (id < 1)
-                return BadRequest(GeneralExceptions.IdNullOrLess);
+                return BadRequest(ControllersExceptions.IdNullOrLess);
             try
             {
                 return Ok(_userService.Delete(id));

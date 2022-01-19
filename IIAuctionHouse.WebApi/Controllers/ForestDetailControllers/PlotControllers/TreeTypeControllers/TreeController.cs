@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailServices.ITreeTypeServices;
-using IIAuctionHouse.WebApi.Dto.ForestDetailDto.PlotDetailsDtos.TreeTypeDto.TreeDto;
+using IIAuctionHouse.WebApi.Dto.ForestDetailDto.PlotDetailsDto.TreeTypeDto;
 using IIAuctionHouse.WebApi.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +15,7 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.PlotControll
 
             public TreeController(ITreeService treeService)
             {
-                _treeService = treeService ?? throw new InvalidDataException(ControllersExceptions.ServiceIsNull);
+                _treeService = treeService ?? throw new InvalidDataException(ControllersExceptions.NullService);
             }
 
             [HttpGet]
@@ -34,13 +33,11 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.PlotControll
             }
 
             [HttpPost]
-            public ActionResult Post([FromBody] TreePostDto treeDto)
+            public ActionResult Post([FromBody] TreeDto tree)
             {
-                if (string.IsNullOrEmpty(treeDto.Name) || treeDto.Name.Any(char.IsDigit))
-                    return BadRequest(ControllersExceptions.InvalidName);
                 try
                 {
-                    var newTreeType = _treeService.NewTree(treeDto.Name);
+                    var newTreeType = _treeService.NewTree(tree.Name);
                     return Ok(_treeService.Create(newTreeType));
                 }
                 catch(Exception e)
@@ -50,13 +47,11 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.PlotControll
             }
             
             [HttpPut("{id}")]
-            public ActionResult Put(int id, [FromBody] TreePutDto treePutDto)
+            public ActionResult Put(int id, [FromBody] TreeDto tree)
             {
-                if (id != treePutDto.Id || treePutDto.Id < 1 || id < 1 )
-                    return BadRequest(GeneralExceptions.NotMatchingId);
                 try
                 {
-                    var treeTypeUpdate = _treeService.UpdateTree(treePutDto.Id, treePutDto.Name);
+                    var treeTypeUpdate = _treeService.NewTree(tree.Id, tree.Name);
                     return Ok(_treeService.Update(treeTypeUpdate));
                 }
                 catch (Exception e)
@@ -68,8 +63,6 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.PlotControll
             [HttpDelete("{id}")]
             public ActionResult Delete(int id)
             {
-                if (id < 1)
-                    return BadRequest(GeneralExceptions.IdNullOrLess);
                 try
                 {
                     return Ok(_treeService.Delete(id));

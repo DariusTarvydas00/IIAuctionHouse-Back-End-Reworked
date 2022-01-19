@@ -12,7 +12,6 @@ namespace IIAuctionHouse.DataAccess.Entities.ForestDetailEntities.PlotEntities
         public double PlotTenderness { get; set; }
         public int Volume { get; set; }
         public int AverageTreeHeight { get; set; }
-        public int? ForestSqlId { get; set; }
         public List<TreeTypeSql> TreeTypeSql { get; set; }
         public ForestUidSql ForestUidSql { get; set; }
     }

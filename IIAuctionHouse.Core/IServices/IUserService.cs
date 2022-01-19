@@ -8,8 +8,8 @@ namespace IIAuctionHouse.Core.IServices
     {
         List<User> GetAll();
         User GetById(int id);
+        User NewUser(int id);
         User NewUser(string firstName, string lastName, UserDetails userDetails);
-        User NewUserCheck(int id);
         User Create(User user);
         User Update(User user);
         User Delete(int id);

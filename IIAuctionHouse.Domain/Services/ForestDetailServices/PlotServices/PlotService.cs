@@ -5,6 +5,7 @@ using System.Linq;
 using IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailServices;
 using IIAuctionHouse.Core.Models.ForestDetailModels;
 using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels;
+using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels.EachUidModels;
 using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels;
 using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels.TreeTypeModels;
 using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IPlotDetailRepositories;

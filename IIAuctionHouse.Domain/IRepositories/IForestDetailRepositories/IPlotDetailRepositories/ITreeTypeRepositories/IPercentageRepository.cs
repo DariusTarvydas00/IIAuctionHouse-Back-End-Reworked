@@ -6,6 +6,7 @@ namespace IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IPlotDet
     public interface IPercentageRepository
     {
         IEnumerable<Percentage> FindAll();
+        Percentage GetById(int id);
         Percentage Create(Percentage percentage);
         Percentage Update(Percentage percentage);
         Percentage Delete(int id);

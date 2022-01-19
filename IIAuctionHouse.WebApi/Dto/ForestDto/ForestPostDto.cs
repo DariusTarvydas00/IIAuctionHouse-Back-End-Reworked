@@ -1,15 +1,17 @@
-﻿using IIAuctionHouse.Core.Models.ForestDetailModels;
+﻿using IIAuctionHouse.WebApi.Dto.ForestDetailDto.ForestGroupDto;
 using IIAuctionHouse.WebApi.Dto.ForestDetailDto.ForestLocationDto;
+using IIAuctionHouse.WebApi.Dto.ForestDetailDto.ForestryEnterpriseDto;
 using IIAuctionHouse.WebApi.Dto.ForestDetailDto.ForestUidDto;
+using IIAuctionHouse.WebApi.Dto.UserDto;
 
 namespace IIAuctionHouse.WebApi.Dto.ForestDto
 {
     public class ForestPostDto
     {
-        public ForestryEnterprise ForestryEnterprise { get; set; }
-        public ForestGroup ForestGroup { get; set; }
-        public ForestLocationPostDto ForestLocationPostDto { get; set; }
-        public OnlyIdDto UserIdDto { get; set; }
-        public ForestUidPostDto ForestUidIdDto { get; set; }
+        public ForestryEnterpriseIdDto ForestryEnterprise { get; set; }
+        public ForestGroupIdDto ForestGroup { get; set; }
+        public ForestLocationPostDto ForestLocation { get; set; }
+        public UserIdDto User { get; set; }
+        public ForestUidPostDto ForestUid { get; set; }
     }
 }

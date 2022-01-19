@@ -4,9 +4,8 @@ using System.Linq;
 using IIAuctionHouse.Core.IServices.IForestDetailServices.IForestUidServices;
 using IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailServices;
 using IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailServices.ITreeTypeServices;
-using IIAuctionHouse.WebApi.Dto.ForestDetailDto.PlotDetailsDtos.PlotDto;
+using IIAuctionHouse.WebApi.Dto.ForestDetailDto.PlotDetailsDto.PlotDto;
 using IIAuctionHouse.WebApi.Exceptions;
-using IIAuctionHouse.WebApi.Exceptions.ForestDetailsControllersExceptions.ForestUidControllersExceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.PlotControllers
@@ -21,9 +20,9 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.PlotControll
 
         public PlotController(IPlotService plotService, IForestUidService forestUidService, ITreeTypeService treeTypeService)
         {
-            _plotService = plotService ?? throw new InvalidDataException(ControllersExceptions.ServiceIsNull);
-            _forestUidService = forestUidService ?? throw new InvalidDataException(ForestUidControllerException.ServiceIsNull);
-            _treeTypeService = treeTypeService ?? throw new InvalidDataException(ForestUidControllerException.ServiceIsNull);
+            _plotService = plotService ?? throw new InvalidDataException(ControllersExceptions.NullService);
+            _forestUidService = forestUidService ?? throw new InvalidDataException(ControllersExceptions.NullService);
+            _treeTypeService = treeTypeService ?? throw new InvalidDataException(ControllersExceptions.NullService);
         }
 
         [HttpGet]
@@ -43,7 +42,7 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.PlotControll
         public ActionResult GetById(int id)
         {
             if (id < 1)
-                return BadRequest(GeneralExceptions.IdNullOrLess);
+                return BadRequest(ControllersExceptions.IdNullOrLess);
             try
             {
                 return Ok(_plotService.GetById(id));
@@ -83,7 +82,7 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.PlotControll
             if (plotPut == null)
                 return BadRequest(ControllersExceptions.MissingSomeInformation);
             if (id != plotPut.Id || id < 1)
-                return BadRequest(GeneralExceptions.NotMatchingId);
+                return BadRequest(ControllersExceptions.NotMatchingId);
             try
             {
                 var newForestUidPostDto = _forestUidService.UpdateForestUid(
@@ -107,7 +106,7 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.PlotControll
         public ActionResult Delete(int id)
         {
             if (id < 1)
-                return BadRequest(GeneralExceptions.IdNullOrLess);
+                return BadRequest(ControllersExceptions.IdNullOrLess);
             try
             {
                 return Ok(_plotService.Delete(id));

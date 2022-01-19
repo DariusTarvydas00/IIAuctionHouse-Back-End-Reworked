@@ -17,9 +17,9 @@ namespace IIAuctionHouse.WebApi.Controllers
 
             public BidController(IBidService bidService, IUserService userService, IForestService forestService)
             {
-                _bidService = bidService ?? throw new InvalidDataException(BidControllerExceptions.ServiceIsNull);
-                _userService = userService ?? throw new InvalidDataException(BidControllerExceptions.ServiceIsNull);
-                _forestService = forestService ?? throw new InvalidDataException(BidControllerExceptions.ServiceIsNull);
+                _bidService = bidService ?? throw new InvalidDataException(ControllersExceptions.NullService);
+                _userService = userService ?? throw new InvalidDataException(ControllersExceptions.NullService);
+                _forestService = forestService ?? throw new InvalidDataException(ControllersExceptions.NullService);
             }
 
             [HttpGet]
@@ -39,7 +39,7 @@ namespace IIAuctionHouse.WebApi.Controllers
             public ActionResult GetById(int id)
             {
                 if (id < 1)
-                    return BadRequest(GeneralExceptions.IdNullOrLess);
+                    return BadRequest(ControllersExceptions.IdNullOrLess);
                 try
                 {
                     return Ok(_bidService.GetById(id));
@@ -54,11 +54,11 @@ namespace IIAuctionHouse.WebApi.Controllers
             public ActionResult Post([FromBody] BidPostDto bidPostDto)
             {
                 if (bidPostDto == null)
-                    return BadRequest(BidControllerExceptions.MissingSomeInformation);
+                    return BadRequest(ControllersExceptions.MissingSomeInformation);
                 try
                 {
-                    var newUser = _userService.NewUserCheck(bidPostDto.UserPostIdDto.Id);
-                    var newForest = _forestService.NewForestCheck(bidPostDto.ForestPostIdDto.Id);
+                    var newUser = _userService.NewUser(bidPostDto.UserPostIdDto.Id);
+                    var newForest = _forestService.NewForestCheck(bidPostDto.ForestPostIdDto.ForestUid.ForestFirstUidDto.Id);
                     var newBid = _bidService.NewBid(bidPostDto.Value, newUser, newForest);
                     return Ok(_bidService.Create(newBid));
                 }
@@ -72,12 +72,12 @@ namespace IIAuctionHouse.WebApi.Controllers
             public ActionResult Put(int id, [FromBody] BidPutDto bidPutDto)
             {
                 if (bidPutDto == null)
-                    return BadRequest(BidControllerExceptions.MissingSomeInformation);
+                    return BadRequest(ControllersExceptions.MissingSomeInformation);
                 if (id != bidPutDto.Id || id < 1)
-                    return BadRequest(GeneralExceptions.NotMatchingId);
+                    return BadRequest(ControllersExceptions.NotMatchingId);
                 try
                 {
-                    var newUser = _userService.NewUserCheck(bidPutDto.UserPostIdDto.Id);
+                    var newUser = _userService.NewUser(bidPutDto.UserPostIdDto.Id);
                     var newForest = _forestService.NewForestCheck(bidPutDto.ForestPostIdDto.Id);
                     var newBid = _bidService.UpdateBid(id, bidPutDto.Value, newUser, newForest);
                     return Ok(_bidService.Update(newBid));
@@ -92,7 +92,7 @@ namespace IIAuctionHouse.WebApi.Controllers
             public ActionResult Delete(int id)
             {
                 if (id < 1)
-                    return BadRequest(GeneralExceptions.IdNullOrLess);
+                    return BadRequest(ControllersExceptions.IdNullOrLess);
                 try
                 {
                     return Ok(_bidService.Delete(id));

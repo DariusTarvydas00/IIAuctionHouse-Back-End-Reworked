@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using IIAuctionHouse.Core.Models;
 using IIAuctionHouse.Core.Models.ForestDetailModels;
+using IIAuctionHouse.DataAccess.Converters.ForestDetailConverters;
+using IIAuctionHouse.DataAccess.Entities;
 using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities;
 using IIAuctionHouse.DataAccess.Exceptions;
 using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories
 {
     public class ForestGroupRepository: IForestGroupRepository
     {
         private readonly MainDbContext _ctx;
+        private readonly ForestGroupConverter _forestGroupConverter;
 
-        public ForestGroupRepository(MainDbContext ctx)
+        public ForestGroupRepository(MainDbContext ctx, ForestGroupConverter forestGroupConverter)
         {
             _ctx = ctx ?? throw new NullReferenceException(DataAccessExceptions.NullContext);
+            _forestGroupConverter = forestGroupConverter ?? throw new NullReferenceException(DataAccessExceptions.NullContext);
         }
 
         public IEnumerable<ForestGroup> FindAll()
@@ -25,49 +32,48 @@ namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories
                 Name = forestGroup.Name,
             }).ToList();
         }
+        
+        public ForestGroup GetById(int id)
+        {
+            var forestGroupList = _ctx.ForestGroupDbSet
+                .FirstOrDefault(sql => sql.Id == id);
+            return forestGroupList != null ? _forestGroupConverter.Convert(forestGroupList) : null;
+        }
+        
+        public ForestGroup GetByIdIncludeDetails(int id)
+        {
+            var forestGroupList = _ctx.ForestGroupDbSet
+                .Include(sql => sql.ForestSqls)
+                .ThenInclude(sql => sql.ForestryEnterpriseSql)
+                .Include(sql => sql.ForestSqls)
+                .ThenInclude(sql => sql.ForestLocationSql)
+                .FirstOrDefault(sql => sql.Id == id);
+            return forestGroupList != null ? _forestGroupConverter.Convert(forestGroupList) : null;
+        }
 
         public ForestGroup Create(ForestGroup forestGroup)
         {
-            
-            var entity = _ctx.ForestGroupDbSet.Add(new ForestGroupSql()
-            {
-                Id = forestGroup.Id,
-                Name = forestGroup.Name,
-            }).Entity;
+            var forestGroupSql = _forestGroupConverter.Convert(forestGroup);
+            _ctx.ForestGroupDbSet.Add(forestGroupSql);
             _ctx.SaveChanges();
-            return new ForestGroup()
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-            };
+            return _forestGroupConverter.Convert(forestGroupSql);
         }
 
-        public ForestGroup Update(ForestGroup updateForestGroup)
+        public ForestGroup Update(ForestGroup forestGroup)
         {
-            var newForestGroup = new ForestGroupSql()
-            {
-                Id = updateForestGroup.Id,
-                Name = updateForestGroup.Name
-            };
-            _ctx.ForestGroupDbSet.Update(newForestGroup);
+            _ctx.ForestGroupDbSet.Update(_forestGroupConverter.Convert(forestGroup));
             _ctx.SaveChanges();
-            return new ForestGroup()
-            {
-                Id = newForestGroup.Id,
-                Name = newForestGroup.Name
-            };
+            return forestGroup;
         }
 
         public ForestGroup Delete(int id)
         {
-            var entity = _ctx.ForestGroupDbSet.FirstOrDefault(forestGroup => forestGroup.Id == id);
-            if (entity != null) _ctx.ForestGroupDbSet.Remove(entity);
+            var forestGroupSql = _ctx.ForestGroupDbSet.FirstOrDefault(fg => fg.Id == id);
+            if (forestGroupSql == null) 
+                throw new InvalidDataException(DataAccessExceptions.NotFound);
+            _ctx.ForestGroupDbSet.Remove(forestGroupSql); 
             _ctx.SaveChanges();
-            return entity != null ? new ForestGroup()
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-            }: null;
+            return _forestGroupConverter.Convert(forestGroupSql);
         }
 
     }

@@ -1,20 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using IIAuctionHouse.Core.Models;
 using IIAuctionHouse.Core.Models.ForestDetailModels;
-using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities;
+using IIAuctionHouse.DataAccess.Converters.ForestDetailConverters;
+using IIAuctionHouse.DataAccess.Entities;
 using IIAuctionHouse.DataAccess.Exceptions;
 using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories
 {
     public class ForestEnterpriseRepository: IForestEnterpriseRepository
     {
         private readonly MainDbContext _ctx;
+        private readonly ForestryEnterpriseConverter _forestryEnterpriseConverter;
 
-        public ForestEnterpriseRepository(MainDbContext ctx)
+        public ForestEnterpriseRepository(
+            MainDbContext ctx, 
+            ForestryEnterpriseConverter forestryEnterpriseConverter)
         {
             _ctx = ctx ?? throw new NullReferenceException(DataAccessExceptions.NullContext);
+            _forestryEnterpriseConverter = forestryEnterpriseConverter ?? throw new NullReferenceException(DataAccessExceptions.NullConverter);
         }
 
         public IEnumerable<ForestryEnterprise> FindAll()
@@ -23,67 +31,60 @@ namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories
             {
                 Id = forestEnterprise.Id,
                 Name = forestEnterprise.Name,
+                Forests = forestEnterprise.ForestSqls.Select(sql => new Forest()
+                {
+                    ForestLocation = new ForestLocation()
+                    {
+                        Id = sql.ForestLocationSql.Id,
+                        GeoLocationX = sql.ForestLocationSql.GeoLocationX,
+                        GeoLocationY = sql.ForestLocationSql.GeoLocationY
+                    }
+                }).ToList()
             }).ToList();
         }
-
+        
         public ForestryEnterprise GetById(int id)
         {
-            var entity = _ctx.ForestryEnterpriseDbSet.Select(forestEnterprise => new ForestryEnterprise()
-            {
-                Id = forestEnterprise.Id,
-                Name = forestEnterprise.Name,
-            }).FirstOrDefault(type => type.Id == id);
+            var forestList = _ctx.ForestryEnterpriseDbSet
+                .FirstOrDefault(sql => sql.Id == id);
+            return forestList != null ? _forestryEnterpriseConverter.Convert(forestList) : null;
+        }
 
-            return new ForestryEnterprise()
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-            };
+        public ForestryEnterprise GetByIdIncludeDetails(int id)
+        {
+            var forestList = _ctx.ForestryEnterpriseDbSet
+                .Include(sql => sql.ForestSqls)
+                .ThenInclude(sql => sql.ForestGroupSql)
+                .Include(sql => sql.ForestSqls)
+                .ThenInclude(sql => sql.ForestLocationSql)
+                .FirstOrDefault(sql => sql.Id == id);
+            return forestList != null ? _forestryEnterpriseConverter.Convert(forestList) : null;
         }
 
         public ForestryEnterprise Create(ForestryEnterprise forestEnterprise)
         {
-            
-            var entity = _ctx.ForestryEnterpriseDbSet.Add(new ForestryEnterpriseSql()
-            {
-                Id = forestEnterprise.Id,
-                Name = forestEnterprise.Name,
-            }).Entity;
+            var newFeForestryEnterpriseSql = _forestryEnterpriseConverter.Convert(forestEnterprise);
+            _ctx.ForestryEnterpriseDbSet.Add(newFeForestryEnterpriseSql);
             _ctx.SaveChanges();
-            return new ForestryEnterprise()
-            {
-                Id = entity.Id,
-                Name = entity.Name
-            };
+            return _forestryEnterpriseConverter.Convert(newFeForestryEnterpriseSql);
         }
 
-        public ForestryEnterprise Update(ForestryEnterprise forestEnterprise)
+        public ForestryEnterprise Update(ForestryEnterprise forestryEnterprise)
         {
-            var entity = _ctx.ForestryEnterpriseDbSet.Update(new ForestryEnterpriseSql()
-            {
-                Id = forestEnterprise.Id,
-                Name = forestEnterprise.Name
-            }).Entity;
+            _ctx.ForestryEnterpriseDbSet.Update(_forestryEnterpriseConverter.Convert(forestryEnterprise));
             _ctx.SaveChanges();
-            return new ForestryEnterprise()
-            {
-                Id = entity.Id,
-                Name = entity.Name
-            };
+            return forestryEnterprise;
         }
 
         public ForestryEnterprise Delete(int id)
         {
-            var entity = _ctx.ForestryEnterpriseDbSet.FirstOrDefault(treeType => treeType.Id == id);
-            if (entity != null) _ctx.ForestryEnterpriseDbSet.Remove(entity);
+            var forestryEnterpriseSql = _ctx.ForestryEnterpriseDbSet.FirstOrDefault(fe => fe.Id == id);
+            if (forestryEnterpriseSql == null) 
+                throw new InvalidDataException(DataAccessExceptions.NotFound);
+            _ctx.ForestryEnterpriseDbSet.Remove(forestryEnterpriseSql); 
             _ctx.SaveChanges();
-            return entity != null ? new ForestryEnterprise()
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-            }: null;
-        }
+            return _forestryEnterpriseConverter.Convert(forestryEnterpriseSql);
 
-    
+        }
     }
 }

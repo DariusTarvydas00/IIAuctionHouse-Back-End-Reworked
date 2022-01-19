@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailServices.ITreeTypeServices;
-using IIAuctionHouse.WebApi.Dto.ForestDetailDto.PlotDetailsDtos.TreeTypeDto.PercentageDto;
+using IIAuctionHouse.WebApi.Dto.ForestDetailDto.PlotDetailsDto.TreeTypeDto;
 using IIAuctionHouse.WebApi.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +15,7 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.PlotControll
 
         public PercentageController(IPercentageService percentageService)
         {
-            _percentageService = percentageService ?? throw new InvalidDataException(ControllersExceptions.ServiceIsNull);
+            _percentageService = percentageService ?? throw new InvalidDataException(ControllersExceptions.NullService);
         }
 
         [HttpGet]
@@ -32,10 +32,8 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.PlotControll
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] PercentagePostDto percentage)
+        public ActionResult Post([FromBody] PercentageDto percentage)
         {
-            if (percentage.Value < 1)
-                return BadRequest(ControllersExceptions.IdNullOrLess);
             try
             {
                 var newPercentage = _percentageService.NewPercentage(percentage.Value);
@@ -48,13 +46,11 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.PlotControll
         }
         
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] PercentagePutDto percentagePutDto)
+        public ActionResult Put(int id, [FromBody] PercentageDto percentage)
         {
-            if (id != percentagePutDto.Id)
-                return BadRequest(GeneralExceptions.NotMatchingId);
             try
             {
-                var percentageUpdate = _percentageService.UpdatePercentage(percentagePutDto.Id, percentagePutDto.Value);
+                var percentageUpdate = _percentageService.NewPercentage(percentage.Id, percentage.Value);
                 return Ok(_percentageService.Update(percentageUpdate));
             }
             catch (Exception e)
@@ -66,8 +62,6 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.PlotControll
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            if (id < 1)
-                return BadRequest(ControllersExceptions.IdNullOrLess);
             try
             {
                 return Ok(_percentageService.Delete(id));

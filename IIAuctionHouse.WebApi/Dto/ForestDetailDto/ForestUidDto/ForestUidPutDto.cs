@@ -1,10 +1,14 @@
-﻿namespace IIAuctionHouse.WebApi.Dto.ForestDetailDto.ForestUidDto
+﻿using IIAuctionHouse.WebApi.Dto.ForestDetailDto.ForestUidDto.ForestUidFirstDto;
+using IIAuctionHouse.WebApi.Dto.ForestDetailDto.ForestUidDto.ForestUidSecondDto;
+using IIAuctionHouse.WebApi.Dto.ForestDetailDto.ForestUidDto.ForestUidThirdDto;
+
+namespace IIAuctionHouse.WebApi.Dto.ForestDetailDto.ForestUidDto
 {
     public class ForestUidPutDto
     {
         public int Id { get; set; }
-        public OnlyIdDto ForestFirstUidDto { get; set; }
-        public OnlyIdDto ForestSecondUidDto { get; set; }
-        public OnlyIdDto ForestThirdUidDto { get; set; }
+        public ForestUidFirstIdDto ForestFirstUidDto { get; set; }
+        public ForestUidSecondIdDto ForestSecondUidDto { get; set; }
+        public ForestUidThirdIdDto ForestThirdUidDto { get; set; }
     }
 }

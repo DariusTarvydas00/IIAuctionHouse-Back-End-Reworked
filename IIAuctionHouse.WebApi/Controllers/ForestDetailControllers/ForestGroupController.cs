@@ -4,7 +4,6 @@ using System.Linq;
 using IIAuctionHouse.Core.IServices.IForestDetailServices;
 using IIAuctionHouse.WebApi.Dto.ForestDetailDto.ForestGroupDto;
 using IIAuctionHouse.WebApi.Exceptions;
-using IIAuctionHouse.WebApi.Exceptions.ForestDetailsControllersExceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers
@@ -17,7 +16,7 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers
 
             public ForestGroupController(IForestGroupService forestGroupService)
             {
-                _forestGroupService = forestGroupService ?? throw new InvalidDataException(ForestGroupControllerExceptions.ServiceIsNull);
+                _forestGroupService = forestGroupService ?? throw new InvalidDataException(ControllersExceptions.NullService);
             }
 
             [HttpGet]
@@ -33,12 +32,27 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers
                 }
                 
             }
+            
+            [HttpGet("{id}")]
+            public ActionResult GetById(int id)
+            {
+                try
+                {
+                    if (id < 1)
+                        throw new InvalidDataException(ControllersExceptions.IdNullOrLess);
+                    return Ok(_forestGroupService.GetById(id));
+                }
+                catch (Exception e)
+                {
+                    return StatusCode(500, e.Message);
+                }
+            }
 
             [HttpPost]
             public ActionResult Post([FromBody] ForestGroupPostDto forestGroup)
             {
                 if (string.IsNullOrEmpty(forestGroup.Name) || forestGroup.Name.Any(char.IsDigit))
-                    return BadRequest(ForestGroupControllerExceptions.InvalidName);
+                    return BadRequest(ControllersExceptions.InvalidName);
                 try
                 {
                     var newForestGroup = _forestGroupService.NewForestGroup(forestGroup.Name);
@@ -54,9 +68,9 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers
             public ActionResult Put(int id, [FromBody] ForestGroupPutDto treePutDto)
             {
                 if (id != treePutDto.Id || id < 1)
-                    return BadRequest(GeneralExceptions.NotMatchingId);
+                    return BadRequest(ControllersExceptions.NotMatchingId);
                 if (string.IsNullOrEmpty(treePutDto.Name) || treePutDto.Name.Any(char.IsDigit))
-                    return BadRequest(ForestGroupControllerExceptions.InvalidName);
+                    return BadRequest(ControllersExceptions.InvalidName);
                 try
                 {
                     var treeTypeUpdate = _forestGroupService.UpdateForestGroup(treePutDto.Id, treePutDto.Name);
@@ -72,7 +86,7 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers
             public ActionResult Delete(int id)
             {
                 if (id < 1)
-                    return BadRequest(GeneralExceptions.IdNullOrLess);
+                    return BadRequest(ControllersExceptions.IdNullOrLess);
                 try
                 {
                     return Ok(_forestGroupService.Delete(id));

@@ -1,6 +1,8 @@
-﻿using IIAuctionHouse.Core.Models;
+﻿using System.Buffers;
+using IIAuctionHouse.Core.Models;
 using IIAuctionHouse.Core.Models.ForestDetailModels;
 using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels;
+using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels.EachUidModels;
 using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels;
 using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels.TreeTypeModels;
 using IIAuctionHouse.Core.Models.UserDetailModels;
@@ -50,11 +52,27 @@ namespace IIAuctionHouse.DataAccess
             modelBuilder.Entity<ForestUid>().HasOne(second => second.SecondUid).WithMany();
             modelBuilder.Entity<ForestUid>().HasOne(third => third.ThirdUid).WithMany();
 
-            modelBuilder.Entity<TreeTypeSql>().HasOne(tree => tree.TreeSql).WithMany();
-            modelBuilder.Entity<TreeTypeSql>().HasOne(tree => tree.PercentageSql).WithMany();
+            modelBuilder.Entity<TreeTypeSql>().HasOne(tree => tree.TreeSql).WithMany().OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<TreeTypeSql>().HasOne(tree => tree.PercentageSql).WithMany().OnDelete(DeleteBehavior.Restrict);
 
-            //modelBuilder.Entity<ForestSql>().HasOne(forestUid => forestUid.ForestUidSql).WithOne();
-            modelBuilder.Entity<ForestSql>().HasMany(plots => plots.PlotSqls).WithOne().HasForeignKey(sql => sql.ForestSqlId);
+            // modelBuilder.Entity<ForestSql>().HasOne<ForestryEnterpriseSql>(sql => sql.ForestryEnterpriseSql).WithMany()
+            //     .HasForeignKey(sql => sql.ForestryEnterpriseSqlId);
+
+            //  modelBuilder.Entity<ForestryEnterpriseSql>()
+            //      .HasMany<ForestSql>(enterprise => enterprise.ForestSqls).WithOne(sql => sql.ForestryEnterpriseSql).HasForeignKey(sql => sql.ForestryEnterpriseSqlId);
+            // // modelBuilder.Entity<ForestSql>().HasOne<ForestryEnterpriseSql>().WithOne().HasForeignKey<ForestSql>(sql => sql.ForestryEnterpriseSqlId).OnDelete(DeleteBehavior.SetNull);
+            //  //modelBuilder.Entity<ForestSql>().Has
+            //  //modelBuilder.Entity<ForestSql>().HasOne(forestUid => forestUid.ForestUidSql).WithOne();
+            //  modelBuilder.Entity<ForestSql>().HasMany(plots => plots.PlotSqls).WithOne().HasForeignKey(sql => sql.ForestSqlId);
+            modelBuilder.Entity<ForestSql>().HasOne<ForestryEnterpriseSql>(sql => sql.ForestryEnterpriseSql).WithMany(sql => sql.ForestSqls)
+                .HasForeignKey(sql => sql.ForestryEnterpriseSqlId);
+            modelBuilder.Entity<ForestryEnterpriseSql>().HasMany<ForestSql>(sql => sql.ForestSqls)
+                .WithOne(sql => sql.ForestryEnterpriseSql).OnDelete(DeleteBehavior.Restrict);
+            
+            modelBuilder.Entity<ForestSql>().HasOne<ForestGroupSql>(sql => sql.ForestGroupSql).WithMany(sql => sql.ForestSqls)
+                .HasForeignKey(sql => sql.ForestGroupSqlId);
+            modelBuilder.Entity<ForestGroupSql>().HasMany<ForestSql>(sql => sql.ForestSqls)
+                .WithOne(sql => sql.ForestGroupSql).OnDelete(DeleteBehavior.Restrict);
 
             #endregion
         }
@@ -62,6 +80,8 @@ namespace IIAuctionHouse.DataAccess
         #region DbSets
 
         public virtual DbSet<TreeSql> TreeDbSet { get; set; }
+
+        public virtual DbSet<ForestUidSql> ForestUidDbSet { get; set; }
         public virtual DbSet<PercentageSql> PercentageDbSet { get; set; }
         public virtual DbSet<ForestGroupSql> ForestGroupDbSet { get; set; }
         public virtual DbSet<ForestryEnterpriseSql> ForestryEnterpriseDbSet { get; set; }
@@ -71,7 +91,6 @@ namespace IIAuctionHouse.DataAccess
         public virtual DbSet<ForestUidThirdSql> ForestUidThirdDbSet { get; set; }
         public virtual DbSet<PlotSql> PlotDbSet { get; set; }
         public virtual DbSet<ForestSql> ForestsDbSet { get; set; }
-        
         public virtual DbSet<UserSql> UserDbSet { get; set; }
         
         #endregion

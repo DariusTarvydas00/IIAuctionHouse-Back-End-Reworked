@@ -7,10 +7,9 @@ namespace IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailService
     {
         List<Tree> GetAll();
         Tree NewTree(string name);
+        Tree NewTree(int id,string name);
         Tree Create(Tree tree);
         Tree Update(Tree tree);
         Tree Delete(int id);
-        
-        Tree UpdateTree(int id, string name);
     }
 }

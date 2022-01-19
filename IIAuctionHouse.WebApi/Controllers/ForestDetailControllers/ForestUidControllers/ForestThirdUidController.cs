@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using IIAuctionHouse.Core.IServices.IForestDetailServices.IForestUidServices;
-using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels;
+using IIAuctionHouse.Core.IServices.IForestDetailServices.IForestUidServices.IEachUidServices;
+using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels.EachUidModels;
 using IIAuctionHouse.WebApi.Dto.ForestDetailDto.ForestUidDto;
 using IIAuctionHouse.WebApi.Exceptions;
-using IIAuctionHouse.WebApi.Exceptions.ForestDetailsControllersExceptions.ForestUidControllersExceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.ForestUidControllers
@@ -17,7 +17,7 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.ForestUidCon
 
             public ForestThirdUidController(IForestThirdUidService forestThirdUidService)
             {
-                _forestThirdUidService = forestThirdUidService ?? throw new InvalidDataException(ForestUidControllerException.ServiceIsNull);
+                _forestThirdUidService = forestThirdUidService ?? throw new InvalidDataException(ControllersExceptions.NullService);
             }
 
             [HttpGet]
@@ -38,7 +38,7 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.ForestUidCon
             public ActionResult Post([FromBody] ForestUidPostFstDto forestUidPostDto)
             {
                 if (forestUidPostDto.Value is < 1 or > 9999)
-                    return BadRequest(ForestUidControllerException.ValueNotInRange);
+                    return BadRequest(ControllersExceptions.ValueNotInRange);
                 try
                 {
                     var newForestThirdUid = _forestThirdUidService.NewThirdUid(forestUidPostDto.Value);
@@ -54,9 +54,9 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.ForestUidCon
             public ActionResult Put(int id, [FromBody] ForestUidThird forestUidThird)
             {
                 if (id != forestUidThird.Id || id < 1)
-                    return BadRequest(GeneralExceptions.NotMatchingId);
+                    return BadRequest(ControllersExceptions.NotMatchingId);
                 if (forestUidThird.Value is < 1 or > 9999)
-                    return BadRequest(ForestUidControllerException.ValueNotInRange);
+                    return BadRequest(ControllersExceptions.ValueNotInRange);
                 try
                 {
                     var treeTypeUpdate = _forestThirdUidService.UpdateThirdUid(forestUidThird.Id, forestUidThird.Value);
@@ -72,7 +72,7 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.ForestUidCon
             public ActionResult Delete(int id)
             {
                 if (id < 1)
-                    return BadRequest(GeneralExceptions.IdNullOrLess);
+                    return BadRequest(ControllersExceptions.IdNullOrLess);
                 try
                 {
                     return Ok(_forestThirdUidService.Delete(id));

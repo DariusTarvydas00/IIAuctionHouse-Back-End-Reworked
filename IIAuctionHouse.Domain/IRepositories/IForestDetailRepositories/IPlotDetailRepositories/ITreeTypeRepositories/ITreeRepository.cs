@@ -6,6 +6,7 @@ namespace IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IPlotDet
     public interface ITreeRepository
     {
         IEnumerable<Tree> FindAll();
+        Tree GetById(int id);
         Tree Create(Tree tree);
         Tree Update(Tree tree);
         Tree Delete(int id);

@@ -22,23 +22,45 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices
         {
             return _forestEnterpriseRepository.FindAll().ToList();
         }
-
-        public ForestryEnterprise NewForestEnterprise(string value)
-        {
-            if (string.IsNullOrEmpty(value) || value.Any(char.IsDigit))
-                throw new InvalidDataException(ServicesExceptions.InvalidName);
-            return new ForestryEnterprise()
-            {
-                Name = value
-            };
-        }
-
-
+        
         public ForestryEnterprise GetById(int id)
         {
             if (id < 1)
                 throw new InvalidDataException(ServicesExceptions.InvalidId);
-            return _forestEnterpriseRepository.GetById(id);
+            return _forestEnterpriseRepository.GetByIdIncludeDetails(id);
+        }
+
+        public ForestryEnterprise NewForestryEnterprise(int id)
+        {
+            if (id < 1)
+                throw new InvalidDataException(ServicesExceptions.InvalidName);
+            return new ForestryEnterprise()
+            {
+                Id = id
+            };
+        }
+
+        public ForestryEnterprise NewForestryEnterprise(string name)
+        {
+            if (string.IsNullOrEmpty(name) || name.Any(char.IsDigit))
+                throw new InvalidDataException(ServicesExceptions.InvalidName);
+            return new ForestryEnterprise()
+            {
+                Name = name
+            };
+        }
+
+        public ForestryEnterprise NewForestryEnterprise(int id, string name)
+        {
+            if (string.IsNullOrEmpty(name) || name.Any(char.IsDigit))
+                throw new InvalidDataException(ServicesExceptions.InvalidName);
+            if (id < 1)
+                throw new InvalidDataException(ServicesExceptions.InvalidId);
+            return new ForestryEnterprise()
+            {
+                Id = id,
+                Name = name
+            };
         }
 
         public ForestryEnterprise Create(ForestryEnterprise forestryEnterprise)

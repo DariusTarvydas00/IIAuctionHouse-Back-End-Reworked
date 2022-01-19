@@ -2,6 +2,7 @@
 using IIAuctionHouse.Core.IServices.IForestDetailServices.IForestUidServices;
 using IIAuctionHouse.Core.Models.ForestDetailModels;
 using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels;
+using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels.EachUidModels;
 using IIAuctionHouse.Domain.ServiceExceptions;
 
 namespace IIAuctionHouse.Domain.Services.ForestDetailServices.ForestUidServices

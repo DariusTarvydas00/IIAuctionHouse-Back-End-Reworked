@@ -2,78 +2,69 @@
 using System.Collections.Generic;
 using System.Linq;
 using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels.TreeTypeModels;
-using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities.PlotEntities.TreeTypeEntities;
+using IIAuctionHouse.DataAccess.Converters.ForestDetailConverters.PlotConverters.TreeTypeConverters;
 using IIAuctionHouse.DataAccess.Exceptions;
 using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IPlotDetailRepositories.ITreeTypeRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories.PlotRepositories.TreeTypeRepositories
 {
     public class PercentageRepository : IPercentageRepository
     {
         private readonly MainDbContext _ctx;
+        private readonly PercentageConverter _percentageConverter;
 
-        public PercentageRepository(MainDbContext ctx)
+        public PercentageRepository(MainDbContext ctx, PercentageConverter percentageConverter)
         {
             _ctx = ctx ?? throw new NullReferenceException(DataAccessExceptions.NullContext);
+            _percentageConverter = percentageConverter ?? throw new NullReferenceException(DataAccessExceptions.NullConverter);
         }
 
         public IEnumerable<Percentage> FindAll()
         {
-            return _ctx.PercentageDbSet.OrderBy(sql => sql.Value).Select(percentage => new Percentage()
+            return _ctx.PercentageDbSet.OrderBy(sql => sql.Value).Select(percentageSql => new Percentage()
             {
-                Id = percentage.Id,
-                Value = percentage.Value
+                Id = percentageSql.Id,
+                Value = percentageSql.Value
             }).ToList();
+        }
+        
+        public Percentage GetById(int id)
+        {
+            return _ctx.PercentageDbSet.Select(tree => new Percentage()
+            {
+                Id = tree.Id,
+                Value = tree.Value,
+            }).FirstOrDefault(tree => tree.Id == id);
         }
 
         public Percentage Create(Percentage percentage)
         {
-            var newPercentage = _ctx.PercentageDbSet.Add(new PercentageSql()
-            {
-                Value = percentage.Value
-            }).Entity;
+            var exists = _ctx.PercentageDbSet.Any(sql => sql.Value == percentage.Value);
+            if (exists) throw new InvalidOperationException(DataAccessExceptions.EntityExists);
+            var newPercentage = _ctx.PercentageDbSet.Add(_percentageConverter.Convert(percentage)).Entity;
             _ctx.SaveChanges();
-            return new Percentage()
-            {
-                Id = newPercentage.Id,
-                Value = newPercentage.Value
-            };
+            return _percentageConverter.Convert(newPercentage);
         }
 
         public Percentage Update(Percentage percentage)
         {
-            var percentageSql = new PercentageSql()
-            {
-                Id = percentage.Id,
-                Value = percentage.Value
-            };
-            var check =_ctx.PercentageDbSet.SingleOrDefault(sql => sql.Id == percentage.Id);
-            if (check != null)
-            {
-                _ctx.PercentageDbSet.Update(percentageSql);
-            }
-            else
-            {
-                _ctx.PercentageDbSet.Add(percentageSql);
-            }
+            var exists = _ctx.PercentageDbSet.Any(sql => sql.Value == percentage.Value);
+            if (exists) throw new InvalidOperationException(DataAccessExceptions.EntityExists);
+            var check = _ctx.PercentageDbSet.AsNoTracking().FirstOrDefault(sql => sql.Id == percentage.Id);
+            if (check == null) throw new InvalidOperationException(DataAccessExceptions.NotFound);
+            var percentageUpdate = _ctx.PercentageDbSet.Update(_percentageConverter.Convert(percentage)).Entity;
             _ctx.SaveChanges();
-            return new Percentage()
-            {
-                Id = percentageSql.Id,
-                Value = percentageSql.Value
-            };
+            return _percentageConverter.Convert(percentageUpdate);
         }
 
         public Percentage Delete(int id)
         {
-            var entity = _ctx.PercentageDbSet.FirstOrDefault(percentage => percentage.Id == id);
-            if (entity != null) _ctx.PercentageDbSet.Remove(entity);
+            var percentageSql = _ctx.PercentageDbSet.FirstOrDefault(percentageSql => percentageSql.Id == id);
+            if (percentageSql == null) throw new InvalidOperationException(DataAccessExceptions.NotFound);
+            _ctx.PercentageDbSet.Remove(percentageSql);
             _ctx.SaveChanges();
-            return entity != null ? new Percentage()
-            {
-                Id = entity.Id,
-                Value = entity.Value
-            } : null;
+            return _percentageConverter.Convert(percentageSql);
         }
     }
 }

@@ -2,20 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels.TreeTypeModels;
-using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities.PlotEntities.TreeTypeEntities;
+using IIAuctionHouse.DataAccess.Converters.ForestDetailConverters.PlotConverters.TreeTypeConverters;
 using IIAuctionHouse.DataAccess.Exceptions;
 using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IPlotDetailRepositories.ITreeTypeRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories.PlotRepositories.TreeTypeRepositories
 {
     public class TreeRepository: ITreeRepository
     {
         private readonly MainDbContext _ctx;
+        private readonly TreeConverter _treeConverter;
 
-        public TreeRepository(MainDbContext ctx)
+        public TreeRepository(MainDbContext ctx, TreeConverter treeConverter)
         {
             _ctx = ctx ?? throw new NullReferenceException(DataAccessExceptions.NullContext);
-            
+            _treeConverter = treeConverter ?? throw new NullReferenceException(DataAccessExceptions.NullConverter);
         }
 
         public IEnumerable<Tree> FindAll()
@@ -26,56 +28,44 @@ namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories.PlotRe
                 Name = tree.Name,
             }).ToList();
         }
+        
+        public Tree GetById(int id)
+        {
+            return _ctx.TreeDbSet.Select(tree => new Tree()
+            {
+                Id = tree.Id,
+                Name = tree.Name,
+            }).FirstOrDefault(tree => tree.Id == id);
+        }
+
 
         public Tree Create(Tree tree)
         {
-            var entity = _ctx.TreeDbSet.Add(new TreeSql()
-            {
-                Name = tree.Name,
-            }).Entity;
+            var exists = _ctx.TreeDbSet.Any(sql => sql.Name.ToLower() == tree.Name.ToLower());
+            if (exists) throw new InvalidOperationException(DataAccessExceptions.EntityExists);
+            var treeEntitySql = _treeConverter.Convert(tree);
+            _ctx.TreeDbSet.Add(treeEntitySql);
             _ctx.SaveChanges();
-            return new Tree()
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-            };
+            return _treeConverter.Convert(treeEntitySql);
         }
 
-        public Tree Update(Tree updateTree)
+        public Tree Update(Tree tree)
         {
-            var newTree = new TreeSql()
-            {
-                Id = updateTree.Id,
-                Name = updateTree.Name
-            };
-            var check =_ctx.TreeDbSet.SingleOrDefault(sql => sql.Id == updateTree.Id);
-            if (check != null)
-            {
-                _ctx.TreeDbSet.Update(newTree);
-            }
-            else
-            {
-                _ctx.TreeDbSet.Add(newTree);
-            }
-            _ctx.TreeDbSet.Update(newTree);
+            var check = _ctx.TreeDbSet.AsNoTracking().FirstOrDefault(sql => sql.Id == tree.Id);
+            if (check == null) throw new InvalidOperationException(DataAccessExceptions.NotFound);
+            if (check.Name.ToLower().Equals(tree.Name.ToLower())) throw new InvalidOperationException(DataAccessExceptions.EntityExists);
+            var treeUpdate = _ctx.TreeDbSet.Update(_treeConverter.Convert(tree)).Entity;
             _ctx.SaveChanges();
-            return new Tree()
-            {
-                Id = newTree.Id,
-                Name = newTree.Name
-            };
+            return _treeConverter.Convert(treeUpdate);
         }
 
         public Tree Delete(int id)
         {
-            var entity = _ctx.TreeDbSet.FirstOrDefault(tree => tree.Id == id);
-            if (entity != null) _ctx.TreeDbSet.Remove(entity);
+            var treeSql = _ctx.TreeDbSet.FirstOrDefault(fe => fe.Id == id);
+            if (treeSql == null) throw new InvalidOperationException(DataAccessExceptions.NotFound);
+            _ctx.TreeDbSet.Remove(treeSql);
             _ctx.SaveChanges();
-            return entity != null ? new Tree()
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-            }: null;
+            return _treeConverter.Convert(treeSql);
         }
 
     }

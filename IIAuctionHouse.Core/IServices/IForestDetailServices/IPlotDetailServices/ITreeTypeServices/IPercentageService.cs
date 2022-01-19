@@ -7,9 +7,9 @@ namespace IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailService
     {
         List<Percentage> GetAll();
         Percentage NewPercentage(int percentage);
+        Percentage NewPercentage(int id,int percentage);
         Percentage Create(Percentage percentage);
         Percentage Update(Percentage percentage);
-        Percentage UpdatePercentage(int id, int percentage);
         Percentage Delete(int id);
     }
 }

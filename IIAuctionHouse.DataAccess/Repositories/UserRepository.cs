@@ -3,6 +3,7 @@ using System.Linq;
 using IIAuctionHouse.Core.Models;
 using IIAuctionHouse.Core.Models.ForestDetailModels;
 using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels;
+using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels.EachUidModels;
 using IIAuctionHouse.Core.Models.UserDetailModels;
 using IIAuctionHouse.DataAccess.Entities;
 using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities;
