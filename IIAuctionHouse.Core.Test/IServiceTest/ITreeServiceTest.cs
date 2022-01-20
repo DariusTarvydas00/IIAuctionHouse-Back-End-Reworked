@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using IIAuctionHouse.Core.IServices;
+using IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailServices.ITreeTypeServices;
 using IIAuctionHouse.Core.Models;
+using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels.TreeTypeModels;
 using Moq;
 using Xunit;
 
@@ -54,9 +56,9 @@ namespace IIAuctionHouse.Core.Test.IServiceTest
                 Id = 1,
                 Name = "Aspen"
             };
-            mock.Setup(s => s.UpdateTree(fakeTree.Id,fakeTree.Name)).Returns(fakeTree);
-            var service = mock.Object;
-            Assert.Equal(fakeTree,service.UpdateTree(fakeTree.Id, fakeTree.Name));
+            // mock.Setup(s => s.new(fakeTree.Id,fakeTree.Name)).Returns(fakeTree);
+            // var service = mock.Object;
+            // Assert.Equal(fakeTree,service.UpdateTree(fakeTree.Id, fakeTree.Name));
             mock.Setup(s => s.Update(fakeTree)).Returns(fakeTree);
             var service2 = mock.Object;
             Assert.Equal(fakeTree,service2.Update(fakeTree));

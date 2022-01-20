@@ -1,8 +1,10 @@
 ﻿using System;
+using System.IO;
 using IIAuctionHouse.Core.IServices;
-using IIAuctionHouse.Core.Models;
-using IIAuctionHouse.Core.Models.ForestUid;
-using IIAuctionHouse.WebApi.Dtos.ForestDto;
+using IIAuctionHouse.Core.IServices.IForestDetailServices;
+using IIAuctionHouse.Core.IServices.IForestDetailServices.IForestUidServices;
+using IIAuctionHouse.WebApi.Dto.ForestDto;
+using IIAuctionHouse.WebApi.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IIAuctionHouse.WebApi.Controllers
@@ -12,10 +14,21 @@ namespace IIAuctionHouse.WebApi.Controllers
     public class ForestController : Controller
     {
         private readonly IForestService _forestService;
+        private readonly IForestUidService _forestUidService;
+        private readonly IForestLocationService _forestLocationService;
+        private readonly IForestEnterpriseService _forestEnterpriseService;
+        private readonly IUserService _userService;
+        private readonly IForestGroupService _forestGroupService;
 
-        public ForestController(IForestService forestService)
+        public ForestController(IForestService forestService, IForestUidService forestUidService, IForestLocationService forestLocationService,
+            IForestEnterpriseService forestEnterpriseService, IUserService userService, IForestGroupService forestGroupService)
         {
-            _forestService = forestService;
+            _forestService = forestService ?? throw new InvalidDataException(ControllersExceptions.NullService);
+            _forestUidService = forestUidService ?? throw new InvalidDataException(ControllersExceptions.NullService);
+            _forestLocationService = forestLocationService ?? throw new InvalidDataException(ControllersExceptions.NullService);
+            _forestEnterpriseService = forestEnterpriseService ?? throw new InvalidDataException(ControllersExceptions.NullService);
+            _userService = userService ?? throw new InvalidDataException(ControllersExceptions.NullService);
+            _forestGroupService = forestGroupService ?? throw new InvalidDataException(ControllersExceptions.NullService);
         }
 
         [HttpGet]
@@ -35,7 +48,7 @@ namespace IIAuctionHouse.WebApi.Controllers
         public ActionResult GetById(int id)
         {
             if (id < 1)
-                return BadRequest("Percentage Update is missing some information");
+                return BadRequest(ControllersExceptions.IdNullOrLess);
             try
             {
                 return Ok(_forestService.GetById(id));
@@ -47,31 +60,21 @@ namespace IIAuctionHouse.WebApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] ForestPostDto forest)
+        public ActionResult Post([FromBody] ForestPostDto forestPostDto)
         {
+            if (forestPostDto == null)
+                return BadRequest(ControllersExceptions.MissingSomeInformation);
             try
             {
-                var newForestLocation = new ForestLocation()
-                {
-                    GeoLocationX = forest.ForestLocationPostDto.GeoLocationX,
-                    GeoLocationY = forest.ForestLocationPostDto.GeoLocationY
-                };
-                var newForestUid = new ForestUid()
-                {
-                    FirstUid = new ForestUidFirst()
-                    {
-                        Id = forest.ForestUidPostDto.ForestFirstUidDto.Id
-                    },
-                    SecondUid = new ForestUidSecond()
-                    {
-                        Id = forest.ForestUidPostDto.ForestSecondUidDto.Id
-                    },
-                    ThirdUid = new ForestUidThird()
-                    {
-                        Id = forest.ForestUidPostDto.ForestThirdUidDto.Id
-                    },
-                };
-                var newForest = _forestService.NewForest(newForestUid,forest.ForestGroup,newForestLocation,forest.ForestryEnterprise, forest.Plots);
+                var newUser = _userService.NewUser(forestPostDto.User.Id);
+                var newForestryEnterprise = _forestEnterpriseService.NewForestryEnterprise(forestPostDto.ForestryEnterprise.Id);
+                var newForestLocation = _forestLocationService.NewForestLocation(
+                    forestPostDto.ForestLocation.GeoLocationX, forestPostDto.ForestLocation.GeoLocationY);
+                var newForestUid = _forestUidService.NewForestUid(forestPostDto.ForestUid.ForestFirstUidDto.Id,
+                    forestPostDto.ForestUid.ForestSecondUidDto.Id,
+                    forestPostDto.ForestUid.ForestThirdUidDto.Id);
+                var newForestGroup = _forestGroupService.NewForestGroup(forestPostDto.ForestGroup.Id);
+                var newForest = _forestService.NewForest(newForestUid,newForestGroup,newForestLocation, newForestryEnterprise, newUser);
                 return Ok(_forestService.Create(newForest));
             }
             catch(Exception e)
@@ -81,13 +84,17 @@ namespace IIAuctionHouse.WebApi.Controllers
         }
         
         [HttpPut]
-        public ActionResult Put(int id, [FromBody]Forest forest)
+        public ActionResult Put(int id, [FromBody]ForestPutDto forestPutDto)
         {
-            if (id != forest.Id)
-                return BadRequest("Id needs to match in both url and object");
+            if (forestPutDto == null)
+                return BadRequest(ControllersExceptions.MissingSomeInformation);
+            if (id != forestPutDto.Id || id < 1)
+                return BadRequest(ControllersExceptions.NotMatchingId);
             try
             {
-                var forestUpdate = _forestService.UpdateForest(forest.Id, forest.ForestUid, forest.ForestGroup, forest.ForestLocation, forest.ForestryEnterprise, forest.Plots);
+                var newUser = _userService.NewUser(forestPutDto.UserIdDto.Id);
+                var newForestryEnterprise = _forestEnterpriseService.GetById(forestPutDto.ForestryEnterpriseIdDto.Id);
+                var forestUpdate = _forestService.UpdateForest(forestPutDto.Id, forestPutDto.ForestUid, forestPutDto.ForestGroup, forestPutDto.ForestLocation, newForestryEnterprise, newUser);
                 return Ok(_forestService.Update(forestUpdate));
             }
             catch (Exception e)
@@ -100,7 +107,7 @@ namespace IIAuctionHouse.WebApi.Controllers
         public ActionResult Delete(int id)
         {
             if (id < 1)
-                return BadRequest("Percentage Update is missing some information");
+                return BadRequest(ControllersExceptions.IdNullOrLess);
             try
             {
                 return Ok(_forestService.Delete(id));
