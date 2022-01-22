@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using IIAuctionHouse.Core.Models;
 using IIAuctionHouse.Core.Models.ForestDetailModels;
+using IIAuctionHouse.Core.Models.ForestDetailModels.ForestGroupModels;
 using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels;
-using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels;
 
 namespace IIAuctionHouse.Core.IServices
 {
@@ -10,11 +10,9 @@ namespace IIAuctionHouse.Core.IServices
     {
         List<Forest> GetAll();
         Forest GetById(int id);
-        Forest NewForest(ForestUid forestUid, ForestGroup forestGroup, ForestLocation forestLocation, ForestryEnterprise forestryEnterprise, User user);
         Forest Create(Forest forest);
         Forest Update(Forest forest);
         Forest Delete(int id);
-        Forest UpdateForest(int id, ForestUid forestForestUid, ForestGroup forestForestGroup, ForestLocation forestForestLocation, ForestryEnterprise forestryEnterprise, User user);
-        Forest NewForestCheck(int id);
+        Forest NewForest(int id, ForestGroupSubGroup forestGroupSubGroup, ForestLocation forestLocation, ForestUid forestUid, ForestryEnterprise forestryEnterprise);
     }
 }

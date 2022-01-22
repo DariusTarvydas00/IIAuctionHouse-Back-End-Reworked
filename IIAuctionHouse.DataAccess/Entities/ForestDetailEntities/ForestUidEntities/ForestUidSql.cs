@@ -1,4 +1,6 @@
-﻿namespace IIAuctionHouse.DataAccess.Entities.ForestDetailEntities.ForestUidEntities
+﻿using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities.ForestUidEntities.EachUidEntities;
+
+namespace IIAuctionHouse.DataAccess.Entities.ForestDetailEntities.ForestUidEntities
 {
     public class ForestUidSql
     {

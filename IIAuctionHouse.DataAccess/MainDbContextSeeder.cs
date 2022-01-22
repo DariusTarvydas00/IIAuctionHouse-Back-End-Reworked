@@ -1,56 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using IIAuctionHouse.Core.IServices;
-using IIAuctionHouse.Core.Models;
-using IIAuctionHouse.Core.Models.ForestDetailModels;
-using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels.EachUidModels;
-using IIAuctionHouse.Core.Models.ForestDetailModels.PlotDetailModels.TreeTypeModels;
-using IIAuctionHouse.DataAccess.Entities;
+﻿using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities;
+using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities.ForestGroupEntities.GroupEntities;
 using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities.ForestUidEntities;
-using IIAuctionHouse.Domain.IRepositories;
-using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories;
-using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IForestUidRepositories;
-using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IForestUidRepositories.IEachUidRepositories;
-using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IPlotDetailRepositories;
-using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IPlotDetailRepositories.ITreeTypeRepositories;
+using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities.ForestUidEntities.EachUidEntities;
+using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities.TreeTypeEntities.TTEntities;
 
 namespace IIAuctionHouse.DataAccess
 {
     public class MainDbContextSeeder: IMainDbContextSeeder
     {
         private readonly MainDbContext _ctx;
-        private readonly IPercentageRepository _percentageRepository;
-        private readonly ITreeRepository _treeRepository;
-        private readonly IPlotRepository _plotRepository;
-        private readonly IForestEnterpriseRepository _forestEnterpriseRepository;
-        private readonly IForestGroupRepository _forestGroupRepository;
-        private readonly IForestFirstUidRepository _forestFirstUidRepository;
-        private readonly IForestSecondUidRepository _forestSecondUidRepository;
-        private readonly IForestThirdUidRepository _forestThirdUidRepository;
 
-        public MainDbContextSeeder(MainDbContext ctx, 
-            IPercentageRepository percentageRepository,
-            ITreeRepository treeRepository,
-            IPlotRepository plotRepository,
-            IForestEnterpriseRepository forestEnterpriseRepository,
-            IForestGroupRepository forestGroupRepository,
-            IForestFirstUidRepository forestFirstUidRepository,
-            IForestSecondUidRepository forestSecondUidRepository,
-            IForestThirdUidRepository forestThirdUidRepository)
+        public MainDbContextSeeder(MainDbContext ctx)
         {
             _ctx = ctx;
-            _percentageRepository = percentageRepository;
-            _treeRepository = treeRepository;
-            _plotRepository = plotRepository;
-            _forestEnterpriseRepository = forestEnterpriseRepository;
-            _forestGroupRepository = forestGroupRepository;
-            _forestFirstUidRepository = forestFirstUidRepository;
-            _forestSecondUidRepository = forestSecondUidRepository;
-            _forestThirdUidRepository = forestThirdUidRepository;
-
         }
 
+
+        #region Development
+        
         public void SeedDevelopment()
         {
             _ctx.Database.EnsureDeleted();
@@ -60,7 +27,7 @@ namespace IIAuctionHouse.DataAccess
 
             for (int i = 1; i < 11; i++)
             {
-                _percentageRepository.Create(new Percentage()
+                _ctx.PercentageDbSet.Add(new PercentageSql()
                 {
                     Value = i * 10
                 });
@@ -71,23 +38,23 @@ namespace IIAuctionHouse.DataAccess
 
             #region Tree Entities
 
-            _treeRepository.Create(new Tree()
+            _ctx.TreeDbSet.Add(new TreeSql()
             {
                 Name = "Pine"
             });
-            _treeRepository.Create(new Tree()
+            _ctx.TreeDbSet.Add(new TreeSql()
             {
                 Name = "Fir"
             });
-            _treeRepository.Create(new Tree()
+            _ctx.TreeDbSet.Add(new TreeSql()
             {
                 Name = "Birch"
             });
-            _treeRepository.Create(new Tree()
+            _ctx.TreeDbSet.Add(new TreeSql()
             {
                 Name = "Oak"
             });
-            _treeRepository.Create(new Tree()
+            _ctx.TreeDbSet.Add(new TreeSql()
             {
                 Name = "Aspen"
             });
@@ -98,31 +65,31 @@ namespace IIAuctionHouse.DataAccess
 
             #region Forestry Enterprise Entites
 
-            _forestEnterpriseRepository.Create(new ForestryEnterprise()
+            _ctx.ForestryEnterpriseDbSet.Add(new ForestryEnterpriseSql()
             {
                 Name = "Vilnius"
             });
-            _forestEnterpriseRepository.Create(new ForestryEnterprise()
+            _ctx.ForestryEnterpriseDbSet.Add(new ForestryEnterpriseSql()
             {
                 Name = "Kaunas"
             });
-            _forestEnterpriseRepository.Create(new ForestryEnterprise()
+            _ctx.ForestryEnterpriseDbSet.Add(new ForestryEnterpriseSql()
             {
                 Name = "Taurage"
             });
-            _forestEnterpriseRepository.Create(new ForestryEnterprise()
+            _ctx.ForestryEnterpriseDbSet.Add(new ForestryEnterpriseSql()
             {
                 Name = "Klaipeda"
             });
-            _forestEnterpriseRepository.Create(new ForestryEnterprise()
+            _ctx.ForestryEnterpriseDbSet.Add(new ForestryEnterpriseSql()
             {
                 Name = "Silale"
             });
-            _forestEnterpriseRepository.Create(new ForestryEnterprise()
+            _ctx.ForestryEnterpriseDbSet.Add(new ForestryEnterpriseSql()
             {
                 Name = "Siauliai"
             });
-            _forestEnterpriseRepository.Create(new ForestryEnterprise()
+            _ctx.ForestryEnterpriseDbSet.Add(new ForestryEnterpriseSql()
             {
                 Name = "Silute"
             });
@@ -133,21 +100,36 @@ namespace IIAuctionHouse.DataAccess
 
             #region Forest Group Entities
 
-            _forestGroupRepository.Create(new ForestGroup()
+            _ctx.GroupDbSet.Add(new GroupSql()
             {
-                Name = "A"
+                ForestGroupName = "I"
             });
-            _forestGroupRepository.Create(new ForestGroup()
+            _ctx.GroupDbSet.Add(new GroupSql()
             {
-                Name = "B"
+                ForestGroupName = "II"
             });
-            _forestGroupRepository.Create(new ForestGroup()
+            _ctx.GroupDbSet.Add(new GroupSql()
             {
-                Name = "C"
+                ForestGroupName = "II"
             });
-            _forestGroupRepository.Create(new ForestGroup()
+            _ctx.GroupDbSet.Add(new GroupSql()
             {
-                Name = "D"
+                ForestGroupName = "IV"
+            });
+            _ctx.SaveChanges();
+            
+
+            #endregion
+            
+            #region Forest Sub Group Entities
+
+            _ctx.SubGroupDbSet.Add(new SubGroupSql()
+            {
+                ForestSubGroupName = "A"
+            });
+            _ctx.SubGroupDbSet.Add(new SubGroupSql()
+            {
+                ForestSubGroupName = "B"
             });
             _ctx.SaveChanges();
             
@@ -156,109 +138,146 @@ namespace IIAuctionHouse.DataAccess
 
             #region Forest Uid Entities
 
-            #region Forest First Uid Entites
-
-            for (int i = 1; i < 10; i++)
+            for (int i = 1; i < 11; i++)
             {
-                _forestFirstUidRepository.Create(new ForestUidFirst()
+                _ctx.ForestUidFirstDbSet.Add(new ForestUidFirstSql()
                 {
-                    Value = i*10
+                    Value = i * 10
                 });
+                _ctx.ForestUidSecondDbSet.Add(new ForestUidSecondSql()
+                {
+                    Value = i * 10
+                });
+                _ctx.ForestUidThirdDbSet.Add(new ForestUidThirdSql()
+                {
+                    Value = i * 10
+                });
+                
             }
             _ctx.SaveChanges();
 
             #endregion
 
-            #region Forest Second Uid Entities
-
-            for (int i = 1; i < 10; i++)
-            {
-                _forestSecondUidRepository.Create(new ForestUidSecond()
-                {
-                    Value = i*40
-                });
-            }
-            _ctx.SaveChanges();
-
-            #endregion
-
-            #region Forest Third Uid Entities
-
-            for (int i = 1; i < 10; i++)
-            {
-                _forestThirdUidRepository.Create(new ForestUidThird()
-                {
-                    Value = i*80
-                });
-            }
-            _ctx.SaveChanges();
-
-            #endregion
-
-            #endregion
         }
+
+        #endregion
 
         #region Production
         
         public void SeedProduction()
         {
-            //-------- Percentage Entity -----------//
+            #region Percentage Entities
+
             for (int i = 1; i < 11; i++)
             {
-                _percentageRepository.Create(new Percentage()
+                _ctx.PercentageDbSet.Add(new PercentageSql()
                 {
                     Value = i * 10
                 });
             }
-            
-            //-------- Tree Entity -----------------//
-            _treeRepository.Create(new Tree()
+            _ctx.SaveChanges();
+
+            #endregion
+
+            #region Tree Entities
+
+            _ctx.TreeDbSet.Add(new TreeSql()
             {
                 Name = "Pine"
             });
-            _treeRepository.Create(new Tree()
+            _ctx.TreeDbSet.Add(new TreeSql()
             {
                 Name = "Fir"
             });
-            _treeRepository.Create(new Tree()
+            _ctx.TreeDbSet.Add(new TreeSql()
             {
                 Name = "Birch"
             });
-            _treeRepository.Create(new Tree()
+            _ctx.TreeDbSet.Add(new TreeSql()
             {
                 Name = "Oak"
             });
-            _treeRepository.Create(new Tree()
+            _ctx.TreeDbSet.Add(new TreeSql()
             {
                 Name = "Aspen"
             });
+            _ctx.SaveChanges();
             
-            //-------- Forest Uid Entities -----------------//
-            
-            var list = new List<ForestUidFirstSql>();
-            var list2 = new List<ForestUidSecondSql>();
-            var list3 = new List<ForestUidThirdSql>();
-            for (int i = 1; i < 10000; i++)
+
+            #endregion
+
+            #region Forestry Enterprise Entites
+
+            _ctx.ForestryEnterpriseDbSet.Add(new ForestryEnterpriseSql()
             {
-                list.Add(new ForestUidFirstSql()
-                {
-                    Id = i,
-                    Value = i
-                });
-                list2.Add(new ForestUidSecondSql()
-                {
-                    Id = i,
-                    Value = i
-                });
-                list3.Add(new ForestUidThirdSql()
-                {
-                    Id = i,
-                    Value = i
-                });
-            }
-            _ctx.ForestUidFirstDbSet.AddRange(list);
-            _ctx.ForestUidSecondDbSet.AddRange(list2); 
-            _ctx.ForestUidThirdDbSet.AddRange(list3);
+                Name = "Vilnius"
+            });
+            _ctx.ForestryEnterpriseDbSet.Add(new ForestryEnterpriseSql()
+            {
+                Name = "Kaunas"
+            });
+            _ctx.ForestryEnterpriseDbSet.Add(new ForestryEnterpriseSql()
+            {
+                Name = "Taurage"
+            });
+            _ctx.ForestryEnterpriseDbSet.Add(new ForestryEnterpriseSql()
+            {
+                Name = "Klaipeda"
+            });
+            _ctx.ForestryEnterpriseDbSet.Add(new ForestryEnterpriseSql()
+            {
+                Name = "Silale"
+            });
+            _ctx.ForestryEnterpriseDbSet.Add(new ForestryEnterpriseSql()
+            {
+                Name = "Siauliai"
+            });
+            _ctx.ForestryEnterpriseDbSet.Add(new ForestryEnterpriseSql()
+            {
+                Name = "Silute"
+            });
+            _ctx.SaveChanges();
+            
+
+            #endregion
+
+            #region Forest Group Entities
+
+            _ctx.GroupDbSet.Add(new GroupSql()
+            {
+                ForestGroupName = "I"
+            });
+            _ctx.GroupDbSet.Add(new GroupSql()
+            {
+                ForestGroupName = "II"
+            });
+            _ctx.GroupDbSet.Add(new GroupSql()
+            {
+                ForestGroupName = "II"
+            });
+            _ctx.GroupDbSet.Add(new GroupSql()
+            {
+                ForestGroupName = "IV"
+            });
+            _ctx.SaveChanges();
+            
+
+            #endregion
+            
+            #region Forest Sub Group Entities
+
+            _ctx.SubGroupDbSet.Add(new SubGroupSql()
+            {
+                ForestSubGroupName = "A"
+            });
+            _ctx.SubGroupDbSet.Add(new SubGroupSql()
+            {
+                ForestSubGroupName = "B"
+            });
+            _ctx.SaveChanges();
+            
+
+            #endregion
             
         }
         

@@ -1,55 +1,58 @@
-﻿using System.IO;
-using IIAuctionHouse.Core.IServices.IForestDetailServices.IForestUidServices;
-using IIAuctionHouse.Core.Models.ForestDetailModels;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using IIAuctionHouse.Core.IServices.IForestDetailServices.IEachUidServices;
+using IIAuctionHouse.Core.IServices.IForestDetailServices.IEachUidServices.EachUid;
 using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels;
 using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels.EachUidModels;
-using IIAuctionHouse.Domain.ServiceExceptions;
 
 namespace IIAuctionHouse.Domain.Services.ForestDetailServices.ForestUidServices
 {
     public class ForestUidService: IForestUidService
     {
-        public ForestUid NewForestUid(int firstUid, int secondUid, int thirdUid)
+        private readonly IForestFirstUidService _forestFirstUidService;
+        private readonly IForestSecondUidService _forestSecondUidService;
+        private readonly IForestThirdUidService _forestThirdUidService;
+
+        public ForestUidService(IForestFirstUidService forestFirstUidService, IForestSecondUidService forestSecondUidService, IForestThirdUidService forestThirdUidService)
         {
-            if (firstUid < 1 || secondUid < 1 || thirdUid < 1)
-                throw new InvalidDataException(ServicesExceptions.InvalidValue);
-            return new ForestUid()
-            {
-                FirstUid = new ForestUidFirst()
-                {
-                    Id = firstUid
-                },
-                SecondUid = new ForestUidSecond()
-                {
-                    Id = secondUid
-                },
-                ThirdUid = new ForestUidThird()
-                {
-                    Id = thirdUid
-                }
-            };
+            _forestFirstUidService = forestFirstUidService ?? throw new NullReferenceException("Forest First Unique Service Can Not Be Null");
+            _forestSecondUidService = forestSecondUidService ?? throw new NullReferenceException("Forest Second Unique Service Can Not Be Null");
+            _forestThirdUidService = forestThirdUidService ?? throw new NullReferenceException("Forest Third Unique Service Can Not Be Null");
         }
 
-        public ForestUid UpdateForestUid(int id, int firstUid, int secondUid, int thirdUid)
+        public ForestUid GetForestUid(int firstUid, int secondUid, int thirdUid)
         {
-            if (firstUid < 1 || secondUid < 1 || thirdUid < 1 || id < 1)
-                throw new InvalidDataException(ServicesExceptions.InvalidValue);
-            return new ForestUid()
+            var first = _forestFirstUidService.GetById(firstUid);
+            var second = _forestSecondUidService.GetById(secondUid);
+            var third = _forestThirdUidService.GetById(thirdUid);
+            if (first != null || second != null || third !=null)
             {
-                Id = id,
-                FirstUid = new ForestUidFirst()
+                return new ForestUid()
                 {
-                    Id = firstUid
-                },
-                SecondUid = new ForestUidSecond()
-                {
-                    Id = secondUid
-                },
-                ThirdUid = new ForestUidThird()
-                {
-                    Id = thirdUid
-                }
-            };
+                    FirstUid = first,
+                    SecondUid = second,
+                    ThirdUid = third
+                };
+                
+            }
+            return null;
+
+        }
+
+        public List<ForestUidFirst> GetAllFirstUids()
+        {
+            return _forestFirstUidService.GetAll().ToList();
+        }
+
+        public List<ForestUidSecond> GetAllSecondUids()
+        {
+            return _forestSecondUidService.GetAll().ToList();
+        }
+
+        public List<ForestUidThird> GetAllThirdUids()
+        {
+            return _forestThirdUidService.GetAll().ToList();
         }
     }
 }

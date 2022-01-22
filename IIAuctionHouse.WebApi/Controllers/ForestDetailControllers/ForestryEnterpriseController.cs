@@ -1,8 +1,6 @@
 ﻿using System;
-using System.IO;
 using IIAuctionHouse.Core.IServices.IForestDetailServices;
-using IIAuctionHouse.WebApi.Dto.ForestDetailDto.ForestryEnterpriseDto;
-using IIAuctionHouse.WebApi.Exceptions;
+using IIAuctionHouse.Core.Models.ForestDetailModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers
@@ -15,7 +13,7 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers
 
         public ForestryEnterpriseController(IForestEnterpriseService forestEnterpriseService)
         {
-            _forestEnterpriseService = forestEnterpriseService ?? throw new InvalidDataException(ControllersExceptions.NullService);
+            _forestEnterpriseService = forestEnterpriseService ?? throw new NullReferenceException("Forestry Enterprise Service Can Not Be Null");
         }
 
         [HttpGet]
@@ -30,30 +28,13 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers
                 return StatusCode(500, e.Message);
             }
         }
-        
-        [HttpGet("{id}")]
-        public ActionResult GetById(int id)
-        {
-            try
-            {
-                if (id < 1)
-                    throw new InvalidDataException(ControllersExceptions.IdNullOrLess);
-                return Ok(_forestEnterpriseService.GetById(id));
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, e.Message);
-            }
-        }
 
         [HttpPost]
-        public ActionResult Post([FromBody] ForestryEnterprisePostDto forestryEnterprisePostDto)
+        public ActionResult Post([FromBody] ForestryEnterprise forestryEnterprise)
         {
             try
             {
-                return Ok(_forestEnterpriseService
-                    .Create(_forestEnterpriseService
-                        .NewForestryEnterprise(forestryEnterprisePostDto.Name)));
+                return Ok(_forestEnterpriseService.Create(forestryEnterprise));
             }
             catch(Exception e)
             {
@@ -62,15 +43,11 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] ForestryEnterprisePutDto forestryEnterprise)
+        public ActionResult Put(int id,[FromBody] ForestryEnterprise forestryEnterprise)
         {
             try
             {
-                if (id < 1)
-                    throw new InvalidDataException(ControllersExceptions.IdNullOrLess);
-                return Ok(_forestEnterpriseService
-                    .Update(_forestEnterpriseService
-                        .NewForestryEnterprise(forestryEnterprise.Id, forestryEnterprise.Name)));
+                return Ok(_forestEnterpriseService.Update(id, forestryEnterprise));
             }
             catch (Exception e)
             {
@@ -83,8 +60,6 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers
         {
             try
             {
-                if (id < 1)
-                    return BadRequest(ControllersExceptions.IdNullOrLess);
                 return Ok(_forestEnterpriseService.Delete(id));
             }
             catch (Exception e)

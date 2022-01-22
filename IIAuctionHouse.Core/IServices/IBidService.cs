@@ -7,10 +7,10 @@ namespace IIAuctionHouse.Core.IServices
     {
         List<Bid> GetAll();
         Bid GetById(int id);
-        Bid NewBid(int bidAmount, User user, Forest forest);
         Bid Create(Bid bid);
         Bid Update(Bid bid);
         Bid Delete(int id);
         Bid UpdateBid(int id, int bidAmount, User user, Forest forest);
+        Bid NewBid(int bidAmount, int bidBidAmount, int bidForestId, int bidUserId);
     }
 }

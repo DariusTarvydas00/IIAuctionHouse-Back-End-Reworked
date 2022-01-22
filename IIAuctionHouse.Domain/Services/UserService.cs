@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.Core.Models;
+using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels;
 using IIAuctionHouse.Core.Models.UserDetailModels;
 using IIAuctionHouse.Domain.IRepositories;
-using IIAuctionHouse.Domain.ServiceExceptions;
 
 namespace IIAuctionHouse.Domain.Services
 {
@@ -16,7 +16,7 @@ namespace IIAuctionHouse.Domain.Services
 
         public UserService(IUserRepository userRepository)
         {
-            _userRepository = userRepository ?? throw new NullReferenceException(ServicesExceptions.NullRepository);
+            _userRepository = userRepository ?? throw new NullReferenceException("");
         }
 
         public List<User> GetAll()
@@ -27,14 +27,14 @@ namespace IIAuctionHouse.Domain.Services
         public User GetById(int id)
         {
             if (id < 1)
-                throw new InvalidDataException(ServicesExceptions.InvalidId);
+                throw new InvalidDataException("");
             return _userRepository.GetById(id);
         }
 
         public User NewUser(string firstName, string lastName, UserDetails userDetails)
         {
             if (firstName.Any(char.IsDigit) || string.IsNullOrEmpty(firstName) || lastName.Any(char.IsDigit) || string.IsNullOrEmpty(lastName) || userDetails == null)
-                throw new InvalidDataException(ServicesExceptions.MissingInformation);
+                throw new InvalidDataException("");
             return new User()
             {
                 FirstName = firstName,
@@ -46,7 +46,7 @@ namespace IIAuctionHouse.Domain.Services
         public User NewUser(int id)
         {
             if (id < 1)
-                throw new InvalidDataException(ServicesExceptions.InvalidId);
+                throw new InvalidDataException("");
             return new User()
             {
                 Id = id
@@ -56,28 +56,34 @@ namespace IIAuctionHouse.Domain.Services
         public User Create(User user)
         {
             if (user ==null)
-                throw new InvalidDataException(ServicesExceptions.MissingInformation);
+                throw new InvalidDataException("");
             return _userRepository.Create(user);
         }
 
         public User Update(User user)
         {
             if (user ==null)
-                throw new InvalidDataException(ServicesExceptions.MissingInformation);
+                throw new InvalidDataException("");
             return _userRepository.Update(user);
         }
 
         public User Delete(int id)
         {
             if (id < 1)
-                throw new InvalidDataException(ServicesExceptions.InvalidId);
+                throw new InvalidDataException("");
             return _userRepository.Delete(id);
+        }
+
+        public User NewUser(int userDtoId, string userDtoFirstName, string userDtoLastName, UserDetails userDtoUserDetails,
+            List<ForestUid> forestUid)
+        {
+            throw new NotImplementedException();
         }
 
         public User UpdateUser(int id, string firstName, string lastName, UserDetails userDetails)
         {
             if (id < 1 || firstName.Any(char.IsDigit) || string.IsNullOrEmpty(firstName) || lastName.Any(char.IsDigit) || string.IsNullOrEmpty(lastName) || userDetails == null)
-                throw new InvalidDataException(ServicesExceptions.MissingInformation);
+                throw new InvalidDataException("");
             return new User()
             {
                 Id = id,

@@ -1,35 +1,30 @@
 using IIAuctionHouse.Core.IServices;
 using IIAuctionHouse.Core.IServices.IForestDetailServices;
-using IIAuctionHouse.Core.IServices.IForestDetailServices.IForestUidServices;
-using IIAuctionHouse.Core.IServices.IForestDetailServices.IForestUidServices.IEachUidServices;
-using IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailServices;
-using IIAuctionHouse.Core.IServices.IForestDetailServices.IPlotDetailServices.ITreeTypeServices;
+using IIAuctionHouse.Core.IServices.IForestDetailServices.IEachUidServices;
+using IIAuctionHouse.Core.IServices.IForestDetailServices.IEachUidServices.EachUid;
+using IIAuctionHouse.Core.IServices.IForestDetailServices.IForestGroupServices;
+using IIAuctionHouse.Core.IServices.IForestDetailServices.IForestGroupServices.IGroupServices;
+using IIAuctionHouse.Core.IServices.IForestDetailServices.ITreeTypeServices;
+using IIAuctionHouse.Core.IServices.IForestDetailServices.ITreeTypeServices.TTServices;
 using IIAuctionHouse.DataAccess;
-using IIAuctionHouse.DataAccess.Converters;
-using IIAuctionHouse.DataAccess.Converters.ForestDetailConverters;
-using IIAuctionHouse.DataAccess.Converters.ForestDetailConverters.ForestUidConverters;
-using IIAuctionHouse.DataAccess.Converters.ForestDetailConverters.PlotConverters;
-using IIAuctionHouse.DataAccess.Converters.ForestDetailConverters.PlotConverters.TreeTypeConverters;
 using IIAuctionHouse.DataAccess.Repositories;
 using IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories;
-using IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories.ForestUidRepositories;
+using IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories.ForestGroupRepositories;
 using IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories.ForestUidRepositories.EachUidRepositories;
-using IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories.PlotRepositories;
-using IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories.PlotRepositories.TreeTypeRepositories;
+using IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories.TreeTypeRepositories.TTRepositories;
 using IIAuctionHouse.Domain.IRepositories;
 using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories;
-using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IForestUidRepositories;
+using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IForestGroupRepositories.IGroupRepositories;
 using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IForestUidRepositories.IEachUidRepositories;
-using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IPlotDetailRepositories;
-using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IPlotDetailRepositories.ITreeTypeRepositories;
+using IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.ITreeTypeRepositories.TTRepositories;
 using IIAuctionHouse.Domain.Services;
 using IIAuctionHouse.Domain.Services.ForestDetailServices;
+using IIAuctionHouse.Domain.Services.ForestDetailServices.ForestGroupServices;
+using IIAuctionHouse.Domain.Services.ForestDetailServices.ForestGroupServices.GroupServices;
 using IIAuctionHouse.Domain.Services.ForestDetailServices.ForestUidServices;
-using IIAuctionHouse.Domain.Services.ForestDetailServices.ForestUidServices.EachUidRepositories;
-using IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices;
-using IIAuctionHouse.Domain.Services.ForestDetailServices.PlotServices.TreeTypeServices;
-using IIAuctionHouse.Domain.Validators.ForestDetailsValidators.PlotDetailsValidators;
-using IIAuctionHouse.Domain.Validators.ForestDetailsValidators.PlotDetailsValidators.TreeTypeValidators;
+using IIAuctionHouse.Domain.Services.ForestDetailServices.ForestUidServices.UidServices;
+using IIAuctionHouse.Domain.Services.ForestDetailServices.TreeTypeServices;
+using IIAuctionHouse.Domain.Services.ForestDetailServices.TreeTypeServices.TTServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -72,49 +67,39 @@ namespace IIAuctionHouse.WebApi
             services.AddScoped<IPercentageRepository, PercentageRepository>();
             services.AddScoped<ITreeService, TreeService>();
             services.AddScoped<ITreeRepository, TreeRepository>();
+            
             services.AddScoped<ITreeTypeService, TreeTypeService>();
-            services.AddScoped<ITreeTypeRepository, TreeTypeRepository>();
             
             services.AddScoped<IPlotService, PlotService>();
             services.AddScoped<IPlotRepository, PlotRepository>();
             services.AddScoped<IForestService, ForestService>();
             services.AddScoped<IForestRepository, ForestRepository>();
             
-            services.AddScoped<IForestEnterpriseService, ForestEnterpriseService>();
-            services.AddScoped<IForestEnterpriseRepository, ForestEnterpriseRepository>();
-            services.AddScoped<IForestGroupService, ForestGroupService>();
-            services.AddScoped<IForestGroupRepository, ForestGroupRepository>();
-            services.AddScoped<IForestLocationService, ForestLocationService>();
+            services.AddScoped<IForestEnterpriseService, ForestryEnterpriseService>();
+            services.AddScoped<IForestryEnterpriseRepository, ForestryEnterpriseRepository>();
             
-            services.AddScoped<IForestFirstUidService, ForestFirstUidService>();
+            services.AddScoped<IGroupService, GroupService>();
+            services.AddScoped<IGroupRepository, GroupRepository>();
+            services.AddScoped<ISubGroupService, SubGroupService>();
+            services.AddScoped<ISubGroupRepository, SubGroupRepository>();
+            
+            services.AddScoped<IForestGroupSubGroupService, ForestGroupSubGroupService>();
+            
+            services.AddScoped<IForestFirstUidService, FirstUidService>();
+            services.AddScoped<IForestSecondUidService, SecondUidService>();
+            services.AddScoped<IForestThirdUidService, ThirdUidService>();
             services.AddScoped<IForestFirstUidRepository, ForestFirstUidRepository>();
-            services.AddScoped<IForestSecondUidService, ForestSecondUidService>();
             services.AddScoped<IForestSecondUidRepository, ForestSecondUidRepository>();
-            services.AddScoped<IForestThirdUidService, ForestThirdUidService>();
             services.AddScoped<IForestThirdUidRepository, ForestThirdUidRepository>();
             
             services.AddScoped<IForestUidService, ForestUidService>();
-            services.AddScoped<IForestUidRepository, ForestUidRepository>();
             
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
             
             services.AddScoped<IBidService, BidService>();
             services.AddScoped<IBidRepository, BidRepository>();
-            
-            services.AddScoped<PercentageConverter>();
-            services.AddScoped<TreeConverter>();
-            services.AddScoped<ForestUidFirstConverter>();
-            services.AddScoped<ForestUidSecondConverter>();
-            services.AddScoped<ForestUidThirdConverter>();
-            services.AddScoped<ForestryEnterpriseConverter>();
-            services.AddScoped<ForestGroupConverter>();
-            services.AddScoped<ForestUidConverter>();
-            services.AddScoped<TreeTypeConverter>();
-            
-            services.AddScoped<PercentageValidator>();
-            services.AddScoped<TreeValidator>();
-            services.AddScoped<PlotValidator>();
+
             
             services.AddScoped<IMainDbContextSeeder, MainDbContextSeeder>();
             

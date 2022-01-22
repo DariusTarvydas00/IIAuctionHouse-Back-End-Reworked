@@ -7,11 +7,8 @@ namespace IIAuctionHouse.Core.IServices.IForestDetailServices
     {
         List<ForestryEnterprise> GetAll();
         ForestryEnterprise GetById(int id);
-        ForestryEnterprise NewForestryEnterprise(int id);
-        ForestryEnterprise NewForestryEnterprise(string name);
-        ForestryEnterprise NewForestryEnterprise(int id, string value);
         ForestryEnterprise Create(ForestryEnterprise forestEnterprise);
-        ForestryEnterprise Update(ForestryEnterprise forestEnterprise);
+        ForestryEnterprise Update(int id, ForestryEnterprise forestEnterprise);
         ForestryEnterprise Delete(int id);
         
     }

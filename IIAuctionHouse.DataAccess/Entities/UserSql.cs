@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities;
 using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities.ForestUidEntities;
+using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities.ForestUidEntities.EachUidEntities;
 using IIAuctionHouse.DataAccess.Entities.UserDetailsEntities;
 
 namespace IIAuctionHouse.DataAccess.Entities

@@ -8,6 +8,7 @@ using IIAuctionHouse.Core.Models.UserDetailModels;
 using IIAuctionHouse.DataAccess.Entities;
 using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities;
 using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities.ForestUidEntities;
+using IIAuctionHouse.DataAccess.Entities.ForestDetailEntities.ForestUidEntities.EachUidEntities;
 using IIAuctionHouse.DataAccess.Entities.UserDetailsEntities;
 using IIAuctionHouse.Domain.IRepositories;
 

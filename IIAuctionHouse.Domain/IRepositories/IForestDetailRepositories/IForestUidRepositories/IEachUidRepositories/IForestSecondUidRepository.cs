@@ -7,8 +7,5 @@ namespace IIAuctionHouse.Domain.IRepositories.IForestDetailRepositories.IForestU
     {
         IEnumerable<ForestUidSecond> FindAll();
         ForestUidSecond GetById(int id);
-        ForestUidSecond Create(ForestUidSecond forestUidSecond);
-        ForestUidSecond Update(ForestUidSecond forestUidSecond);
-        ForestUidSecond Delete(int id);
     }
 }

@@ -20,8 +20,4 @@
         </PackageReference>
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\IIAuctionHouse.Core\IIAuctionHouse.Core.csproj" />
-    </ItemGroup>
-
 </Project>

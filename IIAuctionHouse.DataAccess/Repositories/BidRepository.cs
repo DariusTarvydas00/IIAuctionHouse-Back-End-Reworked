@@ -54,40 +54,41 @@ namespace IIAuctionHouse.DataAccess.Repositories
 
         public Bid Create(Bid bid)
         {
-            var forest = _ctx.ForestsDbSet.FirstOrDefault(sql => 
-                sql.ForestUidSql.Id == bid.Forest.ForestUid.FirstUid.Id &&
-                sql.ForestUidSql.ForestUidSecondSql.Id == bid.Forest.ForestUid.SecondUid.Id &&
-                sql.ForestUidSql.ForestUidSecondSql.Id == bid.Forest.ForestUid.SecondUid.Id);
-            var user = _ctx.UserDbSet.FirstOrDefault(sql => 
-                sql.Id == bid.User.Id);
-            if (forest == null || user == null)
-            {
-                throw new KeyNotFoundException(DataAccessExceptions.NotFound);
-            }
-            var newBid = new BidSql()
-            {
-                Id = bid.Id,
-                BidAmount = bid.BidAmount,
-                UserSqlId = user.Id,
-                ForestSqlId = forest.Id
-            };
-            _ctx.BidsDbSet.Add(newBid);
-            _ctx.SaveChanges();
-            return new Bid()
-            {
-                Id = newBid.Id,
-                BidAmount = newBid.BidAmount,
-                User = new User()
-                {
-                    Id = newBid.UserSql.Id,
-                    FirstName = newBid.UserSql.FirstName,
-                    LastName = newBid.UserSql.LastName
-                },
-                Forest = new Forest()
-                {
-                    Id = newBid.ForestSql.Id
-                }
-            };
+           //  var forest = _ctx.ForestsDbSet.FirstOrDefault(sql => 
+           //      // sql.ForestUidSql.Id == bid.Forest.ForestUid.FirstUid.Id &&
+           //      // sql.ForestUidSql.ForestUidSecondSql.Id == bid.Forest.ForestUid.SecondUid.Id &&
+           //      // sql.ForestUidSql.ForestUidSecondSql.Id == bid.Forest.ForestUid.SecondUid.Id);
+           // // var user = _ctx.UserDbSet.FirstOrDefault(sql => 
+           //   //   sql.Id == bid.User.Id);
+           //  if (forest == null)
+           //  {
+           //      throw new KeyNotFoundException(DataAccessExceptions.NotFound);
+           //  }
+           //  var newBid = new BidSql()
+           //  {
+           //      Id = bid.Id,
+           //      BidAmount = bid.BidAmount,
+           //     // UserSqlId = user.Id,
+           //      ForestSqlId = forest.Id
+           //  };
+           //  _ctx.BidsDbSet.Add(newBid);
+           //  _ctx.SaveChanges();
+           //  return new Bid()
+           //  {
+           //      Id = newBid.Id,
+           //      BidAmount = newBid.BidAmount,
+           //      User = new User()
+           //      {
+           //          Id = newBid.UserSql.Id,
+           //          FirstName = newBid.UserSql.FirstName,
+           //          LastName = newBid.UserSql.LastName
+           //      },
+           //      Forest = new Forest()
+           //      {
+           //          Id = newBid.ForestSql.Id
+           //      }
+           //  };
+           return null;
         }
 
         public Bid Update(Bid bid)

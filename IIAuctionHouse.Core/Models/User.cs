@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using IIAuctionHouse.Core.Models.ForestDetailModels;
 using IIAuctionHouse.Core.Models.ForestDetailModels.ForestUidModels;
 using IIAuctionHouse.Core.Models.UserDetailModels;
 
