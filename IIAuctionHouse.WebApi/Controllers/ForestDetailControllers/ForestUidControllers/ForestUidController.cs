@@ -15,7 +15,7 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.ForestUidCon
             _forestUidService = forestUidService ?? throw new NullReferenceException("Forest Uid Service Can Not Be Null");
         }
 
-        [HttpGet]
+        [HttpGet("FirstUid")]
         public ActionResult GetAllFirstUids()
         {
             try
