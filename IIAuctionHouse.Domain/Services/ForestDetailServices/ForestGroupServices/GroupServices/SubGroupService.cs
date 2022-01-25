@@ -23,14 +23,9 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.ForestGroupService
 
         public SubGroup GetById(int subGroupId)
         {
-            CheckId(subGroupId);
-            return _subGroupRepository.GetById(subGroupId);
-        }
-        
-        private void CheckId(int id)
-        {
-            if (id < 1)
+            if (subGroupId < 1)
                 throw new Exception("Sub Group Id Can Not Be Less Than 1");
+            return _subGroupRepository.GetById(subGroupId);
         }
     }
 }

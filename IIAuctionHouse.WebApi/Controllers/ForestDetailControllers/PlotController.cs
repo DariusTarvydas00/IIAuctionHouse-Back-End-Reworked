@@ -19,9 +19,14 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers
         [HttpPost]
         public ActionResult Post([FromBody] PlotDto plotDto)
         {
+            // foreach (var treeType in plotDto.TreeTypes)
+            // {
+            //     Console.WriteLine(treeType.Tree.Id);
+            //     Console.WriteLine(treeType.Percentage.Id);
+            // }
             try
             {
-                var newPlot = _plotService.NewPlot(plotDto.Id, plotDto.ForestId, plotDto.Volume,
+                var newPlot = _plotService.NewPlot(plotDto.ForestId, plotDto.Volume,
                     plotDto.AverageTreeHeight, plotDto.PlotSize, plotDto.PlotTenderness, plotDto.PlotResolution,
                     plotDto.TreeTypes);
                 return Ok(_plotService.Create(newPlot));
@@ -39,7 +44,7 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers
                 throw new Exception("Id Does Not Match");
             try
             {
-                var newPlot = _plotService.NewPlot(plotDto.Id, plotDto.ForestId, plotDto.Volume,
+                var newPlot = _plotService.NewPlot( plotDto.ForestId, plotDto.Volume,
                     plotDto.AverageTreeHeight, plotDto.PlotSize, plotDto.PlotTenderness, plotDto.PlotResolution,
                     plotDto.TreeTypes);
                 return Ok(_plotService.Update(newPlot));

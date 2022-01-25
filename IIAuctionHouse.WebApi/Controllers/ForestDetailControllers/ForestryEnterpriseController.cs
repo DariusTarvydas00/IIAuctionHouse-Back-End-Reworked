@@ -1,6 +1,6 @@
 ﻿using System;
 using IIAuctionHouse.Core.IServices.IForestDetailServices;
-using IIAuctionHouse.Core.Models.ForestDetailModels;
+using IIAuctionHouse.WebApi.Dto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers
@@ -30,11 +30,12 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] ForestryEnterprise forestryEnterprise)
+        public ActionResult Post([FromBody] ForestryEnterpriseDto forestryEnterprise)
         {
             try
             {
-                return Ok(_forestEnterpriseService.Create(forestryEnterprise));
+                var fe = _forestEnterpriseService.NewForestryEnterprise(forestryEnterprise.Name);
+                return Ok(_forestEnterpriseService.Create(fe));
             }
             catch(Exception e)
             {
@@ -43,11 +44,12 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id,[FromBody] ForestryEnterprise forestryEnterprise)
+        public ActionResult Put(int id,[FromBody] ForestryEnterpriseDto forestryEnterprise)
         {
             try
             {
-                return Ok(_forestEnterpriseService.Update(id, forestryEnterprise));
+                var fe = _forestEnterpriseService.NewForestryEnterprise(id,forestryEnterprise.Name);
+                return Ok(_forestEnterpriseService.Update(fe));
             }
             catch (Exception e)
             {

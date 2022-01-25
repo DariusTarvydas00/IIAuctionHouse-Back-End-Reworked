@@ -24,60 +24,67 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices
         
         public ForestryEnterprise GetById(int id)
         {
-            CheckId(id);
-            return _forestryEnterpriseRepository.GetById(id);
+            if (id < 1)
+                throw new Exception("Forestry Enterprise Id Can Not Be Less Than 1");
+            var forestryEnterprise = _forestryEnterpriseRepository.GetById(id);
+            if (forestryEnterprise != null)
+            {
+                return forestryEnterprise;
+            }
+            throw new Exception("Forestry Enterprise Not Found");
         }
 
         public ForestryEnterprise Create(ForestryEnterprise forestryEnterprise)
         {
-            NewFEnterprise(forestryEnterprise);
+            ValidateName(forestryEnterprise.Name);
             return _forestryEnterpriseRepository.Create(forestryEnterprise);
         }
 
-        public ForestryEnterprise Update(int id, ForestryEnterprise forestEnterprise)
+        private void ValidateName(string name)
         {
-            UpdateFEnterprise(id, forestEnterprise);
-            return _forestryEnterpriseRepository.Update(forestEnterprise);
+            if (name == null)
+                throw new InvalidDataException("Forestry Enterprise Cannot Be Null");
+            if (name.Any(char.IsDigit) || string.IsNullOrEmpty(name))
+            {
+                throw new InvalidDataException("Incorrect Forestry Enterprise Name");
+            }
+        }
+
+        public ForestryEnterprise NewForestryEnterprise(int id, string name)
+        {
+            if (id < 1)
+                throw new Exception("Forestry Enterprise Id Can Not Be Less Than 1");
+            ValidateName(name);
+            return new ForestryEnterprise()
+            {
+                Id = id,
+                Name = name
+            };
+        }
+        
+        public ForestryEnterprise NewForestryEnterprise(string name)
+        {
+            ValidateName(name);
+            return new ForestryEnterprise()
+            {
+                Name = name
+            };
+        }
+
+        public ForestryEnterprise Update(ForestryEnterprise forestryEnterprise)
+        {
+            if (forestryEnterprise.Id < 1)
+                throw new Exception("Forestry Enterprise Id Can Not Be Less Than 1");
+            ValidateName(forestryEnterprise.Name);
+            return _forestryEnterpriseRepository.Update(forestryEnterprise);
         }
 
         public ForestryEnterprise Delete(int id)
         {
             if (id < 1)
-                throw new InvalidDataException("");
+                throw new InvalidDataException("Forestry Enterprise Id Can Not Be Less Than 1");
             return _forestryEnterpriseRepository.Delete(id);
         }
-        
-        
-        private void UpdateFEnterprise(int id, ForestryEnterprise forestryEnterprise)
-        {
-            if (forestryEnterprise == null)
-                throw new InvalidDataException("Forestry Enterprise Cannot Be Null");
-            CheckId(id);
-            CheckId(forestryEnterprise.Id);
-            if (id != forestryEnterprise.Id)
-                throw new Exception("Id Does Not Match");
-            if (forestryEnterprise.Name.Any(char.IsDigit) || string.IsNullOrEmpty(forestryEnterprise.Name))
-            {
-                throw new InvalidDataException("Incorrect Forestry Enterprise Name");
-            }
-            
-        }
-        
-        private void NewFEnterprise(ForestryEnterprise forestryEnterprise)
-        {
-            if (forestryEnterprise == null)
-                throw new InvalidDataException("Tree Cannot Be Null");
-            if (forestryEnterprise.Name.Any(char.IsDigit) || string.IsNullOrEmpty(forestryEnterprise.Name))
-            {
-                throw new InvalidDataException("Incorrect Forestry Enterprise Name");
-            }
-            
-        }
-        
-        private void CheckId(int id)
-        {
-            if (id < 1)
-                throw new Exception("Forestry Enterprise Id Can Not Be Less Than 1");
-        }
+
     }
 }

@@ -6,7 +6,7 @@ namespace IIAuctionHouse.Core.IServices.IForestDetailServices
 {
     public interface IPlotService
     {
-        Plot NewPlot(int id, int forestId,int volume, int averageTreeHeight, double plotSize,double plotTenderness, string plotResolution, List<TreeType> treeTypes);
+        Plot NewPlot(int forestId,int volume, int averageTreeHeight, double plotSize,double plotTenderness, string plotResolution, List<TreeType> treeTypes);
         Plot Create(Plot plot);
         Plot Update(Plot plot);
         Plot Delete(int id);

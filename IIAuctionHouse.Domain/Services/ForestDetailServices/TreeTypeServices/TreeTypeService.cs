@@ -20,7 +20,7 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.TreeTypeServices
         {
             var tree = _treeService.GetById(treeId);
             var percentage = _percentageService.GetById(percentageId);
-            if (tree != null || percentage != null)
+            if (tree != null | percentage != null)
             {
                 return new TreeType()
                 {
@@ -29,7 +29,7 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.TreeTypeServices
                 };
                 
             }
-            return null;
+            throw new Exception("Tree Type Not Found");
 
         }
     }

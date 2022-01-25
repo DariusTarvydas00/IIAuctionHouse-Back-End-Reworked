@@ -25,10 +25,11 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices
             
         }
         
-        public Plot NewPlot(int id, int forestId, int volume, int averageTreeHeight, double plotSize, double plotTenderness,
+        public Plot NewPlot(int forestId, int volume, int averageTreeHeight, double plotSize, double plotTenderness,
             string plotResolution, List<TreeType> treeTypes)
         {
-            CheckId(forestId);
+            if (forestId < 1)
+                throw new InvalidDataException("Invalid Forest Id");
             ValidatePlotValues(volume,averageTreeHeight,plotSize,plotTenderness,plotResolution);
             return new Plot
             {
@@ -90,7 +91,7 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices
             var patter = new Regex(@"^\d{1,4}(x\d{1,4})");
             var match = patter.Match(plotResolution);
             if (!match.Success)
-                throw new InvalidDataException("Incorrect Plot Tenderness");
+                throw new InvalidDataException("Incorrect Plot Resolution");
         }
     }
 }

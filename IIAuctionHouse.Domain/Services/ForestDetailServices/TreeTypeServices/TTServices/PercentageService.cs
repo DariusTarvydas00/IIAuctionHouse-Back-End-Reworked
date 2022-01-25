@@ -23,14 +23,9 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.TreeTypeServices.T
 
         public Percentage GetById(int percentageId)
         {
-            CheckId(percentageId);
+            if (percentageId < 1)
+                throw new Exception("Percentage Id Can Not Be Less Than 1");
             return _percentageRepository.GetById(percentageId);
-        }
-        
-        private void CheckId(int id)
-        {
-            if (id < 1)
-                throw new Exception("Tree Id Can Not Be Less Than 1");
         }
 
     }

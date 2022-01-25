@@ -7,8 +7,10 @@ namespace IIAuctionHouse.Core.IServices.IForestDetailServices.ITreeTypeServices.
     {
         List<Tree> GetAll();
         Tree Create(Tree tree);
-        Tree Update(int id, Tree tree);
+        Tree Update(Tree tree);
         Tree Delete(int id);
         Tree GetById(int treeId);
+        Tree NewTree(int id, string treeName);
+        Tree NewTree(string treeName);
     }
 }

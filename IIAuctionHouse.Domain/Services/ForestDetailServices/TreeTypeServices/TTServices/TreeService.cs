@@ -24,58 +24,68 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.TreeTypeServices.T
         
         public Tree GetById(int id)
         {
-            CheckId(id);
+            if (id < 1)
+                throw new Exception("Tree Id Can Not Be Less Than 1");
             return _treeRepository.GetById(id);
+        }
+
+        public Tree NewTree(int id, string treeName)
+        {
+            if (id < 1)
+                throw new Exception("Tree Id Can Not Be Less Than 1");
+            if (treeName.Any(char.IsDigit) || string.IsNullOrEmpty(treeName))
+            {
+                throw new InvalidDataException("Incorrect Tree Name");
+            }
+            return new Tree()
+            {
+                Id = id,
+                Name = treeName
+            };
+        }
+
+        public Tree NewTree(string treeName)
+        {
+            if (treeName.Any(char.IsDigit) || string.IsNullOrEmpty(treeName))
+            {
+                throw new InvalidDataException("Incorrect Tree Name");
+            }
+            return new Tree()
+            {
+                Name = treeName
+            };
         }
 
         public Tree Create(Tree tree)
         {
-            NewTree(tree);
+            if (tree == null)
+                throw new InvalidDataException("Tree Cannot Be Null");
+            if (tree.Name.Any(char.IsDigit) || string.IsNullOrEmpty(tree.Name))
+            {
+                throw new InvalidDataException("Incorrect Tree Name");
+            }
             return _treeRepository.Create(tree);
         }
 
-        public Tree Update(int id, Tree tree)
+        public Tree Update(Tree tree)
         {
-            UpdateTree(id, tree);
+            if (tree == null)
+                throw new InvalidDataException("Tree Cannot Be Null");
+            if (tree.Id < 1)
+                throw new Exception("Tree Id Can Not Be Less Than 1");
+            if (tree.Name.Any(char.IsDigit) || string.IsNullOrEmpty(tree.Name))
+            {
+                throw new InvalidDataException("Incorrect Tree Name");
+            }
             return _treeRepository.Update(tree);
         }
         
         public Tree Delete(int id)
         {
-            CheckId(id);
-            return _treeRepository.Delete(id);
-        }
-
-        private void NewTree(Tree tree)
-        {
-            if (tree == null)
-                throw new InvalidDataException("Tree Cannot Be Null");
-            if (tree.Name.Any(char.IsDigit) || string.IsNullOrEmpty(tree.Name))
-            {
-                throw new InvalidDataException("Incorrect Tree Name");
-            }
-            
-        }
-        
-        private void UpdateTree(int id, Tree tree)
-        {
-            if (tree == null)
-                throw new InvalidDataException("Tree Cannot Be Null");
-            CheckId(id);
-            CheckId(tree.Id);
-            if (id != tree.Id)
-                throw new Exception("Id Does Not Match");
-            if (tree.Name.Any(char.IsDigit) || string.IsNullOrEmpty(tree.Name))
-            {
-                throw new InvalidDataException("Incorrect Tree Name");
-            }
-            
-        }
-        
-        private void CheckId(int id)
-        {
             if (id < 1)
                 throw new Exception("Tree Id Can Not Be Less Than 1");
+            return _treeRepository.Delete(id);
         }
+        
     }
 }

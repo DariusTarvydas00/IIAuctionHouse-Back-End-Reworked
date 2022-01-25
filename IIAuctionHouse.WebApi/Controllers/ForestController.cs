@@ -46,9 +46,10 @@ namespace IIAuctionHouse.WebApi.Controllers
         [HttpPost]
         public ActionResult Post([FromBody] ForestDto forestDto)
         {
+         
             try
             {
-                var newForest = _forestService.NewForest(forestDto.Id,forestDto.ForestGroup, forestDto.ForestLocation,forestDto.ForestUid, forestDto.ForestryEnterprise);
+                var newForest = _forestService.NewForest(forestDto.ForestGroupSubGroup, forestDto.ForestLocation,forestDto.ForestUid, forestDto.ForestryEnterprise);
                 return Ok(_forestService.Create(newForest));
             }
             catch(Exception e)
@@ -64,7 +65,7 @@ namespace IIAuctionHouse.WebApi.Controllers
                 throw new Exception("Id Does Not Match");
             try
             {
-                var newForest = _forestService.NewForest(forestDto.Id, forestDto.ForestGroup, forestDto.ForestLocation,forestDto.ForestUid,  forestDto.ForestryEnterprise);
+                var newForest = _forestService.NewForest(forestDto.Id, forestDto.ForestGroupSubGroup, forestDto.ForestLocation,forestDto.ForestUid,  forestDto.ForestryEnterprise);
                 return Ok(_forestService.Update(newForest));
             }
             catch (Exception e)

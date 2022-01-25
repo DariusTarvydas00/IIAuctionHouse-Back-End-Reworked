@@ -19,7 +19,7 @@ namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories.Forest
 
         public IEnumerable<ForestUidThird> FindAll()
         {
-            return _ctx.ForestUidThirdDbSet.Select(sql => new ForestUidThird()
+            return _ctx.ForestUidThirdDbSet.OrderBy(sql => sql.Value).Select(sql => new ForestUidThird()
             {
                 Id = sql.Id,
                 Value = sql.Value

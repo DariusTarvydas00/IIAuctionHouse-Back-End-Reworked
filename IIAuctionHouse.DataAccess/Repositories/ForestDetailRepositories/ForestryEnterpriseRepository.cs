@@ -29,15 +29,11 @@ namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories
         
         public ForestryEnterprise GetById(int id)
         {
-            var fEnterprise = _ctx.ForestryEnterpriseDbSet
-                .FirstOrDefault(sql => sql.Id == id);
-            if (fEnterprise != null)
-                return new ForestryEnterprise()
-                {
-                    Id = fEnterprise.Id,
-                    Name = fEnterprise.Name
-                };
-            return null;
+            return _ctx.ForestryEnterpriseDbSet.Select(sql => new ForestryEnterprise()
+            {
+                Id = sql.Id,
+                Name = sql.Name
+            }).FirstOrDefault(enterprise => enterprise.Id == id);
         }
 
         public ForestryEnterprise Create(ForestryEnterprise forestEnterprise)

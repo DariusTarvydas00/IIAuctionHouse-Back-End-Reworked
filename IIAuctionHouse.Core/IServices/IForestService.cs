@@ -14,5 +14,6 @@ namespace IIAuctionHouse.Core.IServices
         Forest Update(Forest forest);
         Forest Delete(int id);
         Forest NewForest(int id, ForestGroupSubGroup forestGroupSubGroup, ForestLocation forestLocation, ForestUid forestUid, ForestryEnterprise forestryEnterprise);
+        Forest NewForest(ForestGroupSubGroup forestGroupSubGroup, ForestLocation forestLocation, ForestUid forestUid, ForestryEnterprise forestryEnterprise);
     }
 }

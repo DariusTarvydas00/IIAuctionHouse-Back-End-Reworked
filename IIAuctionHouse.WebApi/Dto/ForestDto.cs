@@ -9,7 +9,7 @@ namespace IIAuctionHouse.WebApi.Dto
         public int Id { get; set; }
         public ForestryEnterprise ForestryEnterprise { get; set; }
         public ForestLocation ForestLocation { get; set; }
-        public ForestGroupSubGroup ForestGroup { get; set; }
+        public ForestGroupSubGroup ForestGroupSubGroup { get; set; }
         public ForestUid ForestUid { get; set; }
     }
 }

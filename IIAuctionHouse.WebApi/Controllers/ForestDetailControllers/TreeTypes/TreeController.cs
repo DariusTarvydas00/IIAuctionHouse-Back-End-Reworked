@@ -1,6 +1,7 @@
 ﻿using System;
 using IIAuctionHouse.Core.IServices.IForestDetailServices.ITreeTypeServices.TTServices;
 using IIAuctionHouse.Core.Models.ForestDetailModels.TreeTypes.TTModels;
+using IIAuctionHouse.WebApi.Dto.PlotDtos.TreeTypes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.TreeTypes
@@ -31,11 +32,12 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.TreeTypes
             }
 
             [HttpPost]
-            public ActionResult Post([FromBody] Tree tree)
+            public ActionResult Post([FromBody] TreeDto tree)
             {
                 try
                 {
-                    return Ok(_treeService.Create(tree));
+                    var newTree = _treeService.NewTree(tree.Name);
+                    return Ok(_treeService.Create(newTree));
                 }
                 catch(Exception e)
                 {
@@ -44,11 +46,12 @@ namespace IIAuctionHouse.WebApi.Controllers.ForestDetailControllers.TreeTypes
             }
             
             [HttpPut("{id}")]
-            public ActionResult Put(int id, [FromBody] Tree tree)
+            public ActionResult Put(int id, [FromBody] TreeDto tree)
             {
                 try
                 {
-                    return Ok(_treeService.Update(id, tree));
+                    var newTree = _treeService.NewTree(id, tree.Name);
+                    return Ok(_treeService.Update(newTree));
                 }
                 catch (Exception e)
                 {

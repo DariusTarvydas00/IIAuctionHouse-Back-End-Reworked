@@ -26,7 +26,7 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.ForestUidServices
             var first = _forestFirstUidService.GetById(firstUid);
             var second = _forestSecondUidService.GetById(secondUid);
             var third = _forestThirdUidService.GetById(thirdUid);
-            if (first != null || second != null || third !=null)
+            if (first != null | second != null | third !=null)
             {
                 return new ForestUid()
                 {
@@ -36,7 +36,7 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.ForestUidServices
                 };
                 
             }
-            return null;
+            throw new Exception("Forest Uid Not Found");
 
         }
 

@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.13" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.13" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.13" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -17,6 +18,7 @@
       <ProjectReference Include="..\IIAuctionHouse.Core\IIAuctionHouse.Core.csproj" />
       <ProjectReference Include="..\IIAuctionHouse.DataAccess\IIAuctionHouse.DataAccess.csproj" />
       <ProjectReference Include="..\IIAuctionHouse.Domain\IIAuctionHouse.Domain.csproj" />
+      <ProjectReference Include="..\IIAuctionHouse.Security\IIAuctionHouse.Security.csproj" />
     </ItemGroup>
 
 </Project>

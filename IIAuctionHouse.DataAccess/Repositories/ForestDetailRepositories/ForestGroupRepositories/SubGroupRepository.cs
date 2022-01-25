@@ -26,13 +26,11 @@ namespace IIAuctionHouse.DataAccess.Repositories.ForestDetailRepositories.Forest
 
         public SubGroup GetById(int subGroupId)
         {
-            var subGroup = _ctx.SubGroupDbSet.FirstOrDefault(sql => sql.Id == subGroupId);
-            if (subGroup == null) return null;
-            return new SubGroup()
+            return _ctx.SubGroupDbSet.Select(sql => new SubGroup()
             {
-                Id = subGroup.Id,
-                ForestSubGroupName = subGroup.ForestSubGroupName
-            };
+                Id = sql.Id,
+                ForestSubGroupName = sql.ForestSubGroupName
+            }).FirstOrDefault(first => first.Id == subGroupId);
         }
     }
 }

@@ -23,14 +23,10 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.ForestGroupService
 
         public Group GetById(int groupId)
         {
-            CheckId(groupId);
+            if (groupId < 1)
+                throw new Exception("Group Id Can Not Be Less Than 1");
             return _groupRepository.GetById(groupId);
         }
         
-        private void CheckId(int id)
-        {
-            if (id < 1)
-                throw new Exception("Group Id Can Not Be Less Than 1");
-        }
     }
 }

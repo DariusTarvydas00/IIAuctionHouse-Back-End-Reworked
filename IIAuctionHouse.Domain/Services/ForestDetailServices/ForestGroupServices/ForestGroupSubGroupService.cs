@@ -20,16 +20,13 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.ForestGroupService
         {
             var group = _groupService.GetById(groupId);
             var subGroup = _subGroupService.GetById(subGroupId);
-            if (group != null || subGroup != null)
-            {
+            if (group != null | subGroup != null)
                 return new ForestGroupSubGroup()
                 {
                     Group = group,
                     SubGroup = subGroup
                 };
-                
-            }
-            return null;
+            throw new Exception("Forest Group Not Found");
 
         }
     }

@@ -21,16 +21,11 @@ namespace IIAuctionHouse.Domain.Services.ForestDetailServices.ForestUidServices.
             return _forestThirdUidRepository.FindAll().ToList();
         }
 
-        public ForestUidThird GetById(int subGroupId)
+        public ForestUidThird GetById(int third)
         {
-            CheckId(subGroupId);
-            return _forestThirdUidRepository.GetById(subGroupId);
-        }
-        
-        private void CheckId(int id)
-        {
-            if (id < 1)
+            if (third < 1)
                 throw new Exception("Forest Third Unique Id Can Not Be Less Than 1");
+            return _forestThirdUidRepository.GetById(third);
         }
     }
 }
