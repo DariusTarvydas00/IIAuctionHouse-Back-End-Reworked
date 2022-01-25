@@ -112,20 +112,12 @@ namespace IIAuctionHouse.WebApi
                 var value = Configuration["JwtConfig:secret"];
                 services.AddControllers();
                 var loggerFactory = LoggerFactory.Create(builder => { builder.AddConsole(); });
-
-                services.AddDbContext<MainDbContext>(
-                    opt =>
-                    {
-                        opt.UseLoggerFactory(loggerFactory)
-                            .UseSqlite("Data Source=honeyShop.db");
-                    }, ServiceLifetime.Transient
-                );
-
+                
                 services.AddDbContext<AuthDbContext>(
                     opt =>
                     {
                         opt.UseLoggerFactory(loggerFactory)
-                            .UseSqlite("Data Source=honeyAuth.db");
+                            .UseSqlite("Data Source=acAuth.db");
                     }, ServiceLifetime.Transient
                 );
                 services.AddSwaggerGen(c =>
